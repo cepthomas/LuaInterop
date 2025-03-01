@@ -41,13 +41,13 @@
 
 # VS ignores
 .vs/
-*.obj
-*.bin
+# *.obj
+# *.bin
+*.vcxproj.user
+# .x64/
+obj/
+bin/
+# Debug/
 
 # My adds.
 *.sublime-*
-*.vcxproj.user
-.x64/
-obj/
-bin/
-Debug/
