@@ -29,9 +29,9 @@ using $(us);
 >end
 >end
 
-namespace $(config.namespace)
+namespace $(config.host_namespace)
 {
-    public partial class $(config.class)
+    public partial class $(config.host_lib_name)
     {
         #region Functions exported from lua for execution by host
 >for _, func in ipairs(script_funcs) do

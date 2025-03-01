@@ -48,5 +48,6 @@
 *.sublime-*
 *.vcxproj.user
 .x64/
-x64
+obj/
+bin/
 Debug/
