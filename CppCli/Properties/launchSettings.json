@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "LuaSharp": {
+      "commandName": "Project",
+      "commandLineArgs": "C:\\Dev\\Apps\\LuaSharp\\App\\test.lua",
+      "nativeDebugging": true
+    }
+  }
+}
