@@ -56,10 +56,10 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\LuaBagOfTricks\lua54\include;..\LuaBagOfTricks;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..;..\..\lib\lua54\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>..\LuaBagOfTricks\lua54\lua54.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\..\lib\lua54\lua54.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <LinkTimeCodeGeneration>Default</LinkTimeCodeGeneration>
     </Link>
   </ItemDefinitionGroup>
@@ -69,16 +69,16 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\LuaBagOfTricks\lua54\include;..\LuaBagOfTricks;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..;..\..\lib\lua54\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>..\LuaBagOfTricks\lua54\lua54.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\..\lib\lua54\lua54.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <LinkTimeCodeGeneration>Default</LinkTimeCodeGeneration>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Core.cpp" />
-    <ClCompile Include="..\LuaBagOfTricks\luaex.c">
+    <ClCompile Include="..\..\luaex.c">
       <CompileAsManaged>false</CompileAsManaged>
     </ClCompile>
     <ClCompile Include="luainterop.c">
@@ -91,7 +91,7 @@
     <ClInclude Include="HostInterop.h" />
     <ClInclude Include="Core.h" />
     <ClInclude Include="luainterop.h" />
-    <ClInclude Include="..\LuaBagOfTricks\luaex.h" />
+    <ClInclude Include="..\..\luaex.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

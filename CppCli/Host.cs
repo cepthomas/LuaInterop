@@ -38,14 +38,15 @@ namespace Host
         public Host()
         {
             // Where are we?
-            var appDir = MiscUtils.GetHostDataDir("LuaSharp", "Ephemera");
+//            var appDir = MiscUtils.GetAppDataDir("LuaSharp", "Ephemera");
             var thisDir = MiscUtils.GetSourcePath();
-            var lbotDir = $@"{thisDir}\LuaBagOfTricks";
+            var lbotDir = $@"\Dev\Lua\LuaBagOfTricks";
 
             // Setup logging.
             LogManager.MinLevelFile = LogLevel.Trace;
             LogManager.MinLevelNotif = LogLevel.Info;
-            LogManager.Run(Path.Combine(appDir, "log.txt"), 50000);
+            //LogManager.Run(Path.Combine(appDir, "log.txt"), 50000);
+            LogManager.Run(@"..\..\log.txt", 50000);
             LogManager.LogMessage += (object? sender, LogMessageEventArgs e) => Console.WriteLine(e.ShortMessage);
 
             // TODO1? Support reload. Unload current modules so reload will be minty fresh. This may fail safely
