@@ -8,9 +8,9 @@ local M = {}
 
 M.config =
 {
-    lua_lib_name = "gen_lib",             -- -> lua lib name
-    namespace = "MyLuaInteropLib",        -- -> C# namespace
-    class = "MyClass",                    -- -> C# using
+    lua_lib_name = "luainterop",    -- for require
+    host_lib_name = "HostInterop",  -- host filenames
+    host_namespace = "Interop",      -- host namespace
     add_refs = { "System.Diagnostics", }, -- -> using (optional)
 }
 
