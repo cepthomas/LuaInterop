@@ -9,7 +9,7 @@ extern "C"
 #include "lua.h"
 #include "lualib.h"
 #include "lauxlib.h"
-#include "luautils.h"
+#include "luaex.h"
 #include "luainterop.h"
 }
 
@@ -186,21 +186,21 @@ UT_SUITE(INTEROP_EXEC, "Test execute script via luainterop.")
 //---------------- Call host functions from Lua - work functions -------------//
 
 //--------------------------------------------------------//
-int luainteropwork_GetTimestamp(lua_State* l)
+int luainteropcb_GetTimestamp(lua_State* l)
 {
     _timestamp += 100;
     return _timestamp;
 }
 
 //--------------------------------------------------------//
-bool luainteropwork_Log(lua_State* l, int level, const char* msg)
+bool luainteropcb_Log(lua_State* l, int level, const char* msg)
 {
     snprintf(_last_log, sizeof(_last_log) - 1, "Log LVL%d %s", level, msg);
     return true;
 }
 
 //--------------------------------------------------------//
-const char* luainteropwork_GetEnvironment(lua_State* l, double temp)
+const char* luainteropcb_GetEnvironment(lua_State* l, double temp)
 {
     static char buff[50];
     snprintf(buff, sizeof(buff) - 1, "Temperature is %.1f degrees", temp);
@@ -208,7 +208,7 @@ const char* luainteropwork_GetEnvironment(lua_State* l, double temp)
 }
 
 //--------------------------------------------------------//
-bool luainteropwork_ForceError(lua_State* l)
+bool luainteropcb_ForceError(lua_State* l)
 {
     luaL_error(_l, "Let's blow something up in lua");
     return true;

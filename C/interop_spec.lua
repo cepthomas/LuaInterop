@@ -7,7 +7,7 @@ local M = {}
 
 M.config =
 {
-    lua_lib_name = "gen_lib",   -- ua lib name
+    lua_lib_name = "luainterop",   -- ua lib name
 }
 
 -- Host calls script.
