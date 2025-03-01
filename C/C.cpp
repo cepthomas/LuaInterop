@@ -113,8 +113,8 @@ UT_SUITE(INTEROP_EXEC, "Test execute script via luainterop.")
 
     // If stat is ok, run the script to init everything.
     stat = lua_pcall(_l, 0, LUA_MULTRET, 0);
-    UT_EQUAL(stat, LUA_OK);
     slua_error = CheckStatus(stat);
+    UT_EQUAL(stat, LUA_OK);
     UT_NULL(slua_error);
     // Should be ok.
 

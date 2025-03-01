@@ -2,7 +2,7 @@
 
 
 
-local gen = require("gen_lib") -- lua-C api
+local gen = require("luainterop") -- lua-C api
 
 local script_cnt = 0
 
