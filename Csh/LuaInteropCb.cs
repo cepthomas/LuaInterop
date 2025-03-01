@@ -53,7 +53,7 @@ namespace MyLuaInteropLib
         /// </summary>
         /// <param name="arg_one"></param>
         /// <returns></returns>
-        bool MyLuaFunc3Work(double? arg_one)
+        bool MyLuaFunc3Cb(double? arg_one)
         {
             return arg_one < 100.0;
         }
@@ -62,7 +62,7 @@ namespace MyLuaInteropLib
         /// Bound lua work function.
         /// </summary>
         /// <returns></returns>
-        double FuncWithNoArgsWork()
+        double FuncWithNoArgsCb()
         {
             return 1234.5;
         }
