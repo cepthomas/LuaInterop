@@ -6,10 +6,10 @@ using System.Text;
 using KeraLuaEx;
 
 
-namespace MyLuaInteropLib
+namespace Interop
 {
-    /// <summary>An example of how to create a C# library that can be loaded by Lua.</summary>
-    public partial class MyClass
+    /// <summary></summary>
+    public partial class HostInterop
     {
         /// <summary>Main execution lua state.</summary>
         readonly Lua _l;
@@ -23,7 +23,7 @@ namespace MyLuaInteropLib
         /// Load the lua libs implemented in C#.
         /// </summary>
         /// <param name="l">Lua context.</param>
-        public MyClass(Lua l)
+        public HostInterop(Lua l)
         {
             _l = l;
 

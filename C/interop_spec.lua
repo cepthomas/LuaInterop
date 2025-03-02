@@ -53,7 +53,7 @@ M.script_funcs =
             {
                 name = "day",
                 type = "S",
-            description = "Day name."
+                description = "Day name."
             },
         },
          ret =

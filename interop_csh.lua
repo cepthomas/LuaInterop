@@ -33,7 +33,8 @@ namespace $(config.host_namespace)
 {
     public partial class $(config.host_lib_name)
     {
-        #region Functions exported from lua for execution by host
+        #region ============= C# => Lua functions =============
+
 >for _, func in ipairs(script_funcs) do
 >local klex_ret_type = klex_types[func.ret.type]
 >local cs_ret_type = cs_types[func.ret.type]
@@ -77,7 +78,8 @@ namespace $(config.host_namespace)
 >end -- script_funcs
         #endregion
 
-        #region Functions exported from host for execution by lua
+        #region ============= Lua => C# callback functions =============s
+        
 >for _, func in ipairs(host_funcs) do
 >local klex_ret_type = klex_types[func.ret.type]
 >local cs_ret_type = cs_types[func.ret.type]
@@ -108,7 +110,7 @@ namespace $(config.host_namespace)
 >table.insert(arg_specs, arg.name)
 >end -- func.args
 >sargs = sx.strjoin(", ", arg_specs)
-            $(cs_ret_type) ret = $(func.host_func_name)Work($(sargs));
+            $(cs_ret_type) ret = $(func.host_func_name)Cb($(sargs));
             l.Push$(klex_ret_type)(ret);
             return 1;
         }
@@ -116,9 +118,9 @@ namespace $(config.host_namespace)
 >end -- host_funcs
         #endregion
 
-        #region Infrastructure
+        #region ============= Infrastructure =============
         // Bind functions to static instance.
-        static $(config.class)? _instance;
+        static $(config.host_lib_name)? _instance;
         // Bound functions.
 >for _, func in ipairs(host_funcs) do
         static LuaFunction? _$(func.host_func_name);

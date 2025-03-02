@@ -119,4 +119,123 @@ namespace Host
         }
         #endregion
     }
+
+
+
+/*
+            Log(Level.INF, $"Starting tests:{which}");
+            LuaExTests tests = new();
+
+            try
+            {
+                tests.Setup();
+
+                switch (which)
+                {
+                    case "Module": tests.ScriptModule(); break;
+                    case "Global": tests.ScriptGlobal(); break;
+                    case "Errors": tests.ScriptErrors(); break;
+                    case "Api": tests.ScriptApi(); break;
+                    case "Play": tests.Play(); break;
+                }
+            }
+            catch (Exception ex)
+            {
+                var st = "???";
+                if (ex.StackTrace is not null)
+                {
+                    var lst = ex.StackTrace.Split(Environment.NewLine);
+                    if (lst.Length >= 2)
+                    {
+                        st = lst[^2];
+                    }
+                }
+                Log(Level.ERR, $"{ex.Message} {st}");
+            }
+            finally
+            {
+                tests.TearDown();
+            } 
+
+        /// <summary>Lua context.</summary>
+        Lua? _l;
+
+        [SetUp]
+        public void Setup()
+        {
+            _l?.Close();
+            _l = new Lua();
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            _l?.Close();
+            _l = null;
+        }
+
+        /// <summary>Test script api.</summary>
+        [Test]
+        public void ScriptApi()
+        {
+            // Create api.
+            var api = new LuaInterop(_l!);
+
+            LoadTestScript("luaex_api.lua");
+
+            // Run it.
+            _l!.PCall(0, Lua.LUA_MULTRET, 0);
+
+            // Reset stack.
+            _l.SetTop(0);
+
+            var tbl = api!.DoOperation("a string", 9876);
+            Assert.IsInstanceOf<TableEx>(tbl);
+            //Debug.WriteLine(tbl!.Dump("api_ret"));
+            Assert.AreEqual(2, tbl!.Count);
+            Assert.AreEqual("gnirts a", tbl["sret"]);
+            Assert.AreEqual(9876 / 2, tbl["iret"]);
+
+            _l.CheckStackSize(0);
+        }
+
+
+
+        /// <summary>General playground for testing.</summary>
+        [Test]
+        public void Play()
+        {
+            LoadTestScript("luaex.lua");
+
+            // Run it.
+            _l!.PCall(0, Lua.LUA_MULTRET, 0);
+
+            //// Reset stack.
+            _l.SetTop(0);
+            _l.CheckStackSize(0);
+        }
+
+        /// <summary>
+        /// Helper.
+        /// </summary>
+        /// <param name="fn"></param>
+        void LoadTestScript(string fn)
+        {
+            string srcPath = GetSourcePath();
+            string scriptsPath = Path.Combine(srcPath, "scripts");
+            _l!.SetLuaPath(new() { scriptsPath });
+            string scriptFile = Path.Combine(scriptsPath, fn);
+            var lstat = _l!.LoadFile(scriptFile);
+        }
+
+
+
+
+
+
+*/
+
+
+
+
 }

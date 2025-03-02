@@ -8,10 +8,10 @@ local M = {}
 
 M.config =
 {
-    lua_lib_name = "luainterop",    -- for require
-    host_lib_name = "HostInterop",  -- host filenames
-    host_namespace = "Interop",      -- host namespace
-    add_refs = { "System.Diagnostics", }, -- -> using (optional)
+    lua_lib_name = "luainterop",            -- for require
+    host_lib_name = "HostInterop",          -- host filenames
+    host_namespace = "Interop",             -- host namespace
+    add_refs = { "System.Diagnostics", },   -- for using (optional)
 }
 
 -- Host calls script.
