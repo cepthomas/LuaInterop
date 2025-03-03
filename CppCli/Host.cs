@@ -47,27 +47,20 @@ namespace Host
             LogManager.Run(Path.Combine(thisDir, "log.txt"), 50000);
             LogManager.LogMessage += (object? sender, LogMessageEventArgs e) => Console.WriteLine(e.ShortMessage);
 
-            // TODO1? Support reload. Unload current modules so reload will be minty fresh. This may fail safely
-            // if no script loaded yet.
-            //string ret = _interop.NebCommand("unload_all", "no arg");
+            // TODO1 Support reload. Unload current modules so reload will be minty fresh. This may fail safely
 
             try
             {
-                // Check args.
-                string[] args = Environment.GetCommandLineArgs();
-                if (args.Length != 2) throw new ArgumentException($"Invalid command line");
-                var scriptFn = args[1];
-                if (!Path.Exists(scriptFn)) throw new ArgumentException($"Invalid script file: {scriptFn}");
-
                 // Hook script callbacks.
                 HostInterop.Log += Interop_Log;
                 HostInterop.Notification += Interop_Notification;
 
                 // Load script using specific lua script paths.
+                var scriptFn = Path.Combine(thisDir, "script_test.lua");
                 List<string> lpath = [thisDir, lbotDir];
                 _interop.Run(scriptFn, lpath);
 
-                // Execute script functions.
+                // Execute script functions. TODO1 finish debug.
                 int res = _interop.Setup(12345);
                 for (int i = 0; i < res; i++)
                 {

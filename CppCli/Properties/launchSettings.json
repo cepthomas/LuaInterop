@@ -1,9 +1,0 @@
-{
-  "profiles": {
-    "LuaSharp": {
-      "commandName": "Project",
-      "commandLineArgs": "C:\\Dev\\Lua\\LuaInterop\\CppCli\\script_test.lua",
-      "nativeDebugging": true
-    }
-  }
-}

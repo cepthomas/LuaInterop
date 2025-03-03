@@ -9,7 +9,7 @@ local M = {}
 M.config =
 {
     lua_lib_name = "luainterop",            -- for require
-    host_lib_name = "HostInterop",          -- host filenames
+    host_lib_name = "Interop",              -- host filenames
     host_namespace = "Interop",             -- host namespace
     add_refs = { "System.Diagnostics", },   -- for using (optional)
 }
@@ -96,32 +96,37 @@ M.script_funcs =
 M.host_funcs =
 {
     {
-        lua_func_name = "my_lua_func3",
-        host_func_name = "MyLuaFunc3",
-        description = "fooga",
+        lua_func_name = "get_time",
+        host_func_name = "GetTime",
+        description = "What time is it",
+        ret =
+        {
+            type = "S",
+            description = "The time"
+        }
+    },
+
+    {
+        lua_func_name = "check_value",
+        host_func_name = "CheckValue",
+        description = "Val1 is greater than val2? with no args",
         args =
         {
             {
-                name = "arg_one",
+                name = "val_one",
                 type = "N",
-                description = "kakakakaka"
+                description = "Val 1"
+            },
+            {
+                name = "val_two",
+                type = "N",
+                description = "Val 2"
             },
         },
         ret =
         {
             type = "B",
-            description = "required return value"
-        }
-    },
-
-    {
-        lua_func_name = "func_with_no_args",
-        host_func_name = "FuncWithNoArgs",
-        description = "Func with no args",
-        ret =
-        {
-            type = "N",
-            description = "a returned thing"
+            description = "The answer"
         }
     },
 }

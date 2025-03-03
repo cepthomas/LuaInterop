@@ -163,7 +163,7 @@ void Core::_EvalLuaInteropStatus(String^ msg)
 //--------------------------------------------------------//
 void Core::_Debug(String^ msg)
 {
-    // TODO This file does not have easy access to real logging. This will do for now.
+    // TODO1 This file does not have easy access to real logging. This will do for now.
     Console::WriteLine("Core: " + msg);
 }
 

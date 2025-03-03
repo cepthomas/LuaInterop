@@ -55,7 +55,7 @@ namespace $(config.host_namespace)
 
             // Get function.
             LuaType ltype = _l.GetGlobal("$(func.lua_func_name)");
-            if (ltype != LuaType.Function) { ErrorHandler(new SyntaxException($"Bad lua function: $(func.lua_func_name)")); return null; }
+            if (ltype != LuaType.Function) { throw new SyntaxException($"Invalid lua function: $(func.lua_func_name)"); }
 
             // Push arguments.
 >for _, arg in ipairs(func.args or {}) do
@@ -66,11 +66,11 @@ namespace $(config.host_namespace)
 
             // Do the actual call.
             LuaStatus lstat = _l.DoCall(numArgs, numRet);
-            if (lstat >= LuaStatus.ErrRun) { ErrorHandler(new SyntaxException("DoCall() failed")); return null; }
+            if (lstat >= LuaStatus.ErrRun) { throw new LuaException("DoCall() failed"); }
 
             // Get the results from the stack.
             $(cs_ret_type)? ret = _l.To$(klex_ret_type)(-1);
-            if (ret is null) { ErrorHandler(new SyntaxException("Return value is not a $(cs_ret_type)")); return null; }
+            if (ret is null) { throw new SyntaxException("Return value is not a $(cs_ret_type)"); }
             _l.Pop(1);
             return ret;
         }
@@ -101,7 +101,7 @@ namespace $(config.host_namespace)
 >local cs_arg_type = cs_types[arg.type]
             $(cs_arg_type)? $(arg.name) = null;
             if (l.Is$(klex_arg_type)($(i))) { $(arg.name) = l.To$(klex_arg_type)($(i)); }
-            else { ErrorHandler(new SyntaxException($"Bad arg type for {$(arg.name)}")); return 0; }
+            else { throw new SyntaxException($"Invalid arg type for {$(arg.name)}"); }
 >end -- func.args
 
             // Do the work. One result.
@@ -174,7 +174,7 @@ print('Generating cs file')
 local rendered, err, dcode = tmpl.substitute(tmpl_src, tmpl_env)
 
 if not err then -- ok
-    ret["LuaInterop.cs"] = rendered
+    ret[spec.config.host_lib_name..".cs"] = rendered
 else -- failed, look at intermediary code
     ret.err = err
     ret.dcode = dcode
