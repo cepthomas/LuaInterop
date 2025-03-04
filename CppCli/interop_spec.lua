@@ -19,7 +19,7 @@ M.script_funcs =
         description = "Initialize.",
         args =
         {
-            { name = "opt", type = "Q", description = "Option" },
+            { name = "opt", type = "I", description = "Option" },
         },
         ret = { type = "I", description = "Return integer" }
     },

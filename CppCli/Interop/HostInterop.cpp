@@ -1,4 +1,4 @@
-///// Warning - this file is created by gen_interop.lua, do not edit. /////
+///// Warning - this file is created by gen_interop.lua - do not edit. 2025-03-04 16:33:30 /////
 
 #include <windows.h>
 #include "luainterop.h"

@@ -1,7 +1,4 @@
--- Generate lua interop for C and C#.
--- Supported types are Boolean, Integer, Number, String.
--- Later maybe: tables, enums, markdown, out pointers ...
--- TODO1 Improve: Need to check spec files for syntax. If error, err_decode.lua will contain info to parse and present to user.
+-- Generate lua interop for C, C++, C#.
 
 local ut = require('lbot_utils')
 local sx = require("stringex")

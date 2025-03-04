@@ -37,8 +37,8 @@ namespace $(config.host_namespace)
         #region ============= C# => Lua functions =============
 
 >for _, func in ipairs(script_funcs) do
->local klex_ret_type = klex_types[func.ret.type]
->local cs_ret_type = cs_types[func.ret.type]
+>local klex_ret_type = klex_types(func.ret.type)
+>local cs_ret_type = cs_types(func.ret.type)
         /// <summary>Lua export function: $(func.description or "")</summary>
 >for _, arg in ipairs(func.args or {}) do
         /// <param name="$(arg.name)">$(arg.description or "")</param>
@@ -46,7 +46,7 @@ namespace $(config.host_namespace)
         /// <returns>$(cs_ret_type) $(func.ret.description or "")></returns>
 >local arg_specs = {}
 >for _, arg in ipairs(func.args or {}) do
->table.insert(arg_specs, cs_types[arg.type] .. " " .. arg.name)
+>table.insert(arg_specs, cs_types(arg.type) .. " " .. arg.name)
 >end -- func.args
 >sargs = sx.strjoin(", ", arg_specs)
         public $(cs_ret_type)? $(func.host_func_name)($(sargs))
@@ -60,7 +60,7 @@ namespace $(config.host_namespace)
 
             // Push arguments.
 >for _, arg in ipairs(func.args or {}) do
->local klex_arg_type = klex_types[arg.type]
+>local klex_arg_type = klex_types(arg.type)
             _l.Push$(klex_arg_type)($(arg.name));
             numArgs++;
 >end -- func.args
@@ -82,8 +82,8 @@ namespace $(config.host_namespace)
         #region ============= Lua => C# callback functions =============s
         
 >for _, func in ipairs(host_funcs) do
->local klex_ret_type = klex_types[func.ret.type]
->local cs_ret_type = cs_types[func.ret.type]
+>local klex_ret_type = klex_types(func.ret.type)
+>local cs_ret_type = cs_types(func.ret.type)
         /// <summary>Host export function: $(func.description or "")
 >for _, arg in ipairs(func.args or {}) do
         /// Lua arg: "$(arg.name)">$(arg.description or "")
@@ -98,8 +98,8 @@ namespace $(config.host_namespace)
 
             // Get arguments
 >for i, arg in ipairs(func.args or {}) do
->local klex_arg_type = klex_types[arg.type]
->local cs_arg_type = cs_types[arg.type]
+>local klex_arg_type = klex_types(arg.type)
+>local cs_arg_type = cs_types(arg.type)
             $(cs_arg_type)? $(arg.name) = null;
             if (l.Is$(klex_arg_type)($(i))) { $(arg.name) = l.To$(klex_arg_type)($(i)); }
             else { throw new SyntaxException($"Invalid arg type for {$(arg.name)}"); }
@@ -152,10 +152,6 @@ namespace $(config.host_namespace)
 ]]
 
 
--- Type name conversions.
-local klex_types = { B = "Boolean", I = "Integer", N = "Number", S = "String", T = "TableEx" }
-local cs_types = { B = "bool", I = "int", N = "double", S = "string", T = "TableEx" }
-
 -- Make the output content. 
 local tmpl_env =
 {
@@ -165,9 +161,27 @@ local tmpl_env =
     config=spec.config,
     script_funcs=spec.script_funcs,
     host_funcs=spec.host_funcs,
-    klex_types=klex_types,
-    cs_types=cs_types
+    -- Type name conversions.
+    klex_types=function(t)
+        if t == 'B' then return "Boolean"
+        elseif t == 'I' then return "Integer"
+        elseif t == 'N' then return "Number"
+        elseif t == 'S' then return "String"
+        elseif t == 'T' then return "TableEx"
+        else return 'Invalid spec type: '..t
+        end
+    end,
+    cs_types=function(t)
+        if t == 'B' then return "bool"
+        elseif t == 'I' then return "int"
+        elseif t == 'N' then return "double"
+        elseif t == 'S' then return "string"
+        elseif t == 'T' then return "TableEx"
+        else return 'Invalid spec type: '..t
+        end
+    end,
 }
+
 
 local ret = {} -- { "gensrc1.cs"=rendered, "gensrc2.cs"=rendered, err, dcode }
 print('Generating cs file')

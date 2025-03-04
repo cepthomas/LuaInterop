@@ -36,11 +36,11 @@ static const char* _error;
 //============= C => Lua functions .c =============//
 
 >for _, func in ipairs(script_funcs) do
->local lua_ret_type = lua_types[func.ret.type]
->local c_ret_type = c_types[func.ret.type]
+>local lua_ret_type = lua_types(func.ret.type)
+>local c_ret_type = c_types(func.ret.type)
 >local arg_specs = {}
 >for _, arg in ipairs(func.args or {}) do
->table.insert(arg_specs, c_types[arg.type].." "..arg.name)
+>table.insert(arg_specs, c_types(arg.type).." "..arg.name)
 >end -- func.args
 >sargs = sx.strjoin(", ", arg_specs)
 //--------------------------------------------------------//
@@ -66,7 +66,7 @@ $(c_ret_type) $(config.lua_lib_name)_$(func.host_func_name)(lua_State* l)
 
     // Push arguments. No error checking required.
 >for _, arg in ipairs(func.args or {}) do
->local lua_arg_type = lua_types[arg.type]
+>local lua_arg_type = lua_types(arg.type)
     lua_push$(lua_arg_type)(l, $(arg.name));
     num_args++;
 >end -- func.args
@@ -89,8 +89,8 @@ $(c_ret_type) $(config.lua_lib_name)_$(func.host_func_name)(lua_State* l)
 //============= Lua => C callback functions .c =============//
 
 >for _, func in ipairs(host_funcs) do
->local lua_ret_type = lua_types[func.ret.type]
->local c_ret_type = c_types[func.ret.type]
+>local lua_ret_type = lua_types(func.ret.type)
+>local c_ret_type = c_types(func.ret.type)
 //--------------------------------------------------------//
 // $(func.description or "")
 // @param[in] l Internal lua state.
@@ -103,8 +103,8 @@ static int $(config.lua_lib_name)_$(func.host_func_name)(lua_State* l)
 {
     // Get arguments
 >for i, arg in ipairs(func.args or {}) do
->local lua_arg_type = lua_types[arg.type]
->local c_arg_type = c_types[arg.type]
+>local lua_arg_type = lua_types(arg.type)
+>local c_arg_type = c_types(arg.type)
     $(c_arg_type) $(arg.name);
     if (lua_is$(lua_arg_type)(l, $(i))) { $(arg.name) = lua_to$(lua_arg_type)(l, $(i)); }
     else { luaL_error(l, "Bad arg type for: $(arg.name)"); }
@@ -113,7 +113,7 @@ static int $(config.lua_lib_name)_$(func.host_func_name)(lua_State* l)
     // Do the work. One result.
 >local arg_specs = { }
 >for _, arg in ipairs(func.args or {}) do
->local c_ret_type = c_types[func.ret.type]
+>local c_ret_type = c_types(func.ret.type)
 >table.insert(arg_specs, arg.name)
 >end -- func.args
 >sargs = sx.strjoin(", ", arg_specs)
@@ -183,8 +183,8 @@ extern "C" {
 //============= C => Lua functions .h =============//
 
 >for _, func in ipairs(script_funcs) do
->local lua_ret_type = lua_types[func.ret.type]
->local c_ret_type = c_types[func.ret.type]
+>local lua_ret_type = lua_types(func.ret.type)
+>local c_ret_type = c_types(func.ret.type)
 // $(func.description or "")
 // @param[in] l Internal lua state.
 >for _, arg in ipairs(func.args or {}) do
@@ -193,7 +193,7 @@ extern "C" {
 // @return $(c_ret_type) $(func.ret.description or "")
 >local arg_specs = {}
 >for _, arg in ipairs(func.args or {}) do
->table.insert(arg_specs, c_types[arg.type].." "..arg.name)
+>table.insert(arg_specs, c_types(arg.type).." "..arg.name)
 >end -- func.args
 >sargs = sx.strjoin(", ", arg_specs)
 >if #sargs > 0 then
@@ -215,13 +215,13 @@ $(c_ret_type) $(config.lua_lib_name)_$(func.host_func_name)(lua_State* l);
 // @return $(func.ret.description)
 >local arg_specs = { }
 >for _, arg in ipairs(func.args or {}) do
->table.insert(arg_specs, c_types[arg.type].." "..arg.name)
+>table.insert(arg_specs, c_types(arg.type).." "..arg.name)
 >end -- func.args
 >sargs = sx.strjoin(", ", arg_specs)
 >if #sargs > 0 then
-$(c_types[func.ret.type]) $(config.lua_lib_name)cb_$(func.host_func_name)(lua_State* l, $(sargs));
+$(c_types(func.ret.type)) $(config.lua_lib_name)cb_$(func.host_func_name)(lua_State* l, $(sargs));
 >else
-$(c_types[func.ret.type]) $(config.lua_lib_name)cb_$(func.host_func_name)(lua_State* l);
+$(c_types(func.ret.type)) $(config.lua_lib_name)cb_$(func.host_func_name)(lua_State* l);
 >end -- #sargs
 >end -- host_funcs
 
@@ -236,9 +236,6 @@ const char* $(config.lua_lib_name)_Error();
 
 
 ----------------------------------------------------------------------------
--- Type name conversions.
-local lua_types = { B = "boolean", I = "integer", N = "number", S ="string" }
-local c_types = { B = "bool", I = "int", N = "double", S = "const char*" }
 
 -- Make the output content.
 local tmpl_env =
@@ -249,8 +246,23 @@ local tmpl_env =
     config=spec.config,
     script_funcs=spec.script_funcs,
     host_funcs=spec.host_funcs, 
-    lua_types=lua_types,
-    c_types=c_types
+    -- Type name conversions.
+    c_types=function(t)
+        if t == 'B' then return "bool"
+        elseif t == 'I' then return "int"
+        elseif t == 'N' then return "double"
+        elseif t == 'S' then return "const char*"
+        else return 'Invalid spec type: '..t
+        end
+    end,
+    lua_types=function(t)
+        if t == 'B' then return "boolean"
+        elseif t == 'I' then return "integer"
+        elseif t == 'N' then return "number"
+        elseif t == 'S' then return "string"
+        else return 'Invalid spec type: '..t
+        end
+    end
 }
 
 local ret = {}

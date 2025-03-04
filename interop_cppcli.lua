@@ -38,7 +38,7 @@ using namespace Interop;
 >  local arg_spec = {}
 >  local arg_impl = {}
 >  for _, arg in ipairs(func.args or {}) do
->    table.insert(arg_spec, cpp_types[arg.type].." "..arg.name)
+>    table.insert(arg_spec, cpp_types(arg.type).." "..arg.name)
 >    if arg.type == 'S' then
 >       table.insert(arg_impl, "ToCString("..arg.name..")")
 >    else
@@ -49,16 +49,16 @@ using namespace Interop;
 >  sarg_impl = sx.strjoin(", ", arg_impl)
 //--------------------------------------------------------//
 >  if #sarg_spec > 0 then
-$(cpp_types[func.ret.type]) $(config.host_lib_name)::$(func.host_func_name)($(sarg_spec))
+$(cpp_types(func.ret.type)) $(config.host_lib_name)::$(func.host_func_name)($(sarg_spec))
 >  else
-$(cpp_types[func.ret.type]) $(config.host_lib_name)::$(func.host_func_name)()
+$(cpp_types(func.ret.type)) $(config.host_lib_name)::$(func.host_func_name)()
 >  end -- #sarg_spec
 {
     LOCK();
 >    if func.ret.type == 'S' then
-    $(cpp_types[func.ret.type]) ret = ToManagedString($(config.lua_lib_name)_$(func.host_func_name)(_l, $(sarg_impl)));
+    $(cpp_types(func.ret.type)) ret = ToManagedString($(config.lua_lib_name)_$(func.host_func_name)(_l, $(sarg_impl)));
 >    else
-    $(cpp_types[func.ret.type]) ret = $(config.lua_lib_name)_$(func.host_func_name)(_l, $(sarg_impl));
+    $(cpp_types(func.ret.type)) ret = $(config.lua_lib_name)_$(func.host_func_name)(_l, $(sarg_impl));
 >    end
     _EvalLuaInteropStatus("$(func.host_func_name)()");
     return ret;
@@ -72,7 +72,7 @@ $(cpp_types[func.ret.type]) $(config.host_lib_name)::$(func.host_func_name)()
 >  local arg_spec = {}
 >  local arg_impl = {}
 >  for _, arg in ipairs(func.args or {}) do
->    table.insert(arg_spec, c_types[arg.type].." "..arg.name)
+>    table.insert(arg_spec, c_types(arg.type).." "..arg.name)
 >    table.insert(arg_impl, arg.name)
 >  end -- func.args
 >  sarg_spec = sx.strjoin(", ", arg_spec)
@@ -134,9 +134,9 @@ public ref class $(func.host_func_name)Args : public EventArgs
 public:
 >  local arg_spec = {}
 >  for _, arg in ipairs(func.args or {}) do
->    table.insert(arg_spec, c_types[arg.type].." "..arg.name)
+>    table.insert(arg_spec, c_types(arg.type).." "..arg.name)
     /// <summary>$(arg.description)</summary>
-    property $(cpp_types[arg.type]) $(arg.name);
+    property $(cpp_types(arg.type)) $(arg.name);
 >  end -- func.args
 >  sarg_spec = sx.strjoin(", ", arg_spec)
     /// <summary>Constructor.</summary>
@@ -165,12 +165,12 @@ public:
 >  local arg_spec = {}
     /// <summary>$(func.host_func_name)</summary>
 >  for _, arg in ipairs(func.args or {}) do
->    table.insert(arg_spec, cpp_types[arg.type].." "..arg.name)
+>    table.insert(arg_spec, cpp_types(arg.type).." "..arg.name)
     /// <param name="$(arg.name)">$(arg.description)</param>
 >  end -- func.args
 >  sarg_spec = sx.strjoin(", ", arg_spec)
     /// <returns>Script return</returns>
-    $(cpp_types[func.ret.type]) $(func.host_func_name)($(sarg_spec));
+    $(cpp_types(func.ret.type)) $(func.host_func_name)($(sarg_spec));
 
 >end -- script_funcs
 //============= C => C# callback functions =============//
@@ -194,10 +194,6 @@ public:
 
 
 ----------------------------------------------------------------------------
--- Type name conversions.
--- local lua_types = { B = "boolean", I = "integer", N = "number", S ="string" }
-local c_types = { B = "bool", I = "int", N = "double", S = "const char*" }
-local cpp_types = { B = "bool", I = "int", N = "double", S = "String^" }
 
 -- Make the output content.
 local tmpl_env =
@@ -208,16 +204,26 @@ local tmpl_env =
     config=spec.config,
     script_funcs=spec.script_funcs,
     host_funcs=spec.host_funcs, 
-    -- lua_types=lua_types,
-    c_types=c_types,
-    cpp_types=cpp_types
+    -- Type name conversions.
+    c_types=function(t)
+        if t == 'B' then return "bool"
+        elseif t == 'I' then return "int"
+        elseif t == 'N' then return "double"
+        elseif t == 'S' then return "const char*"
+        else return 'Invalid spec type: '..t
+        end
+    end,
+    cpp_types=function(t)
+        if t == 'B' then return "bool"
+        elseif t == 'I' then return "int"
+        elseif t == 'N' then return "double"
+        elseif t == 'S' then return "String^"
+        else return 'Invalid spec type: '..t
+        end
+    end
 }
 
 local ret = {}
--- err, dcode
-
--- local rendered, err, dcode = tmpl.substitute(...)
-
 
 -- cpp interop part
 print('Generating cpp file')
