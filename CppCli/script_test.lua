@@ -1,6 +1,5 @@
 
 local lb  = require("luainterop")
---local ls  = require("luasharp")
 
 local M = {}
 
@@ -14,34 +13,17 @@ local function log_info(msg)  lb.log(2, msg) end
 local function log_debug(msg) lb.log(1, msg) end
 local function log_trace(msg) lb.log(0, msg) end
 
-
 log_info('Loading test.lua')
 
-vvv = [[jjjkd jkdjfkdj fjkdjfkdj]]
-
----@diagnostic disable-next-line: lowercase-global
-xxx = [[jjjkd jkdjfkdj
- fjkdjfkdj]]
-
---[[jjjkd jkdjfkdj fjkdjfkdj]]
-
---[[jjjkd jkdjfkdj 
-fjkdjfkdj]]
-
-
 -- Test event.
-ls.tell_host(123, "XYZ")
+lb.notif(33, "XYZ")
 
 
 -----------------------------------------------------------------------------
 function setup()
     log_info('setup()')
+    return 0
 end
-
-function M.setup()
-    log_info('M.setup()')
-end
-
 
 
 -----------------------------------------------------------------------------

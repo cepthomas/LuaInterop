@@ -45,22 +45,21 @@ namespace Host
             LogManager.Run(Path.Combine(thisDir, "log.txt"), 50000);
             LogManager.LogMessage += (object? sender, LogMessageEventArgs e) => Console.WriteLine(e.ShortMessage);
 
-            // TODO1 Support reload. Unload current modules so reload will be minty fresh. This may fail safely
+            // TODOF Support reload. Unload current modules so reload will be minty fresh. This may fail safely
 
             try
             {
                 Interop.Interop _interop = new(_l);
-                _l.SetLuaPath([ thisDir, lbotDir ]);
+                _l.SetLuaPath([thisDir, lbotDir]);
                 LuaStatus lstat = _l.LoadFile(Path.Combine(thisDir, "script_example.lua"));
 
-                return;
+                // Run it.
+                _l.PCall(0, Lua.LUA_MULTRET, 0);
+                // Reset stack.
+                _l.SetTop(0);
 
                 LuaType t = _l.GetGlobal("thing1");
                 var i = _l.ToInteger(-1);
-
-                //LuaType t = _l.GetGlobal("_G");
-                //var tbl = _l.ToTableEx(-1);
-
 
                 // Execute script functions.
                 List<int> lint = [34, 608, 999];

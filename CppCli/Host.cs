@@ -47,7 +47,7 @@ namespace Host
             LogManager.Run(Path.Combine(thisDir, "log.txt"), 50000);
             LogManager.LogMessage += (object? sender, LogMessageEventArgs e) => Console.WriteLine(e.ShortMessage);
 
-            // TODO1 Support reload. Unload current modules so reload will be minty fresh. This may fail safely
+            // TODOF Support reload. Unload current modules so reload will be minty fresh. This may fail safely
 
             try
             {
@@ -64,8 +64,8 @@ namespace Host
                 int res = _interop.Setup(12345);
                 for (int i = 0; i < res; i++)
                 {
-                    var cmdResp = _interop.DoCommand("mult", i.ToString());
-                    _logger.Info($"mult {i} gave me {cmdResp}");
+                    var cmdResp = _interop.DoCommand("cmd", i.ToString());
+                    _logger.Info($"cmd {i} gave me {cmdResp}");
                 }
             }
             catch (InteropException ex)
