@@ -13,9 +13,12 @@ local spec = args[1]
 --------------------------------------------------------------------------------
 local tmpl_interop_c =
 [[
-///// Warning - this file is created by gen_interop.lua, do not edit. /////
 >local ut = require('lbot_utils')
 >local sx = require("stringex")
+>local os = require("os")
+>local snow = os.date('%Y-%m-%d %H:%M:%S')
+///// Warning - this file is created by gen_interop.lua - do not edit. $(snow) /////
+
 #include "$(config.lua_lib_name).h"
 >if config.add_refs ~= nil then
 >for _, inc in ipairs(config.add_refs) do
@@ -159,10 +162,11 @@ const char* $(config.lua_lib_name)_Error()
 local tmpl_interop_h =
 [[
 #pragma once
-
-///// Warning - this file is created by gen_interop.lua, do not edit. /////
 >local ut = require('lbot_utils')
 >local sx = require("stringex")
+>local os = require("os")
+>local snow = os.date('%Y-%m-%d %H:%M:%S')
+///// Warning - this file is created by gen_interop.lua - do not edit. $(snow) /////
 
 #include <stdbool.h>
 

@@ -37,7 +37,7 @@ namespace Host
         {
             // Where are we?
             var thisDir = MiscUtils.GetSourcePath();
-            var lbotDir = "";// $@"\Dev\Lua\LuaBagOfTricks";
+            var lbotDir = Path.Combine(thisDir, @"..\LBOT");
 
             // Setup logging.
             LogManager.MinLevelFile = LogLevel.Trace;

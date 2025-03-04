@@ -39,7 +39,7 @@ namespace Host
         {
             // Where are we?
             var thisDir = MiscUtils.GetSourcePath();
-            var lbotDir = "";// $@"\Dev\Lua\LuaBagOfTricks";
+            var lbotDir = Path.Combine(thisDir, @"..\LBOT");
 
             // Setup logging.
             LogManager.MinLevelFile = LogLevel.Trace;
@@ -60,7 +60,7 @@ namespace Host
                 List<string> lpath = [thisDir, lbotDir];
                 _interop.Run(scriptFn, lpath);
 
-                // Execute script functions. TODO1 finish debug.
+                // Execute script functions.
                 int res = _interop.Setup(12345);
                 for (int i = 0; i < res; i++)
                 {

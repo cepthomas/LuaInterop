@@ -15,7 +15,9 @@ local tmpl_interop_cpp =
 [[
 >local ut = require('lbot_utils')
 >local sx = require("stringex")
-///// Warning - this file is created by gen_interop.lua, do not edit. /////
+>local os = require("os")
+>local snow = os.date('%Y-%m-%d %H:%M:%S')
+///// Warning - this file is created by gen_interop.lua - do not edit. $(snow) /////
 
 #include <windows.h>
 #include "$(config.lua_lib_name).h"
@@ -110,7 +112,9 @@ local tmpl_interop_h =
 [[
 >local ut = require('lbot_utils')
 >local sx = require("stringex")
-///// Warning - this file is created by gen_interop.lua, do not edit. /////
+>local os = require("os")
+>local snow = os.date('%Y-%m-%d %H:%M:%S')
+///// Warning - this file is created by gen_interop.lua - do not edit. $(snow) /////
 
 #pragma once
 #include "Core.h"
@@ -187,7 +191,7 @@ public:
 
 }
 ]]
-    
+
 
 ----------------------------------------------------------------------------
 -- Type name conversions.
@@ -210,6 +214,10 @@ local tmpl_env =
 }
 
 local ret = {}
+-- err, dcode
+
+-- local rendered, err, dcode = tmpl.substitute(...)
+
 
 -- cpp interop part
 print('Generating cpp file')

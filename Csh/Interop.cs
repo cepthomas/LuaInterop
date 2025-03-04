@@ -1,5 +1,4 @@
-///// Warning - this file is created by gen_interop.lua, do not edit. /////
-
+///// Warning - this file is created by gen_interop.lua - do not edit. 2025-03-04 12:56:05 /////
 
 using System;
 using System.IO;
@@ -26,7 +25,7 @@ namespace Interop
 
             // Get function.
             LuaType ltype = _l.GetGlobal("my_lua_func");
-            if (ltype != LuaType.Function) { throw new SyntaxException($"Bad lua function: my_lua_func"); }
+            if (ltype != LuaType.Function) { throw new SyntaxException($"Invalid lua function: my_lua_func"); }
 
             // Push arguments.
             _l.PushString(arg_one);
@@ -57,7 +56,7 @@ namespace Interop
 
             // Get function.
             LuaType ltype = _l.GetGlobal("my_lua_func2");
-            if (ltype != LuaType.Function) { throw new SyntaxException($"Bad lua function: my_lua_func2"); }
+            if (ltype != LuaType.Function) { throw new SyntaxException($"Invalid lua function: my_lua_func2"); }
 
             // Push arguments.
             _l.PushBoolean(arg_one);
@@ -83,7 +82,7 @@ namespace Interop
 
             // Get function.
             LuaType ltype = _l.GetGlobal("no_args_func");
-            if (ltype != LuaType.Function) { throw new SyntaxException($"Bad lua function: no_args_func"); }
+            if (ltype != LuaType.Function) { throw new SyntaxException($"Invalid lua function: no_args_func"); }
 
             // Push arguments.
 
@@ -107,7 +106,7 @@ namespace Interop
 
             // Get function.
             LuaType ltype = _l.GetGlobal("optional_func");
-            if (ltype != LuaType.Function) { throw new SyntaxException($"Bad lua function: optional_func"); }
+            if (ltype != LuaType.Function) { throw new SyntaxException($"Invalid lua function: optional_func"); }
 
             // Push arguments.
 
@@ -157,10 +156,10 @@ namespace Interop
             // Get arguments
             double? val_one = null;
             if (l.IsNumber(1)) { val_one = l.ToNumber(1); }
-            else { throw new SyntaxException($"Bad arg type for {val_one}"); }
+            else { throw new SyntaxException($"Invalid arg type for {val_one}"); }
             double? val_two = null;
             if (l.IsNumber(2)) { val_two = l.ToNumber(2); }
-            else { throw new SyntaxException($"Bad arg type for {val_two}"); }
+            else { throw new SyntaxException($"Invalid arg type for {val_two}"); }
 
             // Do the work. One result.
             bool ret = CheckValueCb(val_one, val_two);

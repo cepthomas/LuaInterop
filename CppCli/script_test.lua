@@ -1,8 +1,6 @@
 
 local lb  = require("luainterop")
 
-local M = {}
-
 -----------------------------------------------------------------------------
 --- Log functions. This goes straight through to the host.
 -- Magic numbers must match host code.
@@ -22,7 +20,7 @@ lb.notif(33, "XYZ")
 -----------------------------------------------------------------------------
 function setup()
     log_info('setup()')
-    return 0
+    return 5
 end
 
 
@@ -31,7 +29,7 @@ end
 -- @param cmd specific command string
 -- @param arg optional argument string
 -- @return result string (table would be nice later)
-function M.do_command(cmd, arg)
+function do_command(cmd, arg)
     print('>>> do_command', cmd, arg)
     if cmd == 'unload_all' then  -- Unload everything so that the script can be reloaded.
         -- package.loaded.bar_time = nil
@@ -54,7 +52,3 @@ function M.do_command(cmd, arg)
         return 'who knows'
     end
 end
-
------------------------------------------------------------------------------
--- Return module.
-return M

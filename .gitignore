@@ -10,3 +10,4 @@ bin/
 
 *.sublime-*
 log.txt
+err_dcode.lua

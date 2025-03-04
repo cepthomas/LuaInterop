@@ -1,7 +1,7 @@
 -- Generate lua interop for C and C#.
 -- Supported types are Boolean, Integer, Number, String.
 -- Later maybe: tables, enums, markdown, out pointers ...
--- TODOF Need to check spec files for syntax. If error, err_decode.lua will contain info to parse and present to user.
+-- TODO1 Improve: Need to check spec files for syntax. If error, err_decode.lua will contain info to parse and present to user.
 
 local ut = require('lbot_utils')
 local sx = require("stringex")
@@ -76,7 +76,9 @@ end
 -- print("spec_fn:", spec_fn)
 -- print("out_path:", out_path)
 
-if not spec_fn or not out_path then error("Missing output path") end
+if not spec_fn then error("Missing spec file") end
+
+if not out_path then error("Missing output path") end
 
 -- OK so far. Configure error function.
 ut.config_debug(use_dbgr)
@@ -99,28 +101,35 @@ local ok, result = pcall(syntax_chunk, spec)
 
 local save_error = true
 
+-- print('xxx', string.match"9$"(out_path))
+-- print('xxx', out_path:match("9$")) -- :match"9$")
+
 -- What happened?
 if ok then
     -- pcall ok, examine the result.
     sep = package.config:sub(1, 1)
-    for k, v in pairs(result) do
-        if k == "err" then
+    for key, val in pairs(result) do
+        if key == "err" then
             if save_error then
                 -- Compile error, save the intermediate code. Needs template _debug = true.
-                err_fn = sx.strjoin(sep, { out_path, "err_dcode.lua" } )
+                local err_fn = sx.strjoin(sep, { out_path, "err_dcode.lua" } )
                 write_output(err_fn, result.dcode)
-                error("Error in TMP file "..err_fn..": "..v)
+                print('>>>', type(result.dcode))
+                -- val: [string "TMP"]:52: attempt to concatenate a nil value (field '?')
+
+                error("Error generating code - see "..err_fn..": "..val)
             end
-        elseif k == "dcode" then
+        elseif key == "dcode" then
             -- Covered above.
-        else
+        else -- key is out filename
             -- Ok, save the generated code.
-            if out_path:match"9$" then
-                outfn = out_path..k
-            else
-                outfn = sx.strjoin(sep, { out_path, k } )
-            end
-            write_output(outfn, v)
+            outfn = sx.strjoin(sep, { out_path, key } )
+            -- if out_path:match"9$" then
+            --     outfn = out_path..key
+            -- else
+            --     outfn = sx.strjoin(sep, { out_path, key } )
+            -- end
+            write_output(outfn, val)
             print("Generated code in "..outfn)
         end
     end

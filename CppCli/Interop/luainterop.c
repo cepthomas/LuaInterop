@@ -1,4 +1,5 @@
-///// Warning - this file is created by gen_interop.lua, do not edit. /////
+///// Warning - this file is created by gen_interop.lua - do not edit. 2025-03-04 13:01:56 /////
+
 #include "luainterop.h"
 
 #if defined(_MSC_VER)

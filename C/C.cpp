@@ -1,7 +1,9 @@
 #include <cstdio>
 #include <cstring>
 #include <fstream>
-#include "pnut.h"
+//#include "pnut.h"
+#include <assert.h>
+
 
 extern "C"
 {
@@ -24,7 +26,7 @@ static const char* CheckStatus(int stat);
 
 
 /////////////////////////////////////////////////////////////////////////////
-UT_SUITE(INTEROP_LOAD, "Test load and unload lua script.")
+void Interop_Load()
 {
     int stat;
     const char* slua_error;
@@ -52,36 +54,33 @@ UT_SUITE(INTEROP_LOAD, "Test load and unload lua script.")
     // Try to load/compile non-existent file.
     fn = "bad_script_file_name.lua";
     stat = luaL_loadfile(_l, fn);
-    UT_EQUAL(stat, LUA_ERRFILE);
+    assert(stat == LUA_ERRFILE);
     slua_error = CheckStatus(stat);
-    UT_NOT_NULL(slua_error);
-    UT_STR_CONTAINS(slua_error, "cannot open bad_script_file_name.lua: No such file or directory");
+    assert(slua_error != NULL);
+    assert(strstr(slua_error, "cannot open bad_script_file_name.lua: No such file or directory") != NULL);
 
     fn = "script_load_error.lua";
     stat = luaL_loadfile(_l, fn);
-    UT_EQUAL(stat, LUA_ERRSYNTAX);
+    assert(stat == LUA_ERRSYNTAX);
     slua_error = CheckStatus(stat);
-    UT_NOT_NULL(slua_error);
-    UT_STR_CONTAINS(slua_error, "syntax error near 'ts'");
+    assert(slua_error != NULL);
+    assert(strstr(slua_error, "syntax error near 'ts'") != NULL);
 
     fn = "script_main.lua";
     stat = luaL_loadfile(_l, fn);
-    UT_EQUAL(stat, LUA_OK);
+    assert(stat == LUA_OK);
     slua_error = CheckStatus(stat);
-    UT_NULL(slua_error);
+    assert(slua_error == NULL);
     // Should be ok.
 
     //luautils_DumpGlobals(_l, stdout);
 
-    UT_INFO("Fini!", "");
     lua_close(_l);
-
-    return 0;
 }    
 
 
 /////////////////////////////////////////////////////////////////////////////
-UT_SUITE(INTEROP_EXEC, "Test execute script via luainterop.")
+void Interop_Exec()
 {
     int stat;
     const char* slua_error;
@@ -106,20 +105,20 @@ UT_SUITE(INTEROP_EXEC, "Test execute script via luainterop.")
 
     fn = "script_main.lua";
     stat = luaL_loadfile(_l, fn);
-    UT_EQUAL(stat, LUA_OK);
+    assert(stat == LUA_OK);
     slua_error = CheckStatus(stat);
-    UT_NULL(slua_error);
+    assert(slua_error == NULL);
     // Should be ok.
 
     // If stat is ok, run the script to init everything.
     stat = lua_pcall(_l, 0, LUA_MULTRET, 0);
     slua_error = CheckStatus(stat);
-    UT_EQUAL(stat, LUA_OK);
-    UT_NULL(slua_error);
+    assert(stat == LUA_OK);
+    assert(slua_error == NULL);
     // Should be ok.
 
     // This should be set by the script execution.
-    UT_STR_EQUAL(_last_log, "Log LVL1 I know this: ts:1100 env:Temperature is 27.3 degrees");
+    assert(strstr(_last_log, "Log LVL1 I know this: ts:1100 env:Temperature is 27.3 degrees") != NULL);
 
     //luautils_DumpGlobals(_l, stdout);
 
@@ -127,58 +126,55 @@ UT_SUITE(INTEROP_EXEC, "Test execute script via luainterop.")
     char op[] = {"*"};
     double answer = luainterop_Calculator(_l, 12.96, op, 3.15);
     sinterop_error = luainterop_Error();
-    UT_NULL(sinterop_error);
-    UT_CLOSE(answer, 40.824, 0.001);
+    assert(sinterop_error == NULL);
+    assert(answer > 40.823 && answer < 40.825);
 
     char day[] = { "Moonday" };
     int daynum = luainterop_DayOfWeek(_l, day);
     sinterop_error = luainterop_Error();
-    UT_NULL(sinterop_error);
-    UT_EQUAL(daynum, 3);
+    assert(sinterop_error == NULL);
+    assert(daynum == 3);
 
     const char* dayname = luainterop_FirstDay(_l);
     sinterop_error = luainterop_Error();
-    UT_NULL(sinterop_error);
-    UT_STR_EQUAL(dayname, "Hamday");
+    assert(sinterop_error == NULL);
+    assert(strcmp(dayname, "Hamday") == 0);
 
     int dummy = luainterop_InvalidFunc(_l);
     sinterop_error = luainterop_Error();
-    UT_NOT_NULL(sinterop_error);
-    UT_STR_CONTAINS(sinterop_error, "Bad function name: invalid_func()");
+    assert(sinterop_error != NULL);
+    assert(strstr(sinterop_error, "Bad function name: invalid_func()") != NULL);
 
     char arg[] = { "abc" };
     dummy = luainterop_InvalidArgType(_l, arg);
     sinterop_error = luainterop_Error();
-    UT_NOT_NULL(sinterop_error);
-    UT_STR_CONTAINS(sinterop_error, "attempt to add a 'string' with a 'number'");
+    assert(sinterop_error != NULL);
+    assert(strstr(sinterop_error, "attempt to add a 'string' with a 'number'") != NULL);
 
     dummy = luainterop_InvalidRetType(_l);
     sinterop_error = luainterop_Error();
-    UT_NOT_NULL(sinterop_error);
-    UT_STR_CONTAINS(sinterop_error, "Bad return type for invalid_ret_type(): should be integer");
+    assert(sinterop_error != NULL);
+    assert(strstr(sinterop_error, "Bad return type for invalid_ret_type(): should be integer") != NULL);
 
     // Force error - C calls lua which calls error(). This is fatal.
     dummy = luainterop_ErrorFunc(_l, 1);
     sinterop_error = luainterop_Error();
-    UT_NOT_NULL(sinterop_error);
-    UT_STR_CONTAINS(sinterop_error, "user_lua_func3() raises error()");
+    assert(sinterop_error != NULL);
+    assert(strstr(sinterop_error, "user_lua_func3() raises error()") != NULL);
 
     // Force error - C calls lua which calls C which calls luaL_error().
     dummy = luainterop_ErrorFunc(_l, 2);
     sinterop_error = luainterop_Error();
-    UT_NOT_NULL(sinterop_error);
-    UT_STR_CONTAINS(sinterop_error, "Let's blow something up in lua");
+    assert(sinterop_error != NULL);
+    assert(strstr(sinterop_error, "Let's blow something up in lua") != NULL);
 
     // Try to call optional function.
     dummy = luainterop_OptionalFunc(_l);
     sinterop_error = luainterop_Error();
-    UT_NULL(sinterop_error);
+    assert(sinterop_error == NULL);
 
     // Done.
-    UT_INFO("Fini!", "");
     lua_close(_l);
-
-    return 0;
 }    
 
 
@@ -244,13 +240,8 @@ const char* CheckStatus(int stat)
 int main()
 {
     // Run the suites.
-    TestManager& tm = TestManager::Instance();
-    std::vector<std::string> whichSuites;
-    whichSuites.emplace_back("INTEROP");
-    tm.RunSuites(whichSuites, 'r', true, &std::cout);
-    //std::ofstream s_ut("_test.txt", std::ofstream::out);
-    //tm.RunSuites(whichSuites, 'r', true, &s_ut);
-    //s_ut.close();
+    Interop_Load();
+    Interop_Exec();
 
     return 0;
 }

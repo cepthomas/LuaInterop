@@ -1,11 +1,10 @@
-cls
-echo off
 
 :: Convert spec into interop library.
+echo off
+cls
 
-rem set LUA_PATH=;;?;?.lua;\Dev\Lua\LuaBagOfTricks\?.lua;
-
+set "ODIR=%cd%"
 pushd ..
-lua gen_interop.lua -c CppCli\interop_spec.lua CppCli\Interop
-lua gen_interop.lua -cppcli CppCli\interop_spec.lua CppCli\Interop
+set LUA_PATH=;;%ODIR%\?.lua;LBOT\?.lua;
+lua gen_interop.lua -cppcli %ODIR%\interop_spec.lua %ODIR%\Interop
 popd
