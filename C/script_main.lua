@@ -1,8 +1,6 @@
 -- Test script.
 
-
-
-local gen = require("luainterop") -- lua-C api
+local gen = require("luainterop")
 
 local script_cnt = 0
 

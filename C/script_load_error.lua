@@ -1,6 +1,6 @@
 -- Script with syntax errors to detect on loadfile.
 
-local gen = require("gen_lib") -- lua-C api
+local gen = require("luainterop")
 
 bad_statement_oops
 

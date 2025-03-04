@@ -1,4 +1,4 @@
--- Generates the interop code. Only needed if there are changes to the function signatures.
+-- Specifies the generated interop code.
 
 local M = {}
 

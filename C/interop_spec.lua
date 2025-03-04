@@ -1,16 +1,13 @@
--- Spec to gen C interop code.
--- All description and args fields are optional.
--- A return value is required, even if just a dummy.
--- Supported data types: B->bool  I->int  N->double  S->char*
+-- Specifies the generated interop code.
 
 local M = {}
 
 M.config =
 {
-    lua_lib_name = "luainterop",   -- ua lib name
+    lua_lib_name = "luainterop",    -- for require
 }
 
--- Host calls script.
+------------------------ Host => Script ------------------------
 M.script_funcs =
 {
     {
@@ -152,7 +149,7 @@ M.script_funcs =
     },
 }
 
--- Script calls host.
+------------------------ Script => Host ------------------------
 M.host_funcs =
 {
     {

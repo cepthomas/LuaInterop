@@ -1,7 +1,4 @@
--- Spec to gen C# interop code.
--- All description and args fields are optional.
--- A return value is required, even if just a dummy.
--- Supported data types: B->bool  I->int  N->double  S->string T->TableEx
+-- Specifies the generated interop code.
 
 
 local M = {}
@@ -14,7 +11,7 @@ M.config =
     add_refs = { "System.Diagnostics", },   -- for using (optional)
 }
 
--- Host calls script.
+------------------------ Host => Script ------------------------
 M.script_funcs =
 {
     {
@@ -92,7 +89,7 @@ M.script_funcs =
 
 }
 
--- Script calls host.
+------------------------ Script => Host ------------------------
 M.host_funcs =
 {
     {
