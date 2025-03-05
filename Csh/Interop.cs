@@ -1,4 +1,4 @@
-///// Warning - this file is created by gen_interop.lua - do not edit. 2025-03-04 16:45:13 /////
+///// Warning - this file is created by gen_interop.lua - do not edit. 2025-03-05 09:24:03 /////
 
 using System;
 using System.IO;
@@ -11,7 +11,7 @@ namespace Interop
 {
     public partial class Interop
     {
-        #region ============= C# => Lua functions =============
+        #region ============= C# => KeraLuaEx functions =============
 
         /// <summary>Lua export function: Tell me something good.</summary>
         /// <param name="arg_one">some strings</param>
@@ -123,8 +123,33 @@ namespace Interop
 
         #endregion
 
-        #region ============= Lua => C# callback functions =============s
+        #region ============= KeraLuaEx => C# callback functions =============s
         
+        /// <summary>Host export function: Script wants to log something.
+        /// Lua arg: "level">Log level
+        /// Lua arg: "msg">Log message
+        /// Lua return: int Unused>
+        /// </summary>
+        /// <param name="p">Internal lua state</param>
+        /// <returns>Number of lua return values></returns>
+        int Log(IntPtr p)
+        {
+            Lua l = Lua.FromIntPtr(p)!;
+
+            // Get arguments
+            int? level = null;
+            if (l.IsInteger(1)) { level = l.ToInteger(1); }
+            else { throw new SyntaxException($"Invalid arg type for {level}"); }
+            string? msg = null;
+            if (l.IsString(2)) { msg = l.ToString(2); }
+            else { throw new SyntaxException($"Invalid arg type for {msg}"); }
+
+            // Do the work. One result.
+            int ret = LogCb(level, msg);
+            l.PushInteger(ret);
+            return 1;
+        }
+
         /// <summary>Host export function: What time is it
         /// Lua return: string The time>
         /// </summary>
@@ -173,6 +198,7 @@ namespace Interop
         // Bind functions to static instance.
         static Interop? _instance;
         // Bound functions.
+        static LuaFunction? _Log;
         static LuaFunction? _GetTime;
         static LuaFunction? _CheckValue;
         readonly List<LuaRegister> _libFuncs = new();
@@ -187,6 +213,8 @@ namespace Interop
         void LoadInterop()
         {
             _instance = this;
+            _Log = _instance!.Log;
+            _libFuncs.Add(new LuaRegister("log", _Log));
             _GetTime = _instance!.GetTime;
             _libFuncs.Add(new LuaRegister("get_time", _GetTime));
             _CheckValue = _instance!.CheckValue;

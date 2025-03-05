@@ -93,6 +93,18 @@ M.script_funcs =
 M.host_funcs =
 {
     {
+        lua_func_name = "log",
+        host_func_name = "Log",
+        description = "Script wants to log something.",
+        args =
+        {
+            { name = "level", type = "I", description = "Log level" },
+            { name = "msg", type = "S", description = "Log message" },
+        },
+        ret = { type = "I", description = "Unused" }
+    },
+
+    {
         lua_func_name = "get_time",
         host_func_name = "GetTime",
         description = "What time is it",

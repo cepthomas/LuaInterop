@@ -8,11 +8,22 @@ using KeraLuaEx;
 
 namespace Interop
 {
+
+    public class LogEventArgs : EventArgs
+    {
+        public int Level { get; set; } = 0;
+        public string Msg { get; set; } = "???";
+    };
+
+
     /// <summary></summary>
     public partial class Interop
     {
         /// <summary>Main execution lua state.</summary>
         readonly Lua _l;
+
+        /// <summary>Callback.</summary>
+        public event EventHandler<LogEventArgs>? LogEvent;
 
         #region Lifecycle
         /// <summary>
@@ -29,6 +40,16 @@ namespace Interop
         #endregion
 
         #region Lua call Host functions
+        /// <summary>
+        /// Bound lua callback work function.
+        /// </summary>
+        /// <returns></returns>
+        int LogCb(int? level, string msg)
+        {
+            LogEvent?.Invoke(this, new LogEventArgs() { Level = (int)level!, Msg = msg });
+            return 0;
+        }
+        
         /// <summary>
         /// Bound lua callback work function.
         /// </summary>

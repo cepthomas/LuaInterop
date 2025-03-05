@@ -50,6 +50,7 @@ namespace Host
             try
             {
                 Interop.Interop _interop = new(_l);
+                _interop.LogEvent += (object? sender, LogEventArgs e) => _logger.Log((LogLevel)e.Level, e.Msg);
                 _l.SetLuaPath([thisDir, lbotDir]);
                 LuaStatus lstat = _l.LoadFile(Path.Combine(thisDir, "script_example.lua"));
 
@@ -96,7 +97,5 @@ namespace Host
            _l.Dispose();
         }
         #endregion
-
-
     }
 }

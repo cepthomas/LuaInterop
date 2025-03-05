@@ -46,11 +46,12 @@ local out_path = nil
 local syntax_fn = nil
 
 for i = 1, #arg do
-    local a = arg[i]
+    local parg = arg[i]
+    -- print("parg:", parg)
     local valid_arg = true
     -- flags
-    if a:sub(1, 1) == '-' then
-        opt = a:sub(2)
+    if parg:sub(1, 1) == '-' then
+        opt = parg:sub(2)
         if opt == "d" then use_dbgr = true
         else
             syntax = opt
@@ -59,19 +60,20 @@ for i = 1, #arg do
         end
     -- positional args
     elseif not spec_fn then
-        spec_fn = a
+        spec_fn = parg
     elseif not out_path then
-        out_path = a
+        out_path = parg
     else
         valid_arg = false
     end
 
-    if not valid_arg then error("Invalid command line arg: "..a) end
+    -- print("syntax_fn:", syntax_fn)
+    -- print("spec_fn:", spec_fn)
+    -- print("out_path:", out_path)
+
+    if not valid_arg then error("Invalid command line arg: ".."["..parg.."]") end
 end
 
--- print("syntax_fn:", syntax_fn)
--- print("spec_fn:", spec_fn)
--- print("out_path:", out_path)
 
 if not spec_fn then error("Missing spec file") end
 
@@ -94,12 +96,7 @@ if not ok then error("Syntax in spec file: "..spec) end
 
 -- Generate using syntax and the spec.
 local ok, result = pcall(syntax_chunk, spec)
--- local ok, result = xpcall(syntax_chunk, debug.traceback, spec)
-
 local save_error = true
-
--- print('xxx', string.match"9$"(out_path))
--- print('xxx', out_path:match("9$")) -- :match"9$")
 
 -- What happened?
 if ok then
@@ -111,9 +108,6 @@ if ok then
                 -- Compile error, save the intermediate code. Needs template _debug = true.
                 local err_fn = sx.strjoin(sep, { out_path, "err_dcode.lua" } )
                 write_output(err_fn, result.dcode)
-                print('>>>', type(result.dcode))
-                -- val: [string "TMP"]:52: attempt to concatenate a nil value (field '?')
-
                 error("Error generating code - see "..err_fn..": "..val)
             end
         elseif key == "dcode" then
@@ -121,11 +115,6 @@ if ok then
         else -- key is out filename
             -- Ok, save the generated code.
             outfn = sx.strjoin(sep, { out_path, key } )
-            -- if out_path:match"9$" then
-            --     outfn = out_path..key
-            -- else
-            --     outfn = sx.strjoin(sep, { out_path, key } )
-            -- end
             write_output(outfn, val)
             print("Generated code in "..outfn)
         end

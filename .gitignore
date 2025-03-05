@@ -6,6 +6,8 @@
 # .x64/
 obj/
 bin/
+iobj/
+ibin/
 # Debug/
 
 *.sublime-*

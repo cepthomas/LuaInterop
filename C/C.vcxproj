@@ -17,7 +17,7 @@
   <ItemGroup>
     <ClCompile Include="..\LBOT\luaex.c" />
     <ClCompile Include="luainterop.c" />
-    <ClCompile Include="C.cpp" />
+    <ClCompile Include="Host.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

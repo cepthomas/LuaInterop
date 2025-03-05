@@ -1,9 +1,7 @@
 #include <cstdio>
 #include <cstring>
 #include <fstream>
-//#include "pnut.h"
 #include <assert.h>
-
 
 extern "C"
 {
@@ -21,22 +19,76 @@ static lua_State* _l;
 static int _timestamp = 1000;
 static char _last_log[500];
 
-// Top level error handler for nebulua status.
+// Top level error handler for status.
 static const char* CheckStatus(int stat);
 
 
-/////////////////////////////////////////////////////////////////////////////
-void Interop_Load()
+//---------------- Callback host functions from Lua -------------//
+
+//--------------------------------------------------------//
+int luainteropcb_GetTimestamp(lua_State* l)
+{
+    _timestamp += 100;
+    return _timestamp;
+}
+
+//--------------------------------------------------------//
+bool luainteropcb_Log(lua_State* l, int level, const char* msg)
+{
+    snprintf(_last_log, sizeof(_last_log) - 1, "Log LVL%d %s", level, msg);
+    printf(_last_log);
+    printf("\n");
+    return true;
+}
+
+//--------------------------------------------------------//
+const char* luainteropcb_GetEnvironment(lua_State* l, double temp)
+{
+    static char buff[50];
+    snprintf(buff, sizeof(buff) - 1, "Temperature is %.1f degrees", temp);
+    return buff;
+}
+
+//--------------------------------------------------------//
+bool luainteropcb_ForceError(lua_State* l)
+{
+    luaL_error(_l, "Let's blow something up in lua");
+    return true;
+}
+
+
+//---------------- Helpers -------------//
+
+//--------------------------------------------------------//
+const char* CheckStatus(int stat)
+{
+    static char buff[500];
+    char* sret = NULL;
+
+    if (stat >= LUA_ERRRUN)
+    {
+        // Error message.
+        const char* errmsg = NULL;
+        if (stat <= LUA_ERRFILE && lua_gettop(_l) > 0) // internal lua error - get error message on stack if provided.
+        {
+            errmsg = lua_tostring(_l, -1);
+            strncpy(buff, errmsg, sizeof(buff) - 1);
+            sret = buff;
+        }
+    }
+
+    return sret;
+}
+
+//---------------- Start here -------------//
+int main()
 {
     int stat;
     const char* slua_error;
+    const char* sinterop_error;
 
     // Init internal stuff.
     _l = luaL_newstate();
-     //luautils_EvalStack(_l, stdout, 0);
-
-    //FILE* fp = fopen("_here .txt", "w");
-    //fprintf(fp, "here");
 
     // Load std libraries.
     luaL_openlibs(_l);
@@ -47,7 +99,7 @@ void Interop_Load()
     // Pop the table off the stack as it interferes with calling the module functions.
     lua_pop(_l, 1);
 
-    // Load the script file.
+    ///// Load the bad script file.
     // Pushes the compiled chunk as a Lua function on top of the stack or pushes an error message.
     const char* fn = "";
 
@@ -66,63 +118,25 @@ void Interop_Load()
     assert(slua_error != NULL);
     assert(strstr(slua_error, "syntax error near 'ts'") != NULL);
 
+    ///// Load the good script file.
     fn = "script_main.lua";
     stat = luaL_loadfile(_l, fn);
     assert(stat == LUA_OK);
     slua_error = CheckStatus(stat);
     assert(slua_error == NULL);
-    // Should be ok.
-
-    //luautils_DumpGlobals(_l, stdout);
-
-    lua_close(_l);
-}    
-
-
-/////////////////////////////////////////////////////////////////////////////
-void Interop_Exec()
-{
-    int stat;
-    const char* slua_error;
-    const char* sinterop_error;
-
-    // Init internal stuff.
-    _l = luaL_newstate();
-     //luautils_EvalStack(_l, stdout, 0);
-
-    // Load std libraries.
-    luaL_openlibs(_l);
-
-    // Load host funcs into lua space. This table gets pushed on the stack and into globals.
-    luainterop_Load(_l);
-
-    // Pop the table off the stack as it interferes with calling the module functions.
-    lua_pop(_l, 1);
-
-    // Load the script file.
-    // Pushes the compiled chunk as a Lua function on top of the stack or pushes an error message.
-    const char* fn = "";
-
-    fn = "script_main.lua";
-    stat = luaL_loadfile(_l, fn);
-    assert(stat == LUA_OK);
-    slua_error = CheckStatus(stat);
-    assert(slua_error == NULL);
-    // Should be ok.
 
     // If stat is ok, run the script to init everything.
     stat = lua_pcall(_l, 0, LUA_MULTRET, 0);
     slua_error = CheckStatus(stat);
     assert(stat == LUA_OK);
     assert(slua_error == NULL);
-    // Should be ok.
 
-    // This should be set by the script execution.
+    // Should be ok. This should be set by the script execution.
     assert(strstr(_last_log, "Log LVL1 I know this: ts:1100 env:Temperature is 27.3 degrees") != NULL);
 
     //luautils_DumpGlobals(_l, stdout);
 
-    // Call to the script.
+    // Call script functions.
     char op[] = {"*"};
     double answer = luainterop_Calculator(_l, 12.96, op, 3.15);
     sinterop_error = luainterop_Error();
@@ -175,74 +189,6 @@ void Interop_Exec()
 
     // Done.
     lua_close(_l);
-}    
-
-
-
-//---------------- Call host functions from Lua - work functions -------------//
-
-//--------------------------------------------------------//
-int luainteropcb_GetTimestamp(lua_State* l)
-{
-    _timestamp += 100;
-    return _timestamp;
-}
-
-//--------------------------------------------------------//
-bool luainteropcb_Log(lua_State* l, int level, const char* msg)
-{
-    snprintf(_last_log, sizeof(_last_log) - 1, "Log LVL%d %s", level, msg);
-    return true;
-}
-
-//--------------------------------------------------------//
-const char* luainteropcb_GetEnvironment(lua_State* l, double temp)
-{
-    static char buff[50];
-    snprintf(buff, sizeof(buff) - 1, "Temperature is %.1f degrees", temp);
-    return buff;
-}
-
-//--------------------------------------------------------//
-bool luainteropcb_ForceError(lua_State* l)
-{
-    luaL_error(_l, "Let's blow something up in lua");
-    return true;
-}
-
-
-//---------------- Test helpers -------------//
-
-
-//--------------------------------------------------------//
-const char* CheckStatus(int stat)
-{
-    static char buff[500];
-    char* sret = NULL;
-
-    if (stat >= LUA_ERRRUN)
-    {
-        // Error message.
-        const char* errmsg = NULL;
-        if (stat <= LUA_ERRFILE && lua_gettop(_l) > 0) // internal lua error - get error message on stack if provided.
-        {
-            errmsg = lua_tostring(_l, -1);
-            strncpy(buff, errmsg, sizeof(buff) - 1);
-            sret = buff;
-        }
-    }
-
-    return sret;
-}
-
-//---------------- Start here -------------//
-
-int main()
-{
-    // Run the suites.
-    Interop_Load();
-    Interop_Exec();
 
     return 0;
 }
-

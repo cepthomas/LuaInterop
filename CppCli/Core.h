@@ -14,7 +14,7 @@ const char* ToCString(String^ input);
 /// <summary>Convert unmanaged string to managed.</summary>
 String^ ToManagedString(const char* input);
 
-/// <summary>Exceptions used for all cross-interop errors.</summary>
+/// <summary>Exceptions used for all interop errors.</summary>
 public ref struct InteropException : public System::Exception
 {
 public:

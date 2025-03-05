@@ -34,7 +34,7 @@ namespace $(config.host_namespace)
 {
     public partial class $(config.host_lib_name)
     {
-        #region ============= C# => Lua functions =============
+        #region ============= C# => KeraLuaEx functions =============
 
 >for _, func in ipairs(script_funcs) do
 >local klex_ret_type = klex_types(func.ret.type)
@@ -79,7 +79,7 @@ namespace $(config.host_namespace)
 >end -- script_funcs
         #endregion
 
-        #region ============= Lua => C# callback functions =============s
+        #region ============= KeraLuaEx => C# callback functions =============s
         
 >for _, func in ipairs(host_funcs) do
 >local klex_ret_type = klex_types(func.ret.type)

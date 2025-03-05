@@ -1,6 +1,6 @@
 -- Test script.
 
-local gen = require("luainterop")
+local li = require("luainterop")
 
 local script_cnt = 0
 
@@ -11,11 +11,11 @@ local days = { "Hamday", "Eggday", "Moonday", "Boogaday" }
 
 --------------------- Lua calls C host -----------------------------------
 
-local ts = gen.get_timestamp()
+local ts = li.get_timestamp()
 
-local senv = gen.get_environment(27.34)
+local senv = li.get_environment(27.34)
 
-local b = gen.log(1, string.format("I know this: ts:%d env:%s", ts, senv))
+local b = li.log(1, string.format("I know this: ts:%d env:%s", ts, senv))
 
 --------------------- C host calls Lua -----------------------------------
 
@@ -73,7 +73,7 @@ function error_func(flavor)
     if flavor == 1 then
         return user_lua_func1()
     else
-        return gen.force_error()
+        return li.force_error()
     end
 end
 
