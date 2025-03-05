@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="Interop\Interop.vcxproj" />
+    <ProjectReference Include="Interop.vcxproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -22,10 +22,10 @@ namespace Host
     {
         #region Fields
         /// <summary>Host logger.</summary>
-        readonly Logger _logger = LogManager.CreateLogger("Host");
+        readonly Logger _logger = LogManager.CreateLogger("HST");
 
         /// <summary>Script logger.</summary>
-        readonly Logger _loggerScript = LogManager.CreateLogger("Script");
+        readonly Logger _loggerScript = LogManager.CreateLogger("SCR");
 
         /// <summary>The interop.</summary>
         protected HostInterop _interop = new();
@@ -64,7 +64,7 @@ namespace Host
                 int res = _interop.Setup(12345);
                 for (int i = 0; i < res; i++)
                 {
-                    var cmdResp = _interop.DoCommand("cmd", i.ToString());
+                    var cmdResp = _interop.DoCommand("cmd", (i*2).ToString());
                     _logger.Info($"cmd {i} gave me {cmdResp}");
                 }
             }
@@ -108,7 +108,7 @@ namespace Host
         /// <param name="e"></param>
         void Interop_Notification(object? sender, NotificationArgs args) 
         {
-            _loggerScript.Log(LogLevel.Info, "Hello there");
+            _loggerScript.Info($"Notification: {args.num} {args.text}");
         }
         #endregion
     }
