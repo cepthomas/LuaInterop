@@ -37,7 +37,7 @@ namespace Host
         {
             // Where are we?
             var thisDir = MiscUtils.GetSourcePath();
-            var lbotDir = Path.Combine(thisDir, @"..\LBOT");
+var lbotDir = Path.Combine(thisDir, "TODO1 LBOT");
 
             // Setup logging.
             LogManager.MinLevelFile = LogLevel.Trace;

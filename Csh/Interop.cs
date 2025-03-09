@@ -11,6 +11,32 @@ namespace Interop
 {
     public partial class Interop
     {
+        public class LogEventArgs : EventArgs
+        {
+            public int Level { get; set; } = 0;
+            public string Msg { get; set; } = "???";
+        };
+        /// <summary>Callback.</summary>
+        public event EventHandler<LogEventArgs>? LogEventX;
+
+
+
+        /// <summary>Main execution lua state.</summary>
+        readonly Lua _l;
+
+        /// <summary>
+        /// Load the lua libs implemented in C#.
+        /// </summary>
+        /// <param name="l">Lua context.</param>
+        public Interop(Lua l)
+        {
+            _l = l;
+
+            // Load our lib stuff.
+            LoadInterop();
+        }
+
+
         #region ============= C# => KeraLuaEx functions =============
 
         /// <summary>Lua export function: Tell me something good.</summary>
@@ -144,10 +170,19 @@ namespace Interop
             if (l.IsString(2)) { msg = l.ToString(2); }
             else { throw new SyntaxException($"Invalid arg type for {msg}"); }
 
+
+            ///// Do the work. One result.
+            LogEvent?.Invoke(this, new LogEventArgs() { Level = (int)level!, Msg = msg });
+            l.PushInteger(0);
+            return 1;
+
+
+            /*
             // Do the work. One result.
             int ret = LogCb(level, msg);
             l.PushInteger(ret);
             return 1;
+            */
         }
 
         /// <summary>Host export function: What time is it

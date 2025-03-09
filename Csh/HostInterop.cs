@@ -8,7 +8,7 @@ using KeraLuaEx;
 
 namespace Interop
 {
-
+    /*
     public class LogEventArgs : EventArgs
     {
         public int Level { get; set; } = 0;
@@ -69,4 +69,5 @@ namespace Interop
         }
         #endregion
     }
+    */
 }

@@ -7,7 +7,8 @@
         <AssemblyName>GenLib</AssemblyName>
         <RootNamespace>GenLib</RootNamespace>
         <Deterministic>False</Deterministic>
-        <Version>$([System.DateTime]::UtcNow.ToString(yy.MM.dd))</Version>
+        <Version>1.2.0</Version>
+        <!-- <Version>$([System.DateTime]::UtcNow.ToString(yy.MM.dd))</Version> -->
         <Description>GenLib</Description>
         <Copyright>MIT License</Copyright>
         <OutputPath>bin\</OutputPath>
