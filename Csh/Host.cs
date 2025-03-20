@@ -37,7 +37,7 @@ namespace Host
         {
             // Where are we?
             var thisDir = MiscUtils.GetSourcePath();
-var lbotDir = Path.Combine(thisDir, "TODO1 LBOT");
+var lbotDir = Path.Combine(thisDir, "TODO? LBOT");
 
             // Setup logging.
             LogManager.MinLevelFile = LogLevel.Trace;
@@ -52,7 +52,7 @@ var lbotDir = Path.Combine(thisDir, "TODO1 LBOT");
                 Interop.Interop _interop = new(_l);
                 _interop.LogEvent += (object? sender, LogEventArgs e) => _logger.Log((LogLevel)e.Level, e.Msg);
                 _l.SetLuaPath([thisDir, lbotDir]);
-                LuaStatus lstat = _l.LoadFile(Path.Combine(thisDir, "script_example.lua"));
+LuaStatus lstat = _l.LoadFile(Path.Combine(thisDir, "script_example.lua")); // TODO?
 
                 // Run it.
                 _l.PCall(0, Lua.LUA_MULTRET, 0);

@@ -82,6 +82,8 @@ These may also appear:
 - luainterop.c/h - generated C <=> Lua interop code
 
 ### C++/CLI
+Note that this flavor also requires the C flavor.
+
 - CppCli.sln, Host.csproj, Interop.vcxproj - VS solution
 - Host.cs - main application and events
 - HostInterop.cpp/h - generated C# <=> C interop code

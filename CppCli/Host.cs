@@ -39,7 +39,7 @@ namespace Host
         {
             // Where are we?
             var thisDir = MiscUtils.GetSourcePath();
-            var lbotDir = Path.Combine(thisDir, @"..\LBOT");
+            var lbotDir = Path.Combine(thisDir, get env var $(LBOT)
 
             // Setup logging.
             LogManager.MinLevelFile = LogLevel.Trace;
