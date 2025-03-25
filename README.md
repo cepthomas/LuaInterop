@@ -1,3 +1,7 @@
+# Refactored to:
+- https://github.com/cepthomas/LuaBagOfTricks
+- https://github.com/cepthomas/LbotImpl
+
 # LuaInterop
 
 Contains several flavors of how to embed Lua scripting in host languages:
