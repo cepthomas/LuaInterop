@@ -1,6 +1,6 @@
 -- Generate C specific interop code.
 
-local ut = require('lbot_utils')
+-- local ut = require('lbot_utils')
 local tmpl = require('template')
 
 -- Get specification.
@@ -17,10 +17,10 @@ local tmpl_interop_c =
 >local sx = require("stringex")
 >local os = require("os")
 >local snow = os.date('%Y-%m-%d %H:%M:%S')
-///// Warning - this file is created by gen_interop.lua - do not edit. $(snow) /////
+///// Warning - this file is created by gen_interop.lua - do not edit. /////
 
 #include "$(config.lua_lib_name).h"
->if config.add_refs ~= nil then
+>if config.add_refs then
 >for _, inc in ipairs(config.add_refs) do
 #include $(inc)
 >end
@@ -60,7 +60,7 @@ $(c_ret_type) $(config.lua_lib_name)_$(func.host_func_name)(lua_State* l)
     int ltype = lua_getglobal(l, "$(func.lua_func_name)");
     if (ltype != LUA_TFUNCTION)
     {
-        if ($(func.required)) { _error = "Bad function name: $(func.lua_func_name)()"; }
+        _error = "Invalid function name: $(func.lua_func_name)()";
         return ret;
     }
 
@@ -77,7 +77,7 @@ $(c_ret_type) $(config.lua_lib_name)_$(func.host_func_name)(lua_State* l)
     {
         // Get the results from the stack.
         if (lua_is$(lua_ret_type)(l, -1)) { ret = lua_to$(lua_ret_type)(l, -1); }
-        else { _error = "Bad return type for $(func.lua_func_name)(): should be $(lua_ret_type)"; }
+        else { _error = "Invalid return type for $(func.lua_func_name)(): should be $(lua_ret_type)"; }
     }
     else { _error = lua_tostring(l, -1); }
     lua_pop(l, num_ret); // Clean up results.
@@ -107,7 +107,7 @@ static int $(config.lua_lib_name)_$(func.host_func_name)(lua_State* l)
 >local c_arg_type = c_types(arg.type)
     $(c_arg_type) $(arg.name);
     if (lua_is$(lua_arg_type)(l, $(i))) { $(arg.name) = lua_to$(lua_arg_type)(l, $(i)); }
-    else { luaL_error(l, "Bad arg type for: $(arg.name)"); }
+    else { luaL_error(l, "Invalid arg type for: $(arg.name)"); }
 >end -- func.args
 
     // Do the work. One result.
@@ -166,7 +166,7 @@ local tmpl_interop_h =
 >local sx = require("stringex")
 >local os = require("os")
 >local snow = os.date('%Y-%m-%d %H:%M:%S')
-///// Warning - this file is created by gen_interop.lua - do not edit. $(snow) /////
+///// Warning - this file is created by gen_interop.lua - do not edit. /////
 
 #include <stdbool.h>
 
@@ -245,7 +245,7 @@ local tmpl_env =
     _debug=true,
     config=spec.config,
     script_funcs=spec.script_funcs,
-    host_funcs=spec.host_funcs, 
+    host_funcs=spec.host_funcs,
     -- Type name conversions.
     c_types=function(t)
         if t == 'B' then return "bool"

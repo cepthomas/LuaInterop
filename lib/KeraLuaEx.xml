@@ -69,9 +69,7 @@
             <summary>
             Lua state class, main interface to use Lua library.
             </summary>
-            <summary>
-            Stuff added for KeraLuaEx.
-            </summary>
+            <summary>Stuff added for KeraLuaEx.</summary>
         </member>
         <member name="F:KeraLuaEx.Lua._luaState">
             <summary>Native lua context.</summary>
@@ -1502,8 +1500,8 @@
             Check lua status and log an error. If ThrowOnError is true, throws an exception.
             </summary>
             <param name="lstat">Thing to look at.</param>
-            <param name="file">Ignore - compiler use.</param>
-            <param name="line">Ignore - compiler use.</param>
+            <param name="appFile">Ignore - compiler use.</param>
+            <param name="appLine">Ignore - compiler use.</param>
             <returns>True means error</returns>
             <exception cref="T:System.IO.FileNotFoundException"></exception>
             <exception cref="T:KeraLuaEx.LuaException"></exception>
@@ -1524,26 +1522,6 @@
             </summary>
             <param name="info"></param>
             <returns>List of strings.</returns>
-        </member>
-        <member name="T:KeraLuaEx.LuaCompare">
-            <summary>
-            Used by Compare
-            </summary>
-        </member>
-        <member name="F:KeraLuaEx.LuaCompare.Equal">
-            <summary>
-             compares for equality (==)
-            </summary>
-        </member>
-        <member name="F:KeraLuaEx.LuaCompare.LessThen">
-            <summary>
-             compares for less than 
-            </summary>
-        </member>
-        <member name="F:KeraLuaEx.LuaCompare.LessOrEqual">
-            <summary>
-            compares for less or equal 
-            </summary>
         </member>
         <member name="T:KeraLuaEx.LuaDebug">
             <summary>
@@ -1642,11 +1620,101 @@
             a "printable" version of source, to be used in error messages
             </summary>
         </member>
-        <member name="T:KeraLuaEx.SyntaxException">
-            <summary>Lua script syntax error.</summary>
+        <member name="T:KeraLuaEx.LuaType">
+            <summary>
+            Lua types
+            </summary>
         </member>
-        <member name="T:KeraLuaEx.LuaException">
-            <summary>Internal error on lua side.</summary>
+        <member name="F:KeraLuaEx.LuaType.None">
+            <summary>
+            LUA_TNONE
+            </summary>
+        </member>
+        <member name="F:KeraLuaEx.LuaType.Nil">
+            <summary>
+            LUA_TNIL
+            </summary>
+        </member>
+        <member name="F:KeraLuaEx.LuaType.Boolean">
+            <summary>
+            LUA_TBOOLEAN
+            </summary>
+        </member>
+        <member name="F:KeraLuaEx.LuaType.LightUserData">
+            <summary>
+            LUA_TLIGHTUSERDATA
+            </summary>
+        </member>
+        <member name="F:KeraLuaEx.LuaType.Number">
+            <summary>
+            LUA_TNUMBER
+            </summary>
+        </member>
+        <member name="F:KeraLuaEx.LuaType.String">
+            <summary>
+            LUA_TSTRING
+            </summary>
+        </member>
+        <member name="F:KeraLuaEx.LuaType.Table">
+            <summary>
+            LUA_TTABLE
+            </summary>
+        </member>
+        <member name="F:KeraLuaEx.LuaType.Function">
+            <summary>
+            LUA_TFUNCTION
+            </summary>
+        </member>
+        <member name="F:KeraLuaEx.LuaType.UserData">
+            <summary>
+            LUA_TUSERDATA
+            </summary>
+        </member>
+        <member name="F:KeraLuaEx.LuaType.Thread">
+            <summary>
+            LUA_TTHREAD
+            </summary>
+            //
+        </member>
+        <member name="T:KeraLuaEx.LuaStatus">
+            <summary>
+            Lua Load/Call status return
+            </summary>
+        </member>
+        <member name="F:KeraLuaEx.LuaStatus.OK">
+            <summary>
+            success
+            </summary>
+        </member>
+        <member name="F:KeraLuaEx.LuaStatus.Yield">
+            <summary>
+            Yield
+            </summary>
+        </member>
+        <member name="F:KeraLuaEx.LuaStatus.ErrRun">
+            <summary>
+            a runtime error. 
+            </summary>
+        </member>
+        <member name="F:KeraLuaEx.LuaStatus.ErrSyntax">
+            <summary>
+            syntax error during precompilation
+            </summary>
+        </member>
+        <member name="F:KeraLuaEx.LuaStatus.ErrMem">
+            <summary>
+            memory allocation error. For such errors, Lua does not call the message handler. 
+            </summary>
+        </member>
+        <member name="F:KeraLuaEx.LuaStatus.ErrErr">
+            <summary>
+            error while running the message handler. 
+            </summary>
+        </member>
+        <member name="F:KeraLuaEx.LuaStatus.ErrFile">
+            <summary>
+            extra error code for luaL_loadfilex - LUA_ERRFILE
+            </summary>
         </member>
         <member name="T:KeraLuaEx.LuaGC">
             <summary>
@@ -1843,7 +1911,44 @@
             performs bitwise NOT (~)
             </summary>
         </member>
+        <member name="T:KeraLuaEx.LuaCompare">
+            <summary>
+            Used by Compare
+            </summary>
+        </member>
+        <member name="F:KeraLuaEx.LuaCompare.Equal">
+            <summary>
+             compares for equality (==)
+            </summary>
+        </member>
+        <member name="F:KeraLuaEx.LuaCompare.LessThen">
+            <summary>
+             compares for less than 
+            </summary>
+        </member>
+        <member name="F:KeraLuaEx.LuaCompare.LessOrEqual">
+            <summary>
+            compares for less or equal 
+            </summary>
+        </member>
+        <member name="T:KeraLuaEx.SyntaxException">
+            <summary>Lua script syntax error.</summary>
+        </member>
+        <member name="T:KeraLuaEx.FileException">
+            <summary>Lua script file error.</summary>
+        </member>
+        <member name="T:KeraLuaEx.LuaException">
+            <summary>Internal error on lua side.</summary>
+        </member>
+        <member name="T:KeraLuaEx.LuaExException">
+            <summary>Base exception class.</summary>
+        </member>
         <member name="T:KeraLuaEx.LuaRegister">
+            <summary>
+            LuaRegister store the name and the delegate to register a native function
+            </summary>
+        </member>
+        <member name="M:KeraLuaEx.LuaRegister.#ctor(System.String,KeraLuaEx.LuaFunction)">
             <summary>
             LuaRegister store the name and the delegate to register a native function
             </summary>
@@ -1882,102 +1987,6 @@
             <summary>
             At this index the registry has the global environment. 
             </summary>
-        </member>
-        <member name="T:KeraLuaEx.LuaStatus">
-            <summary>
-            Lua Load/Call status return
-            </summary>
-        </member>
-        <member name="F:KeraLuaEx.LuaStatus.OK">
-            <summary>
-            success
-            </summary>
-        </member>
-        <member name="F:KeraLuaEx.LuaStatus.Yield">
-            <summary>
-            Yield
-            </summary>
-        </member>
-        <member name="F:KeraLuaEx.LuaStatus.ErrRun">
-            <summary>
-            a runtime error. 
-            </summary>
-        </member>
-        <member name="F:KeraLuaEx.LuaStatus.ErrSyntax">
-            <summary>
-            syntax error during precompilation
-            </summary>
-        </member>
-        <member name="F:KeraLuaEx.LuaStatus.ErrMem">
-            <summary>
-            memory allocation error. For such errors, Lua does not call the message handler. 
-            </summary>
-        </member>
-        <member name="F:KeraLuaEx.LuaStatus.ErrErr">
-            <summary>
-            error while running the message handler. 
-            </summary>
-        </member>
-        <member name="F:KeraLuaEx.LuaStatus.ErrFile">
-            <summary>
-            extra error code for luaL_loadfilex.
-            </summary>
-        </member>
-        <member name="T:KeraLuaEx.LuaType">
-            <summary>
-            Lua types
-            </summary>
-        </member>
-        <member name="F:KeraLuaEx.LuaType.None">
-            <summary>
-            LUA_TNONE
-            </summary>
-        </member>
-        <member name="F:KeraLuaEx.LuaType.Nil">
-            <summary>
-            LUA_TNIL
-            </summary>
-        </member>
-        <member name="F:KeraLuaEx.LuaType.Boolean">
-            <summary>
-            LUA_TBOOLEAN
-            </summary>
-        </member>
-        <member name="F:KeraLuaEx.LuaType.LightUserData">
-            <summary>
-            LUA_TLIGHTUSERDATA
-            </summary>
-        </member>
-        <member name="F:KeraLuaEx.LuaType.Number">
-            <summary>
-            LUA_TNUMBER
-            </summary>
-        </member>
-        <member name="F:KeraLuaEx.LuaType.String">
-            <summary>
-            LUA_TSTRING
-            </summary>
-        </member>
-        <member name="F:KeraLuaEx.LuaType.Table">
-            <summary>
-            LUA_TTABLE
-            </summary>
-        </member>
-        <member name="F:KeraLuaEx.LuaType.Function">
-            <summary>
-            LUA_TFUNCTION
-            </summary>
-        </member>
-        <member name="F:KeraLuaEx.LuaType.UserData">
-            <summary>
-            LUA_TUSERDATA
-            </summary>
-        </member>
-        <member name="F:KeraLuaEx.LuaType.Thread">
-            <summary>
-            LUA_TTHREAD
-            </summary>
-            //
         </member>
         <member name="F:KeraLuaEx.TableEx._elements">
             <summary>Dictionary used to store the data. If it's a list the key is 1-based.</summary>
@@ -2028,13 +2037,15 @@
             <param name="dict">Copy from this.</param>
             <exception cref="T:System.InvalidOperationException"></exception>
         </member>
-        <member name="M:KeraLuaEx.TableEx.#ctor(KeraLuaEx.Lua)">
+        <member name="M:KeraLuaEx.TableEx.#ctor(KeraLuaEx.Lua,System.String,System.Int32)">
             <summary>
             Constructor populates from a lua table on the top of the stack.
             Does the pop.
             FUTURE arbitrary indexes.
             </summary>
             <param name="l"></param>
+            <param name="file">Ignore - compiler use.</param>
+            <param name="line">Ignore - compiler use.</param>
             <exception cref="T:KeraLuaEx.SyntaxException"></exception>
             <exception cref="T:System.InvalidOperationException"></exception>
         </member>

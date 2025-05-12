@@ -13,3 +13,5 @@ ibin/
 *.sublime-*
 log.txt
 err_dcode.lua
+/CppCli/Properties/launchSettings.json
+/CppCli/CppCli.csproj.user
