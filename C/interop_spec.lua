@@ -13,7 +13,6 @@ M.script_funcs =
     {
         lua_func_name = "calculator",
         host_func_name = "Calculator",
-        required = "true",
         description = "Simple calculations.",
         args =
         {
@@ -43,7 +42,6 @@ M.script_funcs =
     {
         lua_func_name = "day_of_week",
         host_func_name = "DayOfWeek",
-        required = "true",
         description = "String to integer.",
         args =
         {
@@ -63,7 +61,6 @@ M.script_funcs =
     {
         lua_func_name = "first_day",
         host_func_name = "FirstDay",
-        required = "true",
         description = "Function with no args.",
         ret =
         {
@@ -75,7 +72,6 @@ M.script_funcs =
     {
         lua_func_name = "invalid_func",
         host_func_name = "InvalidFunc",
-        required = "true",
         description = "Function not implemented in script.",
         ret =
         {
@@ -87,7 +83,6 @@ M.script_funcs =
     {
         lua_func_name = "invalid_arg_type",
         host_func_name = "InvalidArgType",
-        required = "true",
         description = "Function argument type incorrect.",
         args =
         {
@@ -107,7 +102,6 @@ M.script_funcs =
     {
         lua_func_name = "invalid_ret_type",
         host_func_name = "InvalidRetType",
-        required = "true",
         description = "Function return type incorrect.",
         ret =
         {
@@ -119,7 +113,6 @@ M.script_funcs =
     {
         lua_func_name = "error_func",
         host_func_name = "ErrorFunc",
-        required = "true",
         description = "Function that calls error().",
         args =
         {
@@ -139,7 +132,6 @@ M.script_funcs =
     {
         lua_func_name = "optional_func",
         host_func_name = "OptionalFunc",
-        required = "false",
         description = "Function is optional.",
         ret =
         {
