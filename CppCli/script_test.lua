@@ -32,7 +32,7 @@ li.notif(33, "Notification from script_test")
 --> SCR_NOT Notification from script_test(33) 
 
 --uncomment broken here
---> LUA_EXC ScriptSyntaxError: Load script file failed. [C:\Dev\Libs\LbotImpl\CppCli\script_test.lua:32: syntax error near 'here'] 
+--> LUA_EXC ScriptSyntaxError: Load script file failed. [C:\Dev\Libs\LuaInterop\CppCli\script_test.lua:32: syntax error near 'here'] 
 
 -----------------------------------------------------------------------------
 function setup()
