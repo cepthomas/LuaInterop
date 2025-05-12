@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.12.35527.113
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Host", "Host.csproj", "{7F3D83D5-942B-4CCA-B9AA-EAAE5E9C0000}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CppCli", "CppCli.csproj", "{7F3D83D5-942B-4CCA-B9AA-EAAE5E9C0000}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Interop", "Interop.vcxproj", "{953F3806-EB5D-444E-A500-09B455E35E53}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Interop", "Interop\Interop.vcxproj", "{953F3806-EB5D-444E-A500-09B455E35E53}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

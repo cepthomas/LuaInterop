@@ -5,8 +5,7 @@ local M = {}
 M.config =
 {
     lua_lib_name = "luainterop",    -- for require
-    host_lib_name = "HostInterop",  -- host filenames
-    host_namespace = "Interop"      -- host namespace
+    class_name = "Interop",         -- host filenames
 }
 
 ------------------------ Host => Script ------------------------
@@ -15,24 +14,22 @@ M.script_funcs =
     {
         lua_func_name = "setup",
         host_func_name = "Setup",
-        required = "true",
-        description = "Initialize.",
+        description = "Initialize stuff.",
         args =
         {
             { name = "opt", type = "I", description = "Option" },
         },
-        ret = { type = "I", description = "Return integer" }
+        ret = { type = "I", description = "Return some integer" }
     },
 
     {
         lua_func_name = "do_command",
         host_func_name = "DoCommand",
-        required = "true",
-        description = "Host executes arbitrary lua function.",
+        description = "Arbitrary lua function.",
         args =
         {
             { name = "cmd", type = "S", description = "Specific command" },
-            { name = "arg", type = "S", description = "Optional argument" },
+            { name = "arg", type = "I", description = "Optional argument" },
         },
         ret = { type = "S", description = "Script response" }
     },
