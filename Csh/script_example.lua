@@ -7,6 +7,7 @@ thing1 = 123  --"aaaaaa"
 
 li.log(2, "Hello from luainterop")
 
+print("xxxxxx")
 
 ----------------- Functions called from C#. -----------------
 function my_lua_func(arg_one, arg_two, arg_three)
@@ -17,14 +18,8 @@ function my_lua_func(arg_one, arg_two, arg_three)
 end 
 
 function my_lua_func2(arg_one)
-    local tm = li.get_time()
+    local tm = li.get_time(99)
     print("my_lua_func2() time is: ", tm)
-
-    local res = li.check_value(123.5, 123.4)
-    print("my_lua_func2() answer is: ", res)
-
-    local res = li.check_value(123.5, 123.6)
-    print("my_lua_func2() answer is: ", res)
 
     if arg_one then return 99.99 else return 100.01 end
 end

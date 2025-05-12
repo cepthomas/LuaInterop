@@ -5,9 +5,10 @@ local M = {}
 
 M.config =
 {
-    lua_lib_name = "luainterop",            -- for require
-    host_lib_name = "Interop",              -- host filenames
-    host_namespace = "Interop",             -- host namespace
+    lua_lib_name = "luainterop",            -- for require, also filename
+    file_name = "Interop",                  -- host filename
+    namespace = "Csh",                      -- host namespace
+    class_name = "App",                     -- host classname
     add_refs = { "System.Diagnostics", },   -- for using (optional)
 }
 
@@ -17,7 +18,6 @@ M.script_funcs =
     {
         lua_func_name = "my_lua_func",
         host_func_name = "MyLuaFunc",
-        required = "true",
         description = "Tell me something good.",
         args =
         {
@@ -46,7 +46,6 @@ M.script_funcs =
     {
         lua_func_name = "my_lua_func2",
         host_func_name = "MyLuaFunc2",
-        required = "true",
         description = "wooga wooga",
         args =
         {
@@ -66,7 +65,6 @@ M.script_funcs =
     {
         lua_func_name = "no_args_func",
         host_func_name = "NoArgsFunc",
-        required = "true",
         description = "no_args",
         ret =
         {
@@ -78,7 +76,6 @@ M.script_funcs =
     {
         lua_func_name = "optional_func",
         host_func_name = "OptionalFunc",
-        required = "false",
         description = "Function is optional.",
         ret =
         {
@@ -108,34 +105,18 @@ M.host_funcs =
         lua_func_name = "get_time",
         host_func_name = "GetTime",
         description = "What time is it",
-        ret =
-        {
-            type = "S",
-            description = "The time"
-        }
-    },
-
-    {
-        lua_func_name = "check_value",
-        host_func_name = "CheckValue",
-        description = "Val1 is greater than val2? with no args",
         args =
         {
             {
-                name = "val_one",
-                type = "N",
-                description = "Val 1"
-            },
-            {
-                name = "val_two",
-                type = "N",
-                description = "Val 2"
+                name = "tzone",
+                type = "I",
+                description = "Time zone"
             },
         },
         ret =
         {
-            type = "B",
-            description = "The answer"
+            type = "S",
+            description = "The time"
         }
     },
 }

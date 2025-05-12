@@ -4,12 +4,12 @@
         <TargetFramework>net8.0-windows</TargetFramework>
         <ImplicitUsings>disable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <AssemblyName>GenLib</AssemblyName>
-        <RootNamespace>GenLib</RootNamespace>
+        <AssemblyName>Csh</AssemblyName>
+        <RootNamespace>Csh</RootNamespace>
         <Deterministic>False</Deterministic>
         <Version>1.2.0</Version>
         <!-- <Version>$([System.DateTime]::UtcNow.ToString(yy.MM.dd))</Version> -->
-        <Description>GenLib</Description>
+        <Description>Csh</Description>
         <Copyright>MIT License</Copyright>
         <OutputPath>bin\</OutputPath>
         <!-- <DefineConstants>DEBUG;TRACE</DefineConstants> -->
@@ -18,6 +18,16 @@
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <SatelliteResourceLanguages>none</SatelliteResourceLanguages>
     </PropertyGroup>
+    <ItemGroup>
+      <Compile Remove="__\**" />
+      <EmbeddedResource Remove="__\**" />
+      <None Remove="__\**" />
+    </ItemGroup>
+    <ItemGroup>
+      <None Remove="gen_interop.cmd" />
+      <None Remove="interop_spec.lua" />
+      <None Remove="log.txt" />
+    </ItemGroup>
     <ItemGroup>
       <Reference Include="Ephemera.NBagOfTricks">
         <HintPath>..\lib\Ephemera.NBagOfTricks.dll</HintPath>

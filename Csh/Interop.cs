@@ -1,4 +1,4 @@
-///// Warning - this file is created by gen_interop.lua - do not edit. 2025-03-05 09:24:03 /////
+///// Warning - this file is created by gen_interop.lua - do not edit. /////
 
 using System;
 using System.IO;
@@ -7,36 +7,10 @@ using System.Collections.Generic;
 using KeraLuaEx;
 using System.Diagnostics;
 
-namespace Interop
+namespace Csh
 {
-    public partial class Interop
+    public partial class App
     {
-        public class LogEventArgs : EventArgs
-        {
-            public int Level { get; set; } = 0;
-            public string Msg { get; set; } = "???";
-        };
-        /// <summary>Callback.</summary>
-        public event EventHandler<LogEventArgs>? LogEventX;
-
-
-
-        /// <summary>Main execution lua state.</summary>
-        readonly Lua _l;
-
-        /// <summary>
-        /// Load the lua libs implemented in C#.
-        /// </summary>
-        /// <param name="l">Lua context.</param>
-        public Interop(Lua l)
-        {
-            _l = l;
-
-            // Load our lib stuff.
-            LoadInterop();
-        }
-
-
         #region ============= C# => KeraLuaEx functions =============
 
         /// <summary>Lua export function: Tell me something good.</summary>
@@ -51,7 +25,7 @@ namespace Interop
 
             // Get function.
             LuaType ltype = _l.GetGlobal("my_lua_func");
-            if (ltype != LuaType.Function) { throw new SyntaxException($"Invalid lua function: my_lua_func"); }
+            if (ltype != LuaType.Function) { throw new SyntaxException("", -1, $"Invalid lua function: my_lua_func"); }
 
             // Push arguments.
             _l.PushString(arg_one);
@@ -63,11 +37,11 @@ namespace Interop
 
             // Do the actual call.
             LuaStatus lstat = _l.DoCall(numArgs, numRet);
-            if (lstat >= LuaStatus.ErrRun) { throw new LuaException("DoCall() failed"); }
+            if (lstat >= LuaStatus.ErrRun) { throw new LuaException("", -1, lstat, "DoCall() failed"); }
 
             // Get the results from the stack.
             TableEx? ret = _l.ToTableEx(-1);
-            if (ret is null) { throw new SyntaxException("Return value is not a TableEx"); }
+            if (ret is null) { throw new SyntaxException("", -1, "MyLuaFunc return value is not a TableEx"); }
             _l.Pop(1);
             return ret;
         }
@@ -82,7 +56,7 @@ namespace Interop
 
             // Get function.
             LuaType ltype = _l.GetGlobal("my_lua_func2");
-            if (ltype != LuaType.Function) { throw new SyntaxException($"Invalid lua function: my_lua_func2"); }
+            if (ltype != LuaType.Function) { throw new SyntaxException("", -1, $"Invalid lua function: my_lua_func2"); }
 
             // Push arguments.
             _l.PushBoolean(arg_one);
@@ -90,11 +64,11 @@ namespace Interop
 
             // Do the actual call.
             LuaStatus lstat = _l.DoCall(numArgs, numRet);
-            if (lstat >= LuaStatus.ErrRun) { throw new LuaException("DoCall() failed"); }
+            if (lstat >= LuaStatus.ErrRun) { throw new LuaException("", -1, lstat, "DoCall() failed"); }
 
             // Get the results from the stack.
             double? ret = _l.ToNumber(-1);
-            if (ret is null) { throw new SyntaxException("Return value is not a double"); }
+            if (ret is null) { throw new SyntaxException("", -1, "MyLuaFunc2 return value is not a double"); }
             _l.Pop(1);
             return ret;
         }
@@ -108,17 +82,17 @@ namespace Interop
 
             // Get function.
             LuaType ltype = _l.GetGlobal("no_args_func");
-            if (ltype != LuaType.Function) { throw new SyntaxException($"Invalid lua function: no_args_func"); }
+            if (ltype != LuaType.Function) { throw new SyntaxException("", -1, $"Invalid lua function: no_args_func"); }
 
             // Push arguments.
 
             // Do the actual call.
             LuaStatus lstat = _l.DoCall(numArgs, numRet);
-            if (lstat >= LuaStatus.ErrRun) { throw new LuaException("DoCall() failed"); }
+            if (lstat >= LuaStatus.ErrRun) { throw new LuaException("", -1, lstat, "DoCall() failed"); }
 
             // Get the results from the stack.
             double? ret = _l.ToNumber(-1);
-            if (ret is null) { throw new SyntaxException("Return value is not a double"); }
+            if (ret is null) { throw new SyntaxException("", -1, "NoArgsFunc return value is not a double"); }
             _l.Pop(1);
             return ret;
         }
@@ -132,17 +106,17 @@ namespace Interop
 
             // Get function.
             LuaType ltype = _l.GetGlobal("optional_func");
-            if (ltype != LuaType.Function) { throw new SyntaxException($"Invalid lua function: optional_func"); }
+            if (ltype != LuaType.Function) { throw new SyntaxException("", -1, $"Invalid lua function: optional_func"); }
 
             // Push arguments.
 
             // Do the actual call.
             LuaStatus lstat = _l.DoCall(numArgs, numRet);
-            if (lstat >= LuaStatus.ErrRun) { throw new LuaException("DoCall() failed"); }
+            if (lstat >= LuaStatus.ErrRun) { throw new LuaException("", -1, lstat, "DoCall() failed"); }
 
             // Get the results from the stack.
             int? ret = _l.ToInteger(-1);
-            if (ret is null) { throw new SyntaxException("Return value is not a int"); }
+            if (ret is null) { throw new SyntaxException("", -1, "OptionalFunc return value is not a int"); }
             _l.Pop(1);
             return ret;
         }
@@ -152,9 +126,9 @@ namespace Interop
         #region ============= KeraLuaEx => C# callback functions =============s
         
         /// <summary>Host export function: Script wants to log something.
-        /// Lua arg: "level">Log level
-        /// Lua arg: "msg">Log message
-        /// Lua return: int Unused>
+        /// Lua arg: "level" Log level
+        /// Lua arg: "msg" Log message
+        /// Lua return: int Unused
         /// </summary>
         /// <param name="p">Internal lua state</param>
         /// <returns>Number of lua return values></returns>
@@ -165,28 +139,20 @@ namespace Interop
             // Get arguments
             int? level = null;
             if (l.IsInteger(1)) { level = l.ToInteger(1); }
-            else { throw new SyntaxException($"Invalid arg type for {level}"); }
+            else { throw new SyntaxException("", -1, "Invalid arg type: log(level)"); }
             string? msg = null;
             if (l.IsString(2)) { msg = l.ToString(2); }
-            else { throw new SyntaxException($"Invalid arg type for {msg}"); }
+            else { throw new SyntaxException("", -1, "Invalid arg type: log(msg)"); }
 
-
-            ///// Do the work. One result.
-            LogEvent?.Invoke(this, new LogEventArgs() { Level = (int)level!, Msg = msg });
-            l.PushInteger(0);
-            return 1;
-
-
-            /*
-            // Do the work. One result.
+            // Do the work. Always one result.
             int ret = LogCb(level, msg);
             l.PushInteger(ret);
             return 1;
-            */
         }
 
         /// <summary>Host export function: What time is it
-        /// Lua return: string The time>
+        /// Lua arg: "tzone" Time zone
+        /// Lua return: string The time
         /// </summary>
         /// <param name="p">Internal lua state</param>
         /// <returns>Number of lua return values></returns>
@@ -195,48 +161,22 @@ namespace Interop
             Lua l = Lua.FromIntPtr(p)!;
 
             // Get arguments
+            int? tzone = null;
+            if (l.IsInteger(1)) { tzone = l.ToInteger(1); }
+            else { throw new SyntaxException("", -1, "Invalid arg type: get_time(tzone)"); }
 
-            // Do the work. One result.
-            string ret = GetTimeCb();
+            // Do the work. Always one result.
+            string ret = GetTimeCb(tzone);
             l.PushString(ret);
-            return 1;
-        }
-
-        /// <summary>Host export function: Val1 is greater than val2? with no args
-        /// Lua arg: "val_one">Val 1
-        /// Lua arg: "val_two">Val 2
-        /// Lua return: bool The answer>
-        /// </summary>
-        /// <param name="p">Internal lua state</param>
-        /// <returns>Number of lua return values></returns>
-        int CheckValue(IntPtr p)
-        {
-            Lua l = Lua.FromIntPtr(p)!;
-
-            // Get arguments
-            double? val_one = null;
-            if (l.IsNumber(1)) { val_one = l.ToNumber(1); }
-            else { throw new SyntaxException($"Invalid arg type for {val_one}"); }
-            double? val_two = null;
-            if (l.IsNumber(2)) { val_two = l.ToNumber(2); }
-            else { throw new SyntaxException($"Invalid arg type for {val_two}"); }
-
-            // Do the work. One result.
-            bool ret = CheckValueCb(val_one, val_two);
-            l.PushBoolean(ret);
             return 1;
         }
 
         #endregion
 
         #region ============= Infrastructure =============
-        // Bind functions to static instance.
-        static Interop? _instance;
-        // Bound functions.
-        static LuaFunction? _Log;
-        static LuaFunction? _GetTime;
-        static LuaFunction? _CheckValue;
+
         readonly List<LuaRegister> _libFuncs = new();
+        readonly Lua _l = new ();
 
         int OpenInterop(IntPtr p)
         {
@@ -247,16 +187,21 @@ namespace Interop
 
         void LoadInterop()
         {
-            _instance = this;
-            _Log = _instance!.Log;
-            _libFuncs.Add(new LuaRegister("log", _Log));
-            _GetTime = _instance!.GetTime;
-            _libFuncs.Add(new LuaRegister("get_time", _GetTime));
-            _CheckValue = _instance!.CheckValue;
-            _libFuncs.Add(new LuaRegister("check_value", _CheckValue));
-
+            _libFuncs.Add(new LuaRegister("log", Log));
+            _libFuncs.Add(new LuaRegister("get_time", GetTime));
             _libFuncs.Add(new LuaRegister(null, null));
             _l.RequireF("luainterop", OpenInterop, true);
+        }
+
+        void LoadScript(string scriptFn, List<string> lbotDirs)
+        {
+            _l.SetLuaPath(lbotDirs);
+            LuaStatus lstat = _l.LoadFile(scriptFn);
+            if (lstat >= LuaStatus.ErrRun) { throw new LuaException("", -1, lstat, "LoadScript() failed"); }
+            // Run it.
+            _l.PCall(0, Lua.LUA_MULTRET, 0);
+            // Reset stack.
+            _l.SetTop(0);
         }
         #endregion
     }
