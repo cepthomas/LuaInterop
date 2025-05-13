@@ -17,7 +17,7 @@ namespace CppCli
     {
         #region Fields
         readonly RichTextBox rtbOut;
-        readonly Button btnGo;
+        // readonly Button btnGo;
 
         /// <summary>The interop.</summary>
         protected Interop _interop = new();
@@ -43,15 +43,48 @@ namespace CppCli
             };
             Controls.Add(rtbOut);
 
-            btnGo = new Button
+            // do math
+            var btn = new Button { Location = new Point(20, 8), Name = "do_math", Size = new Size(100, 28), Text = "do math" };
+            btn.Click += (object? sender, EventArgs e) =>
             {
-                Location = new Point(12, 12),
-                Name = "btnGo",
-                Size = new Size(86, 26),
-                Text = "Go"
+                var res = _interop.DoCommand("do_math", 55);
+                Log("SCR_RET", $"do_math gave me {res}");
             };
-            btnGo.Click += Go_Click;
-            Controls.Add(btnGo);
+            Controls.Add(btn);
+
+            // do dbg()
+            btn = new Button { Location = new Point(140, 8), Name = "do_dbg", Size = new Size(100, 28), Text = "do dbg()" };
+            btn.Click += (object? sender, EventArgs e) =>
+            {
+                var res = _interop.DoCommand("do_dbg", 9999);
+                Log("SCR_RET", $"do_dbg gave me {res}");
+            };
+            Controls.Add(btn);
+
+            // boom dbg()
+            btn = new Button { Location = new Point(260, 8), Name = "boom_dbg", Size = new Size(100, 28), Text = "boom dbg()" };
+            btn.Click += (object? sender, EventArgs e) =>
+            {
+                var res = _interop.DoCommand("boom_dbg", 9999);
+                Log("SCR_RET", $"boom_dbg gave me {res}");
+            };
+            Controls.Add(btn);
+
+            // boom exception
+            btn = new Button { Location = new Point(380, 8), Name = "boom_exc", Size = new Size(100, 28), Text = "boom exc" };
+            btn.Click += (object? sender, EventArgs e) =>
+            {
+                try
+                {
+                    var res = _interop.DoCommand("boom_exc", 9999);
+                    Log("SCR_RET", $"boom_exc gave me {res}");
+                }
+                catch (Exception ex)
+                {
+                    Log("SCR_EXC", $"boom {ex.Message}");
+                }
+            };
+            Controls.Add(btn);
             #endregion
 
             // Where are we?
@@ -68,6 +101,9 @@ namespace CppCli
                 var luaPath = $"{srcDir}\\..\\LBOT\\?.lua;{srcDir}\\lua\\?.lua;;";
                 _interop.Run(scriptFn, luaPath);
 
+                // Execute script functions.
+                var res = _interop.Setup(12345);
+                Log("SCR_RET", $"setup gave me {res}");
             }
             catch (LuaException ex)
             {
@@ -94,50 +130,6 @@ namespace CppCli
         void Log(string cat, string s)
         {
             rtbOut.AppendText($"{cat} {s}{Environment.NewLine}");
-        }
-
-        /// <summary></summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        void Go_Click(object? sender, EventArgs e)
-        {
-            // Execute script functions.
-
-            // setup()
-            {
-                var res = _interop.Setup(12345);
-                Log("SCR_RET", $"setup gave me {res}");
-            }
-
-            // do_command: do_dbg
-            {
-                var res = _interop.DoCommand("do_dbg", 9999);
-                Log("SCR_RET", $"do_dbg gave me {res}");
-                //--> SCR_RET do_dbg gave me!!!dbg()
-            }
-
-            // do_command: do_math
-            //for (int i = 0; i < res; i++)
-            //{
-            //    var res = _interop.DoCommand("do_math", i * 2);
-            //    Log("SCR_RET", $"do_math {i} gave me {res}");
-            //}
-
-            //// do_command: boom
-            //try
-            //{
-            //    var res = _interop.DoCommand("boom", 9999);
-            //    Log("SCR_RET", $"boom gave me {res}");
-            //}
-            //catch (Exception ex)
-            //{
-            //    Log("SCR_EXC", $"boom {ex.Message}");
-            //    //SCR_LOG boom() was called
-            //    //SCR_EXC boom LuaInteropError: DoCommand() [C:\Dev\Libs\LbotImpl\CppCli\script_test.lua:47: attempt to concatenate a nil value
-            //    //stack traceback:
-            //    //	C:\Dev\Libs\LbotImpl\CppCli\script_test.lua:47: in upvalue 'boom'
-            //    //	C:\Dev\Libs\LbotImpl\CppCli\script_test.lua:68: in function 'do_command']
-            //}
         }
     }
 
