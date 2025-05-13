@@ -122,7 +122,7 @@ const char* luaex_LuaStatusToString(int stat)
 }
 
 //--------------------------------------------------------//
-int luaex_DumpTable(lua_State* l, FILE* fout, const char* name) // TODOF make recursive like lua dump_table()?
+int luaex_DumpTable(lua_State* l, FILE* fout, const char* name) // TODO make recursive like lua dump_table()?
 {
     fprintf(fout, "%s\n", name);
 
