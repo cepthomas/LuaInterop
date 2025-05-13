@@ -1,14 +1,12 @@
 
 .vs/
-# *.obj
-# *.bin
 *.vcxproj.user
 # .x64/
 obj/
 bin/
-iobj/
-ibin/
-# Debug/
+# iobj/
+# ibin/
+LBOT
 
 *.sublime-*
 log.txt

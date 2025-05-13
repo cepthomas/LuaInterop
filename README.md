@@ -2,7 +2,7 @@
 
 Contains several flavors of how to embed Lua scripting in host languages:
 - C: Bog standard using Lua C API.
-- CppCli: Creates a .NET assembly for consumption by host.
+- CppCli: Creates a .NET assembly for consumption by host. This also demonstrates use of embedded debugger.
 - Csh: Call directly using [KeraLuaEx](https://github.com/cepthomas/KeraLuaEx.git) which exposes the Lua C API as .NET native methods.
 
 Building and running requires access to LuaBagOfTricks in a folder named `LBOT` at the top level
