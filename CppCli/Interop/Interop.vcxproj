@@ -56,7 +56,8 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\internal;..\..\LBOT\lua54\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\LBOT\lua54\include;..\..\LBOT\csrc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <!-- <AdditionalIncludeDirectories>..\internal;..\..\LBOT\lua54\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories> -->
     </ClCompile>
     <Link>
       <AdditionalDependencies>..\..\LBOT\lua54\lua54.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -73,7 +74,8 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\internal;..\..\LBOT\lua54\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\LBOT\lua54\include;..\..\LBOT\csrc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <!-- <AdditionalIncludeDirectories>..\internal;..\..\LBOT\lua54\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories> -->
     </ClCompile>
     <Link>
       <AdditionalDependencies>..\..\LBOT\lua54\lua54.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -82,22 +84,32 @@
   </ItemDefinitionGroup>
 
   <ItemGroup>
-    <ClCompile Include="..\internal\InteropCore.cpp" />
-    <ClCompile Include="..\internal\luaex.c">
+
+    <!-- <ClCompile Include="..\internal\InteropCore.cpp" /> -->
+    <ClCompile Include="..\..\LBOT\csrc\InteropCore.cpp" />
+
+    <ClCompile Include="..\..\LBOT\csrc\luaex.c">
       <CompileAsManaged>false</CompileAsManaged>
     </ClCompile>
+
     <ClCompile Include="luainterop.c">
       <CompileAs>CompileAsCpp</CompileAs>
       <CompileAsManaged>false</CompileAsManaged>
     </ClCompile>
+
     <ClCompile Include="Interop.cpp" />
   </ItemGroup>
 
   <ItemGroup>
+
     <ClInclude Include="Interop.h" />
     <ClInclude Include="luainterop.h" />
-    <ClInclude Include="..\internal\InteropCore.h" />
-    <ClInclude Include="..\internal\luaex.h" />
+
+   <!--  <ClInclude Include="..\internal\InteropCore.h" /> -->
+
+    <ClInclude Include="..\..\LBOT\csrc\InteropCore.h" />
+    <ClInclude Include="..\..\LBOT\csrc\luaex.h" />
+
   </ItemGroup>
 
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

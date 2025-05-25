@@ -7,7 +7,7 @@ Contains several flavors of how to embed Lua scripting in host languages:
 
 Building and running requires access to LuaBagOfTricks in a folder named `LBOT` at the top level
 of the repo. You can add it is a submodule, plain copy, or symlink as preferred.
-`mklink /d some_path\NTerm\Script\LBOT other_path\LuaBagOfTricks'.
+(`mklink /d some_path\NTerm\Script\LBOT other_path\LuaBagOfTricks').
 
 It's mostly a Windows project but parts would probably work elsewhere.
 

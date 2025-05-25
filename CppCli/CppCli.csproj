@@ -31,10 +31,13 @@
     <ItemGroup>
       <Compile Remove="Interop\bin\**" />
       <Compile Remove="Interop\obj\**" />
+      <Compile Remove="__internal\**" />
       <EmbeddedResource Remove="Interop\bin\**" />
       <EmbeddedResource Remove="Interop\obj\**" />
+      <EmbeddedResource Remove="__internal\**" />
       <None Remove="Interop\bin\**" />
       <None Remove="Interop\obj\**" />
+      <None Remove="__internal\**" />
     </ItemGroup>
 
     <ItemGroup>
