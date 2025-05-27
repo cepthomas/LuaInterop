@@ -18,22 +18,11 @@
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <SatelliteResourceLanguages>none</SatelliteResourceLanguages>
     </PropertyGroup>
-    <ItemGroup>
-      <Compile Remove="__\**" />
-      <EmbeddedResource Remove="__\**" />
-      <None Remove="__\**" />
-    </ItemGroup>
-    <ItemGroup>
-      <None Remove="gen_interop.cmd" />
-      <None Remove="interop_spec.lua" />
-      <None Remove="log.txt" />
-    </ItemGroup>
+
     <ItemGroup>
       <Reference Include="Ephemera.NBagOfTricks">
         <HintPath>..\lib\Ephemera.NBagOfTricks.dll</HintPath>
       </Reference>
-      <Reference Include="KeraLuaEx">
-        <HintPath>..\lib\KeraLuaEx.dll</HintPath>
-      </Reference>
-    </ItemGroup>
+          </ItemGroup>
+
 </Project>
