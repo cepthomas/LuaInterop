@@ -118,7 +118,7 @@ local tmpl_interop_h =
 ///// Warning - this file is created by gen_interop.lua - do not edit. /////
 
 #pragma once
-#include "InteropCore.h"
+#include "cliex.h"
 
 using namespace System;
 using namespace System::Collections::Generic;
@@ -155,7 +155,7 @@ public:
 >end -- host_funcs
 
 //----------------------------------------------------//
-public ref class $(config.class_name) : InteropCore
+public ref class $(config.class_name) : CliEx
 {
 
 //============= C# => C functions .h =============//

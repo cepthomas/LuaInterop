@@ -84,9 +84,7 @@
   </ItemDefinitionGroup>
 
   <ItemGroup>
-
-    <!-- <ClCompile Include="..\internal\InteropCore.cpp" /> -->
-    <ClCompile Include="..\..\LBOT\csrc\InteropCore.cpp" />
+    <ClCompile Include="..\..\LBOT\csrc\CliEx.cpp" />
 
     <ClCompile Include="..\..\LBOT\csrc\luaex.c">
       <CompileAsManaged>false</CompileAsManaged>
@@ -101,15 +99,11 @@
   </ItemGroup>
 
   <ItemGroup>
-
     <ClInclude Include="Interop.h" />
     <ClInclude Include="luainterop.h" />
 
-   <!--  <ClInclude Include="..\internal\InteropCore.h" /> -->
-
-    <ClInclude Include="..\..\LBOT\csrc\InteropCore.h" />
+    <ClInclude Include="..\..\LBOT\csrc\CliEx.h" />
     <ClInclude Include="..\..\LBOT\csrc\luaex.h" />
-
   </ItemGroup>
 
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

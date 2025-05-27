@@ -6,6 +6,7 @@ cls
 set "ODIR=%cd%"
 pushd ..\LBOT
 set LUA_PATH="%ODIR%\?.lua";?.lua;;
+:: Cpp flavor also requires the C generaated code.
 lua gen_interop.lua -c "%ODIR%\interop_spec.lua" "%ODIR%\Interop"
 lua gen_interop.lua -cppcli "%ODIR%\interop_spec.lua" "%ODIR%\Interop"
 popd
