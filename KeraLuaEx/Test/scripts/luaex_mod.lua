@@ -1,4 +1,6 @@
 
+-- Script as a module.
+
 local M = {}
 
 -- Functions implemented in C#.

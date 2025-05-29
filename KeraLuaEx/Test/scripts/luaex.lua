@@ -1,4 +1,6 @@
 
+-- Script where everything is global.
+
 -- Seed the randomizer.
 local seed = os.time()
 math.randomseed(seed)
