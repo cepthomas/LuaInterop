@@ -1,13 +1,19 @@
 # LuaInterop
 
 Contains several flavors of how to embed Lua scripting in host languages:
+
+TODO KeraLuaEx
+
+
 - C: Bog standard using Lua C API.
 - CppCli: Creates a .NET assembly for consumption by host. This also demonstrates use of embedded debugger.
 - Csh: Call directly using [KeraLuaEx](https://github.com/cepthomas/KeraLuaEx.git) which exposes the Lua C API as .NET native methods.
 
-Building and running requires access to LuaBagOfTricks in a folder named `LBOT` at the top level
-of the repo. You can add it is a submodule, plain copy, or symlink as preferred.
-(`mklink /d some_path\NTerm\Script\LBOT other_path\LuaBagOfTricks').
+Building this solution requires a folder named `LBOT` at the top level containing the contents of
+  [LuaBagOfTricks](https://github.com/cepthomas/LuaBagOfTricks). This can be done one of several ways:
+  - git submodule
+  - copy of pertinent parts
+  - symlink: `mklink /d <current_folder>\LBOT <lbot_source_folder>\LuaBagOfTricks`
 
 It's mostly a Windows project but parts would probably work elsewhere.
 

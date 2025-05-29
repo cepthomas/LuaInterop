@@ -20,9 +20,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Reference Include="Ephemera.NBagOfTricks">
-        <HintPath>..\lib\Ephemera.NBagOfTricks.dll</HintPath>
-      </Reference>
-          </ItemGroup>
+        <ProjectReference Include="..\KeraLuaEx\KeraLuaEx.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Reference Include="Ephemera.NBagOfTricks">
+            <HintPath>..\lib\Ephemera.NBagOfTricks.dll</HintPath>
+        </Reference>
+    </ItemGroup>
 
 </Project>
