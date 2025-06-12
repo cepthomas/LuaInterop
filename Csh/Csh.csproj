@@ -7,7 +7,7 @@
         <AssemblyName>Csh</AssemblyName>
         <RootNamespace>Csh</RootNamespace>
         <Deterministic>False</Deterministic>
-        <Version>1.2.0</Version>
+        <Version>2.0.0</Version>
         <!-- <Version>$([System.DateTime]::UtcNow.ToString(yy.MM.dd))</Version> -->
         <Description>Csh</Description>
         <Copyright>MIT License</Copyright>
