@@ -11,20 +11,20 @@ rem set "ODIR=%cd%"
 call "C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\Tools\VsDevCmd.bat"
 
 
-rem pushd C
-rem msbuild C.sln /p:Configuration=Debug /t:Restore -v:n
-rem msbuild C.sln /p:Configuration=Debug /t:Build -v:n
-rem popd
+pushd C
+msbuild C.sln /p:Configuration=Debug /t:Restore -v:n
+msbuild C.sln /p:Configuration=Debug /t:Build -v:n
+popd
 
-rem pushd KeraLuaEx
-rem msbuild KeraLuaEx.sln /p:Configuration=Debug /t:Restore -v:n
-rem msbuild KeraLuaEx.sln /p:Configuration=Debug /t:Build -v:n
-rem popd
+pushd KeraLuaEx
+msbuild KeraLuaEx.sln /p:Configuration=Debug /t:Restore -v:n
+msbuild KeraLuaEx.sln /p:Configuration=Debug /t:Build -v:n
+popd
 
-rem pushd Csh
-rem msbuild Csh.sln /p:Configuration=Debug /t:Restore -v:n
-rem msbuild Csh.sln /p:Configuration=Debug /t:Build -v:n
-rem popd
+pushd Csh
+msbuild Csh.sln /p:Configuration=Debug /t:Restore -v:n
+msbuild Csh.sln /p:Configuration=Debug /t:Build -v:n
+popd
 
 pushd CppCli
 msbuild CppCli.sln /p:Configuration=Debug /t:Restore -v:n

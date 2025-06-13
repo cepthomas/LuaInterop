@@ -426,7 +426,7 @@ namespace KeraLuaEx.Test
         {
             string srcPath = GetSourcePath();
             string scriptsPath = Path.Combine(srcPath, "scripts");
-            _l!.SetLuaPath(new() { scriptsPath });
+            _l!.SetLuaPath([scriptsPath]);
             string scriptFile = Path.Combine(scriptsPath, fn);
             var lstat = _l!.LoadFile(scriptFile);
         }
