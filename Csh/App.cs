@@ -96,10 +96,21 @@ namespace Csh
         /// <returns></returns>
         int LogCb(int? level, string? msg)
         {
-            _logger.Log((LogLevel)level!, $"SCRIPT LOGS {msg ?? "null"}");
+            if (level >= (int)LogLevel.Trace && level <= (int)LogLevel.Error)
+            {
+                string s = $"SCRIPT LOGS {msg ?? "null"}";
+                switch ((LogLevel)level)
+                {
+                    case LogLevel.Trace: _logger.Trace(s); break;
+                    case LogLevel.Debug: _logger.Debug(s); break;
+                    case LogLevel.Info:  _logger.Info(s); break;
+                    case LogLevel.Warn:  _logger.Warn(s); break;
+                    case LogLevel.Error: _logger.Error(s); break;
+                }
+            }
             return 0;
         }
-        
+
         /// <summary>
         /// Bound lua callback work function.
         /// </summary>
