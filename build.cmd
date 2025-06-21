@@ -1,9 +1,9 @@
 
-:: Build everythig.
+:: Build everythig in this repository.
+
 echo off
 cls
 
-:: symlink: mklink /d C:\Dev\Libs\LuaInterop\LBOT C:\Dev\Libs\LuaBagOfTricks
 :: verbosity levels: q[uiet], m[inimal], n[ormal] (default), d[etailed], and diag[nostic].
 
 rem set "ODIR=%cd%"
