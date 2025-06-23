@@ -12,7 +12,7 @@
         <!-- https://stackoverflow.com/questions/67117053/ca1416-how-to-tell-builder-that-only-platform-is-windows-->
         <TargetFramework>net8.0-windows</TargetFramework>
         <PlatformName>windows</PlatformName>
-        <Platforms>x64</Platforms>
+        <Platforms>x64;AnyCPU</Platforms>
         <SelfContained>false</SelfContained>
         <RuntimeIdentifier>win-x64</RuntimeIdentifier>
         <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
