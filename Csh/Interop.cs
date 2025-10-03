@@ -25,7 +25,7 @@ namespace Csh
 
             // Get function.
             LuaType ltype = _l.GetGlobal("my_lua_func");
-            if (ltype != LuaType.Function) { throw new SyntaxException("", -1, $"Invalid lua function: my_lua_func"); }
+            if (ltype != LuaType.Function) { throw new SyntaxException("", -1, $"Invalid lua function my_lua_func"); }
 
             // Push arguments.
             _l.PushString(arg_one);
@@ -56,7 +56,7 @@ namespace Csh
 
             // Get function.
             LuaType ltype = _l.GetGlobal("my_lua_func2");
-            if (ltype != LuaType.Function) { throw new SyntaxException("", -1, $"Invalid lua function: my_lua_func2"); }
+            if (ltype != LuaType.Function) { throw new SyntaxException("", -1, $"Invalid lua function my_lua_func2"); }
 
             // Push arguments.
             _l.PushBoolean(arg_one);
@@ -82,7 +82,7 @@ namespace Csh
 
             // Get function.
             LuaType ltype = _l.GetGlobal("no_args_func");
-            if (ltype != LuaType.Function) { throw new SyntaxException("", -1, $"Invalid lua function: no_args_func"); }
+            if (ltype != LuaType.Function) { throw new SyntaxException("", -1, $"Invalid lua function no_args_func"); }
 
             // Push arguments.
 
@@ -106,7 +106,7 @@ namespace Csh
 
             // Get function.
             LuaType ltype = _l.GetGlobal("optional_func");
-            if (ltype != LuaType.Function) { throw new SyntaxException("", -1, $"Invalid lua function: optional_func"); }
+            if (ltype != LuaType.Function) { throw new SyntaxException("", -1, $"Invalid lua function optional_func"); }
 
             // Push arguments.
 
@@ -139,10 +139,10 @@ namespace Csh
             // Get arguments
             int? level = null;
             if (l.IsInteger(1)) { level = l.ToInteger(1); }
-            else { throw new SyntaxException("", -1, "Invalid arg type: log(level)"); }
+            else { throw new SyntaxException("", -1, "Invalid arg type log(level)"); }
             string? msg = null;
             if (l.IsString(2)) { msg = l.ToString(2); }
-            else { throw new SyntaxException("", -1, "Invalid arg type: log(msg)"); }
+            else { throw new SyntaxException("", -1, "Invalid arg type log(msg)"); }
 
             // Do the work. Always one result.
             int ret = LogCb(level, msg);
@@ -163,7 +163,7 @@ namespace Csh
             // Get arguments
             int? tzone = null;
             if (l.IsInteger(1)) { tzone = l.ToInteger(1); }
-            else { throw new SyntaxException("", -1, "Invalid arg type: get_time(tzone)"); }
+            else { throw new SyntaxException("", -1, "Invalid arg type get_time(tzone)"); }
 
             // Do the work. Always one result.
             string ret = GetTimeCb(tzone);

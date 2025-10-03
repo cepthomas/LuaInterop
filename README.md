@@ -6,6 +6,11 @@ Contains several flavors of how to embed Lua scripting in host languages:
 - CppCli: Creates a .NET assembly for consumption by host. This also demonstrates use of embedded debugger.
 - Csh: Call directly using [KeraLuaEx](KeraLuaEx/README.md) which exposes the Lua C API as .NET native methods.
 
+Note that an alternate (maybe better) way to implement in C# is to generate two bodies of code (-c and -cppcli)
+and build them with an interop project for use by the C# application.
+See [Nebulua](https://github.com/cepthomas/Nebulua) for an example of how to do this.
+
+
 Building this solution requires a folder named `LBOT` at the top level containing the contents of
   [LuaBagOfTricks](https://github.com/cepthomas/LuaBagOfTricks). This can be done one of several ways:
   - git submodule
@@ -24,7 +29,7 @@ will have minimal changes after settling down.
 C# and/or C code is generated using `gen_interop.lua`, `interop_<flavor>.lua`, and a custom `interop_spec.lua`
 file that describes the bidirectional api you need for your application.
 
-`interop_spec.lua` is a plain Lua data file. It has thrree sections:
+`interop_spec.lua` is a plain Lua data file. It has three sections:
   - `M.config` specifies identifiers to be used for artifacts.
   - `M.script_funcs` specifies the script functions the application can call.
   - `M.host_funcs` specifies the application functions the script can call.
