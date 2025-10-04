@@ -1,5 +1,5 @@
 #pragma once
-///// Warning - this file is created by gen_interop.lua - do not edit. 2025-03-06 17:20:54 /////
+///// Warning - this file is created by gen_interop.lua - do not edit. /////
 
 #include <stdbool.h>
 

@@ -6,9 +6,6 @@
 using namespace System;
 using namespace System::Collections::Generic;
 
-namespace CppCli
-{
-
 //============= C => C# callback payload .h =============//
 
 //--------------------------------------------------------//
@@ -82,5 +79,3 @@ public:
     /// <param name="luaPath">LUA_PATH components</param>
     void Run(String^ scriptFn, String^ luaPath);
 };
-
-}

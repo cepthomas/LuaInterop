@@ -6,7 +6,6 @@
 
 using namespace System;
 using namespace System::Collections::Generic;
-using namespace CppCli;
 
 
 //============= C# => C functions .cpp =============//

@@ -1,4 +1,4 @@
-///// Warning - this file is created by gen_interop.lua - do not edit. 2025-03-06 17:20:54 /////
+///// Warning - this file is created by gen_interop.lua - do not edit. /////
 
 #include "luainterop.h"
 
@@ -24,7 +24,7 @@ double luainterop_Calculator(lua_State* l, double op_one, const char* oper, doub
     int ltype = lua_getglobal(l, "calculator");
     if (ltype != LUA_TFUNCTION)
     {
-        if (true) { _error = "Bad function name: calculator()"; }
+        _error = "Invalid function name calculator()";
         return ret;
     }
 
@@ -42,7 +42,7 @@ double luainterop_Calculator(lua_State* l, double op_one, const char* oper, doub
     {
         // Get the results from the stack.
         if (lua_isnumber(l, -1)) { ret = lua_tonumber(l, -1); }
-        else { _error = "Bad return type for calculator(): should be number"; }
+        else { _error = "Invalid return type for calculator() should be number"; }
     }
     else { _error = lua_tostring(l, -1); }
     lua_pop(l, num_ret); // Clean up results.
@@ -62,7 +62,7 @@ int luainterop_DayOfWeek(lua_State* l, const char* day)
     int ltype = lua_getglobal(l, "day_of_week");
     if (ltype != LUA_TFUNCTION)
     {
-        if (true) { _error = "Bad function name: day_of_week()"; }
+        _error = "Invalid function name day_of_week()";
         return ret;
     }
 
@@ -76,7 +76,7 @@ int luainterop_DayOfWeek(lua_State* l, const char* day)
     {
         // Get the results from the stack.
         if (lua_isinteger(l, -1)) { ret = lua_tointeger(l, -1); }
-        else { _error = "Bad return type for day_of_week(): should be integer"; }
+        else { _error = "Invalid return type for day_of_week() should be integer"; }
     }
     else { _error = lua_tostring(l, -1); }
     lua_pop(l, num_ret); // Clean up results.
@@ -96,7 +96,7 @@ const char* luainterop_FirstDay(lua_State* l)
     int ltype = lua_getglobal(l, "first_day");
     if (ltype != LUA_TFUNCTION)
     {
-        if (true) { _error = "Bad function name: first_day()"; }
+        _error = "Invalid function name first_day()";
         return ret;
     }
 
@@ -108,7 +108,7 @@ const char* luainterop_FirstDay(lua_State* l)
     {
         // Get the results from the stack.
         if (lua_isstring(l, -1)) { ret = lua_tostring(l, -1); }
-        else { _error = "Bad return type for first_day(): should be string"; }
+        else { _error = "Invalid return type for first_day() should be string"; }
     }
     else { _error = lua_tostring(l, -1); }
     lua_pop(l, num_ret); // Clean up results.
@@ -128,7 +128,7 @@ bool luainterop_InvalidFunc(lua_State* l)
     int ltype = lua_getglobal(l, "invalid_func");
     if (ltype != LUA_TFUNCTION)
     {
-        if (true) { _error = "Bad function name: invalid_func()"; }
+        _error = "Invalid function name invalid_func()";
         return ret;
     }
 
@@ -140,7 +140,7 @@ bool luainterop_InvalidFunc(lua_State* l)
     {
         // Get the results from the stack.
         if (lua_isboolean(l, -1)) { ret = lua_toboolean(l, -1); }
-        else { _error = "Bad return type for invalid_func(): should be boolean"; }
+        else { _error = "Invalid return type for invalid_func() should be boolean"; }
     }
     else { _error = lua_tostring(l, -1); }
     lua_pop(l, num_ret); // Clean up results.
@@ -160,7 +160,7 @@ bool luainterop_InvalidArgType(lua_State* l, const char* arg1)
     int ltype = lua_getglobal(l, "invalid_arg_type");
     if (ltype != LUA_TFUNCTION)
     {
-        if (true) { _error = "Bad function name: invalid_arg_type()"; }
+        _error = "Invalid function name invalid_arg_type()";
         return ret;
     }
 
@@ -174,7 +174,7 @@ bool luainterop_InvalidArgType(lua_State* l, const char* arg1)
     {
         // Get the results from the stack.
         if (lua_isboolean(l, -1)) { ret = lua_toboolean(l, -1); }
-        else { _error = "Bad return type for invalid_arg_type(): should be boolean"; }
+        else { _error = "Invalid return type for invalid_arg_type() should be boolean"; }
     }
     else { _error = lua_tostring(l, -1); }
     lua_pop(l, num_ret); // Clean up results.
@@ -194,7 +194,7 @@ int luainterop_InvalidRetType(lua_State* l)
     int ltype = lua_getglobal(l, "invalid_ret_type");
     if (ltype != LUA_TFUNCTION)
     {
-        if (true) { _error = "Bad function name: invalid_ret_type()"; }
+        _error = "Invalid function name invalid_ret_type()";
         return ret;
     }
 
@@ -206,7 +206,7 @@ int luainterop_InvalidRetType(lua_State* l)
     {
         // Get the results from the stack.
         if (lua_isinteger(l, -1)) { ret = lua_tointeger(l, -1); }
-        else { _error = "Bad return type for invalid_ret_type(): should be integer"; }
+        else { _error = "Invalid return type for invalid_ret_type() should be integer"; }
     }
     else { _error = lua_tostring(l, -1); }
     lua_pop(l, num_ret); // Clean up results.
@@ -226,7 +226,7 @@ bool luainterop_ErrorFunc(lua_State* l, int flavor)
     int ltype = lua_getglobal(l, "error_func");
     if (ltype != LUA_TFUNCTION)
     {
-        if (true) { _error = "Bad function name: error_func()"; }
+        _error = "Invalid function name error_func()";
         return ret;
     }
 
@@ -240,7 +240,7 @@ bool luainterop_ErrorFunc(lua_State* l, int flavor)
     {
         // Get the results from the stack.
         if (lua_isboolean(l, -1)) { ret = lua_toboolean(l, -1); }
-        else { _error = "Bad return type for error_func(): should be boolean"; }
+        else { _error = "Invalid return type for error_func() should be boolean"; }
     }
     else { _error = lua_tostring(l, -1); }
     lua_pop(l, num_ret); // Clean up results.
@@ -260,7 +260,7 @@ int luainterop_OptionalFunc(lua_State* l)
     int ltype = lua_getglobal(l, "optional_func");
     if (ltype != LUA_TFUNCTION)
     {
-        if (false) { _error = "Bad function name: optional_func()"; }
+        _error = "Invalid function name optional_func()";
         return ret;
     }
 
@@ -272,7 +272,7 @@ int luainterop_OptionalFunc(lua_State* l)
     {
         // Get the results from the stack.
         if (lua_isinteger(l, -1)) { ret = lua_tointeger(l, -1); }
-        else { _error = "Bad return type for optional_func(): should be integer"; }
+        else { _error = "Invalid return type for optional_func() should be integer"; }
     }
     else { _error = lua_tostring(l, -1); }
     lua_pop(l, num_ret); // Clean up results.
@@ -294,10 +294,10 @@ static int luainterop_Log(lua_State* l)
     // Get arguments
     int level;
     if (lua_isinteger(l, 1)) { level = lua_tointeger(l, 1); }
-    else { luaL_error(l, "Bad arg type for: level"); }
+    else { luaL_error(l, "Invalid arg type for level"); }
     const char* msg;
     if (lua_isstring(l, 2)) { msg = lua_tostring(l, 2); }
-    else { luaL_error(l, "Bad arg type for: msg"); }
+    else { luaL_error(l, "Invalid arg type for msg"); }
 
     // Do the work. One result.
     bool ret = luainteropcb_Log(l, level, msg);
@@ -316,7 +316,7 @@ static int luainterop_GetEnvironment(lua_State* l)
     // Get arguments
     double temp;
     if (lua_isnumber(l, 1)) { temp = lua_tonumber(l, 1); }
-    else { luaL_error(l, "Bad arg type for: temp"); }
+    else { luaL_error(l, "Invalid arg type for temp"); }
 
     // Do the work. One result.
     const char* ret = luainteropcb_GetEnvironment(l, temp);

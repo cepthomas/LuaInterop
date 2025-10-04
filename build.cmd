@@ -1,5 +1,5 @@
 
-:: Build everythig in this repository.
+:: Build everything in this repository.
 
 echo off
 cls
@@ -11,14 +11,14 @@ rem set "ODIR=%cd%"
 call "C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\Tools\VsDevCmd.bat"
 
 
-pushd C
-msbuild C.sln /p:Configuration=Debug /t:Restore -v:n
-msbuild C.sln /p:Configuration=Debug /t:Build -v:n
-popd
-
 pushd KeraLuaEx
 msbuild KeraLuaEx.sln /p:Configuration=Debug /t:Restore -v:n
 msbuild KeraLuaEx.sln /p:Configuration=Debug /t:Build -v:n
+popd
+
+pushd C
+msbuild C.sln /p:Configuration=Debug /t:Restore -v:n
+msbuild C.sln /p:Configuration=Debug /t:Build -v:n
 popd
 
 pushd Csh

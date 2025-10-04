@@ -24,7 +24,7 @@ int luainterop_Setup(lua_State* l, int opt)
     int ltype = lua_getglobal(l, "setup");
     if (ltype != LUA_TFUNCTION)
     {
-        if (true) { _error = "Bad function name: setup()"; }
+        _error = "Invalid function name setup()";
         return ret;
     }
 
@@ -38,7 +38,7 @@ int luainterop_Setup(lua_State* l, int opt)
     {
         // Get the results from the stack.
         if (lua_isinteger(l, -1)) { ret = lua_tointeger(l, -1); }
-        else { _error = "Bad return type for setup(): should be integer"; }
+        else { _error = "Invalid return type for setup() should be integer"; }
     }
     else { _error = lua_tostring(l, -1); }
     lua_pop(l, num_ret); // Clean up results.
@@ -58,7 +58,7 @@ const char* luainterop_DoCommand(lua_State* l, const char* cmd, int arg)
     int ltype = lua_getglobal(l, "do_command");
     if (ltype != LUA_TFUNCTION)
     {
-        if (true) { _error = "Bad function name: do_command()"; }
+        _error = "Invalid function name do_command()";
         return ret;
     }
 
@@ -74,7 +74,7 @@ const char* luainterop_DoCommand(lua_State* l, const char* cmd, int arg)
     {
         // Get the results from the stack.
         if (lua_isstring(l, -1)) { ret = lua_tostring(l, -1); }
-        else { _error = "Bad return type for do_command(): should be string"; }
+        else { _error = "Invalid return type for do_command() should be string"; }
     }
     else { _error = lua_tostring(l, -1); }
     lua_pop(l, num_ret); // Clean up results.
@@ -96,10 +96,10 @@ static int luainterop_Log(lua_State* l)
     // Get arguments
     int level;
     if (lua_isinteger(l, 1)) { level = lua_tointeger(l, 1); }
-    else { luaL_error(l, "Bad arg type for: level"); }
+    else { luaL_error(l, "Invalid arg type for level"); }
     const char* msg;
     if (lua_isstring(l, 2)) { msg = lua_tostring(l, 2); }
-    else { luaL_error(l, "Bad arg type for: msg"); }
+    else { luaL_error(l, "Invalid arg type for msg"); }
 
     // Do the work. One result.
     int ret = luainteropcb_Log(l, level, msg);
@@ -119,10 +119,10 @@ static int luainterop_Notification(lua_State* l)
     // Get arguments
     int num;
     if (lua_isinteger(l, 1)) { num = lua_tointeger(l, 1); }
-    else { luaL_error(l, "Bad arg type for: num"); }
+    else { luaL_error(l, "Invalid arg type for num"); }
     const char* text;
     if (lua_isstring(l, 2)) { text = lua_tostring(l, 2); }
-    else { luaL_error(l, "Bad arg type for: text"); }
+    else { luaL_error(l, "Invalid arg type for text"); }
 
     // Do the work. One result.
     int ret = luainteropcb_Notification(l, num, text);
