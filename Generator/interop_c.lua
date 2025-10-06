@@ -17,6 +17,7 @@ local tmpl_interop_c =
 >local sx = require("stringex")
 >local os = require("os")
 >local snow = os.date('%Y-%m-%d %H:%M:%S')
+///// Generated C and h files that bind interop C to lua C code.       /////
 ///// Warning - this file is created by gen_interop.lua - do not edit. /////
 
 #include "$(config.lua_lib_name).h"
@@ -33,7 +34,7 @@ local tmpl_interop_c =
 
 static const char* _error;
 
-//============= C => Lua functions .c =============//
+//============= interop C => Lua functions =============//
 
 >for _, func in ipairs(script_funcs) do
 >local lua_ret_type = lua_types(func.ret.type)
@@ -60,7 +61,7 @@ $(c_ret_type) $(config.lua_lib_name)_$(func.host_func_name)(lua_State* l)
     int ltype = lua_getglobal(l, "$(func.lua_func_name)");
     if (ltype != LUA_TFUNCTION)
     {
-        _error = "Invalid function name $(func.lua_func_name)()";
+        _error = "Script does not implement required function $(func.lua_func_name)()";
         return ret;
     }
 
@@ -77,16 +78,20 @@ $(c_ret_type) $(config.lua_lib_name)_$(func.host_func_name)(lua_State* l)
     {
         // Get the results from the stack.
         if (lua_is$(lua_ret_type)(l, -1)) { ret = lua_to$(lua_ret_type)(l, -1); }
-        else { _error = "Invalid return type for $(func.lua_func_name)() should be $(lua_ret_type)"; }
+        else { _error = "Script function $(func.lua_func_name)() returned wrong type - should be $(lua_ret_type)"; }
     }
-    else { _error = lua_tostring(l, -1); }
+    else
+    {
+        // Get the traceback from the stack.
+         _error = lua_tostring(l, -1);
+    }
     lua_pop(l, num_ret); // Clean up results.
     return ret;
 }
 
 >end -- script_funcs
 
-//============= Lua => C callback functions .c =============//
+//============= Lua => interop C callback functions =============//
 
 >for _, func in ipairs(host_funcs) do
 >local lua_ret_type = lua_types(func.ret.type)
@@ -128,7 +133,7 @@ static int $(config.lua_lib_name)_$(func.host_func_name)(lua_State* l)
 
 >end -- host_funcs
 
-//============= Infrastructure .c =============//
+//============= Infrastructure =============//
 
 static const luaL_Reg function_map[] =
 {
@@ -180,7 +185,7 @@ extern "C" {
 #include "luaex.h"
 #endif
 
-//============= C => Lua functions .h =============//
+//============= interop C => Lua functions =============//
 
 >for _, func in ipairs(script_funcs) do
 >local lua_ret_type = lua_types(func.ret.type)
@@ -204,7 +209,7 @@ $(c_ret_type) $(config.lua_lib_name)_$(func.host_func_name)(lua_State* l);
 
 >end -- script_funcs
 
-//============= Lua => C callback functions .h =============//
+//============= Lua => interop C callback functions =============//
 >for _, func in ipairs(host_funcs) do
 
 // $(func.description or "")
@@ -225,12 +230,12 @@ $(c_types(func.ret.type)) $(config.lua_lib_name)cb_$(func.host_func_name)(lua_St
 >end -- #sargs
 >end -- host_funcs
 
-//============= Infrastructure .h =============//
+//============= Infrastructure =============//
 
 /// Load Lua C lib.
 void $(config.lua_lib_name)_Load(lua_State* l);
 
-/// Return operation error or NULL if ok.
+/// Operation result: lua traceback OR error info string OR NULL if OK. 
 const char* $(config.lua_lib_name)_Error();
 ]]
 

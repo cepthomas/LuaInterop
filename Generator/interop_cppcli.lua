@@ -17,6 +17,7 @@ local tmpl_interop_cpp =
 >local sx = require("stringex")
 >local os = require("os")
 >local snow = os.date('%Y-%m-%d %H:%M:%S')
+///// Generated cpp and h files that bind Cpp/CLI to C interop code.   /////
 ///// Warning - this file is created by gen_interop.lua - do not edit. /////
 
 #include <windows.h>
@@ -32,7 +33,7 @@ using namespace System;
 using namespace System::Collections::Generic;
 
 
-//============= C# => C functions .cpp =============//
+//============= Cpp/CLI => interop C functions =============//
 
 >for _, func in ipairs(script_funcs) do
 >  local arg_spec = {}
@@ -61,13 +62,13 @@ $(cpp_types(func.ret.type)) $(config.class_name)::$(func.host_func_name)()
 >    else
     $(cpp_types(func.ret.type)) ret = $(config.lua_lib_name)_$(func.host_func_name)(_l$(sarg_impl));
 >    end
-    EvalLuaInteropStatus(luainterop_Error(), "$(func.host_func_name)()");
+    EvalInterop(luainterop_Error(), "$(func.host_func_name)()");
     return ret; 
 }
 
 >end -- script_funcs
 
-//============= C => C# callback functions .cpp =============//
+//============= interop C => Cpp/CLI callback functions =============//
 
 >for _, func in ipairs(host_funcs) do
 >  local arg_spec = {}
@@ -91,7 +92,7 @@ int $(config.lua_lib_name)cb_$(func.host_func_name)(lua_State* l, $(sarg_spec))
 
 >end -- host_funcs
 
-//============= Infrastructure .cpp =============//
+//============= Infrastructure =============//
 
 //--------------------------------------------------------//
 void $(config.class_name)::Run(String^ scriptFn, String^ luaPath)
@@ -123,7 +124,7 @@ local tmpl_interop_h =
 using namespace System;
 using namespace System::Collections::Generic;
 
-//============= C => C# callback payload .h =============//
+//============= interop C => Cpp/CLI callback payload =============//
 
 >for _, func in ipairs(host_funcs) do
 //--------------------------------------------------------//
@@ -158,7 +159,7 @@ public:
 public ref class $(config.class_name) : CliEx
 {
 
-//============= C# => C functions .h =============//
+//============= Cpp/CLI => interop C functions =============//
 public:
 
 >for _, func in ipairs(script_funcs) do
@@ -173,7 +174,7 @@ public:
     $(cpp_types(func.ret.type)) $(func.host_func_name)($(sarg_spec));
 
 >end -- script_funcs
-//============= C => C# callback functions =============//
+//============= interop C => Cpp/CLI callback functions =============//
 public:
 >for _, func in ipairs(host_funcs) do
     static event EventHandler<$(func.host_func_name)Args^>^ $(func.host_func_name);
@@ -181,7 +182,7 @@ public:
 
 >end -- host_funcs
 
-//============= Infrastructure .h =============//
+//============= Infrastructure =============//
 public:
     /// <summary>Initialize and execute.</summary>
     /// <param name="scriptFn">The script to load.</param>

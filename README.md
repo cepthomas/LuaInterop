@@ -65,7 +65,7 @@ M.script_funcs =
     {
         lua_func_name = "my_lua_func",
         host_func_name = "MyLuaFunc",
-        required = "true",
+        -- required = "true",
         description = "Tell me something good.",
         args =
         {
