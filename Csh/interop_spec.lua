@@ -21,26 +21,11 @@ M.script_funcs =
         description = "Tell me something good.",
         args =
         {
-            {
-                name = "arg_one",
-                type = "S",
-                description = "some strings"
-            },
-            {
-                name = "arg_two",
-                type = "I",
-                description = "a nice integer"
-            },
-            {
-                name = "arg_three",
-                type = "T",
-            },
+            { name = "arg_one", type = "S", description = "some strings" },
+            { name = "arg_two", type = "I", description = "a nice integer" },
+            { name = "arg_three", type = "T" },
         },
-        ret =
-        {
-            type = "T",
-            description = "a returned thing"
-        }
+        ret = { type = "T", description = "a returned thing" }
     },
 
     {
@@ -49,41 +34,24 @@ M.script_funcs =
         description = "wooga wooga",
         args =
         {
-            {
-                name = "arg_one",
-                type = "B",
-                description = "aaa bbb ccc"
-            },
+            { name = "arg_one", type = "B", description = "aaa bbb ccc" },
         },
-         ret =
-        {
-            type = "N",
-            description = "a returned number"
-        }
+        ret = { type = "N", description = "a returned number" }
     },
 
     {
         lua_func_name = "no_args_func",
         host_func_name = "NoArgsFunc",
         description = "no_args",
-        ret =
-        {
-            type = "N",
-            description = "a returned number"
-        },
+        ret = { type = "N", description = "a returned number" }
     },
 
     {
         lua_func_name = "optional_func",
         host_func_name = "OptionalFunc",
         description = "Function is optional.",
-        ret =
-        {
-            type = "I",
-            description = "Dummy return value."
-        }
+        ret = { type = "I", description = "Dummy return value." }
     },
-
 }
 
 ------------------------ Script => Host ------------------------
@@ -107,18 +75,10 @@ M.host_funcs =
         description = "What time is it",
         args =
         {
-            {
-                name = "tzone",
-                type = "I",
-                description = "Time zone"
-            },
+            { name = "tzone", type = "I", description = "Time zone" },
         },
-        ret =
-        {
-            type = "S",
-            description = "The time"
-        }
-    },
+        ret = { type = "S", description = "The time" }
+    }
 }
 
 return M
