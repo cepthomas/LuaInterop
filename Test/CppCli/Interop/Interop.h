@@ -12,16 +12,13 @@ using namespace System::Collections::Generic;
 public ref class LogArgs : public EventArgs
 {
 public:
-    /// <summary>Log level</summary>
-    property int level;
     /// <summary>Log message</summary>
     property String^ msg;
     /// <summary>Unused</summary>
     property int ret;
     /// <summary>Constructor.</summary>
-    LogArgs(int level, const char* msg)
+    LogArgs(const char* msg)
     {
-        this->level = level;
         this->msg = gcnew String(msg);
     }
 };
@@ -31,16 +28,22 @@ public ref class NotificationArgs : public EventArgs
 {
 public:
     /// <summary>A number</summary>
-    property int num;
+    property int arg_I;
     /// <summary>Some text</summary>
-    property String^ text;
-    /// <summary>Unused</summary>
+    property String^ arg_S;
+    /// <summary>boooooool</summary>
+    property bool arg_B;
+    /// <summary>numero/doublo</summary>
+    property double arg_N;
+    /// <summary>Back at you</summary>
     property int ret;
     /// <summary>Constructor.</summary>
-    NotificationArgs(int num, const char* text)
+    NotificationArgs(int arg_I, const char* arg_S, bool arg_B, double arg_N)
     {
-        this->num = num;
-        this->text = gcnew String(text);
+        this->arg_I = arg_I;
+        this->arg_S = gcnew String(arg_S);
+        this->arg_B = arg_B;
+        this->arg_N = arg_N;
     }
 };
 
@@ -59,7 +62,16 @@ public:
 
     /// <summary>DoCommand</summary>
     /// <param name="cmd">Specific command</param>
-    /// <param name="arg">Optional argument</param>
+    /// <param name="arg_B">bool argument</param>
+    /// <param name="arg_I">int argument</param>
+    /// <param name="arg_N">number/double argument</param>
+    /// <param name="arg_S">string argument</param>
+    /// <returns>Script return</returns>
+    double DoCommand(String^ cmd, bool arg_B, int arg_I, double arg_N, String^ arg_S);
+
+    /// <summary>DoCommand</summary>
+    /// <param name="cmd">Specific command</param>
+    /// <param name="arg">int argument</param>
     /// <returns>Script return</returns>
     String^ DoCommand(String^ cmd, int arg);
 

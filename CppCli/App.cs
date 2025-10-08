@@ -10,7 +10,7 @@ using System.Drawing;
 using Ephemera.NBagOfTricks;
 
 
-namespace CppCli
+namespace CppCli //TODO1 delete this project
 {
     /// <summary>A typical application using interop and debugex.</summary>
     public class App : Form
@@ -99,7 +99,7 @@ namespace CppCli
                 // Load script.
                 var scriptFn = Path.Combine(srcDir, "script_test.lua");
                 var luaPath = $"{srcDir}\\..\\LBOT\\?.lua;{srcDir}\\lua\\?.lua;;";
-                _interop.Run(scriptFn, luaPath);
+                _interop.RunScript(scriptFn, luaPath);
 
                 // Execute script functions.
                 var res = _interop.Setup(12345);

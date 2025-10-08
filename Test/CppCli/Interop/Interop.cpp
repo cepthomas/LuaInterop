@@ -21,6 +21,15 @@ int Interop::Setup(int opt)
 }
 
 //--------------------------------------------------------//
+double Interop::DoCommand(String^ cmd, bool arg_B, int arg_I, double arg_N, String^ arg_S)
+{
+    SCOPE();
+    double ret = luainterop_DoCommand(_l, ToCString(cmd), arg_B, arg_I, arg_N, ToCString(arg_S));
+    EvalInterop(luainterop_Error(), "DoCommand()");
+    return ret; 
+}
+
+//--------------------------------------------------------//
 String^ Interop::DoCommand(String^ cmd, int arg)
 {
     SCOPE();
@@ -35,10 +44,10 @@ String^ Interop::DoCommand(String^ cmd, int arg)
 
 //--------------------------------------------------------//
 
-int luainteropcb_Log(lua_State* l, int level, const char* msg)
+int luainteropcb_Log(lua_State* l, const char* msg)
 {
     SCOPE();
-    LogArgs^ args = gcnew LogArgs(level, msg);
+    LogArgs^ args = gcnew LogArgs(msg);
     Interop::Notify(args);
     return args->ret;
 }
@@ -46,10 +55,10 @@ int luainteropcb_Log(lua_State* l, int level, const char* msg)
 
 //--------------------------------------------------------//
 
-int luainteropcb_Notification(lua_State* l, int num, const char* text)
+int luainteropcb_Notification(lua_State* l, int arg_I, const char* arg_S, bool arg_B, double arg_N)
 {
     SCOPE();
-    NotificationArgs^ args = gcnew NotificationArgs(num, text);
+    NotificationArgs^ args = gcnew NotificationArgs(arg_I, arg_S, arg_B, arg_N);
     Interop::Notify(args);
     return args->ret;
 }
