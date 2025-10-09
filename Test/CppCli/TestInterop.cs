@@ -10,83 +10,42 @@ using Ephemera.NBagOfTricks;
 using Ephemera.NBagOfTricks.PNUT;
 
 
-// var r = ExecuteLuaCode and ExecuteLuaCode -> TODO1 simplify/remove: new OpenScript/Chunk
-
-
-// compile script:
-//   - syntax error(s)
-
-
-// host => script lua func:
-//   - missing required func
-//   - arg type wrong
-//   - arg value out of range
-
-
-// script => host callback func:
-//   - missing required func
-//   - arg type wrong
-//   - arg value out of range
-
-
-
-//res = _interop.DoCommand("do_math", 55);
-//res = _interop.DoCommand("do_dbg", 9999);
-//res = _interop.DoCommand("boom_dbg", 9999);
-//try
-//{
-//    res = _interop.DoCommand("boom_exc", 9999);
-//    Log("SCR_RET", $"boom_exc gave me {res}");
-//}
-//catch (Exception ex)
-//{
-//    Log("SCR_EXC", $"boom {ex.Message}");
-//}
-
-//--------------------------- all? errors ----------------------------------
-//
-// WRN INTEROP Setup() C:\Dev\Apps\Nebulua\LBOT\lbot_types.lua:109: Invalid integer:100000
-// stack traceback:
-//     [C]: in function 'error'
-//     C:\Dev\Apps\Nebulua\LBOT\lbot_types.lua:109: in function 'lbot_types.val_integer'
-//     C:\Dev\Apps\Nebulua\lua\step_types.lua:31: in function 'step_types.note'
-//     C:\Dev\Apps\Nebulua\lua\script_api.lua:183: in function 'script_api.send_midi_note'
-//     C:\Dev\Apps\Nebulua\examples\example.lua:91: in function 'setup'
-// 
-// 
-// INF OpenScriptFile exception thread:1
-// WRN ERRSYNTAX C:\Dev\Apps\Nebulua\examples\example.lua:31: syntax error near 'local'
-// 
-// 
-// INF OpenScriptFile exception thread:1
-// ERR ERRRUN C:\Dev\Apps\Nebulua\lua\script_api.lua:106: Invalid arg type for dev_name
-// stack traceback:
-//     [C]: in function 'luainterop.open_midi_output'
-//     C:\Dev\Apps\Nebulua\lua\script_api.lua:106: in function 'script_api.open_midi_output'
-//     C:\Dev\Apps\Nebulua\examples\example.lua:39: in main chunk
-// 
-// 
-// INF OpenScriptFile exception thread:1
-// WRN DEBUG MidiOutputDevice TOD-O1 just a test - delete me
-// 
-// 
-// WRN INTEROP Setup() C:\Dev\Apps\Nebulua\lua\script_api.lua:178: attempt to perform arithmetic on a nil value (field '?')
-// stack traceback:
-//     C:\Dev\Apps\Nebulua\lua\script_api.lua:178: in function 'script_api.send_midi_note'
-//     C:\Dev\Apps\Nebulua\examples\example.lua:92: in function 'setup'
-
-
 namespace Test
 {
-    public class Program
+    public class Common
     {
-        static void Main(string[] args)
+        // Where are we?
+        static public string SrcDir { get; set; } // = MiscUtils.GetSourcePath().Replace("\\", "/");
+        static public string LuaPath { get; set; } // = $"{srcDir}/LBOT/?.lua;{srcDir}/lua/?.lua;;";
+        static public Interop Interop { get; set; } = new();
+
+        // Hook script callbacks. Capture payload.
+        static public LogArgs? LogArgs { get; set; } = null;
+        static public NotificationArgs? NotifArgs { get; set; } = null;
+
+        static Common()
+        {
+            SrcDir = MiscUtils.GetSourcePath().Replace("\\", "/");
+            LuaPath = $"{SrcDir}/LBOT/?.lua;{SrcDir}/lua/?.lua;;";
+
+            Interop.Log += (object? sender, LogArgs args) => { LogArgs = args; };
+            Interop.Notification += (object? sender, NotificationArgs args) => { NotifArgs = args; NotifArgs.ret = 987; };
+        }
+
+        static public void Reset()
+        {
+            LogArgs = null;
+            NotifArgs = null;
+        }
+
+        static void Main()
         {
             TestRunner runner = new(OutputFormat.Readable);
-            // "INTEROP"  "CLI"  "MISC"
-            var cases = new[] { "INTEROP_HAPPY" };
+            var cases = new[] { "INTEROP" };
             runner.RunSuites(cases);
-            File.WriteAllLines(@"_test_out.txt", runner.Context.OutputLines);
+            File.WriteAllLines(Path.Combine(MiscUtils.GetSourcePath(), "_test_out.txt"), runner.Context.OutputLines);
+
+            Interop.Dispose();
         }
     }
 
@@ -95,130 +54,305 @@ namespace Test
     {
         public override void RunSuite()
         {
-            //UT_STOP_ON_FAIL(true); // throws TestFailException
-
-            // Where are we?
-            var srcDir = MiscUtils.GetSourcePath().Replace("\\", "/");
-            var luaPath = $"{srcDir}/LBOT/?.lua;{srcDir}/lua/?.lua;;";
-
-            // Hook script callbacks. Capture payload.
-            LogArgs? logArgs = null;
-            NotificationArgs? notifArgs = null;
-            Interop.Log += (object? sender, LogArgs args) => { logArgs = args; };
-            Interop.Notification += (object? sender, NotificationArgs args) => { notifArgs = args; };
+            Common.Reset();
 
             try
             {
-                using Interop interop = new();
-
-                // Load chunk.
-                var s = @"
-                local li  = require('luainterop')
-                li.log('Loading script_test.lua')
-                nret = li.notif(33, 'Notification from script_test', true, 123.45)
-                print('>>>', nret)
-                function setup(arg) return arg + 1111 end
-                function do_command(cmd, arg) return 'do_command('..cmd..', '..arg..')' end";
-                interop.RunChunk(s, luaPath);
+                // Load test code.
+                string s = @"
+                    local li  = require('luainterop')
+                    li.log('Loading script_test.lua')
+                    nret = li.notif(33, 'Notification from script_test', true, 123.45)
+                    li.log('nret:' .. nret)
+                    function setup(arg) return arg + 1111 end
+                    function do_command(cmd, arg) return 'do_command('..cmd..', '..arg..')' end";
+                Common.Interop.RunChunk(s, Common.LuaPath);
 
                 // Execute script functions.
-                var resi = interop.Setup(1234);
+                var resi = Common.Interop.Setup(1234);
                 UT_EQUAL(resi, 2345);
-
-                UT_FAIL("did not throw");
+            }
+            catch (LuaException e)
+            {
+                UT_FAIL("Should not throw");
             }
             catch (Exception e)
             {
-                UT_FAIL("did throw");
-                //UT_STRING_CONTAINS(e.Message, "syntax error near 'is'");
+                UT_FAIL(e.GetType().Name);
             }
+
+            UT_NOT_NULL(Common.LogArgs);
+            UT_NOT_NULL(Common.NotifArgs);
+            UT_EQUAL(Common.LogArgs.msg, "nret:987");
+            UT_EQUAL(Common.NotifArgs.arg_N, 123.45);
         }
     }
 
-    /// <summary>Test basic failure modes. TODO1 from nebulua</summary>
-    public class INTEROP_FAIL : TestSuite
+    /// <summary>host => script lua func</summary>
+    public class INTEROP_SYNTAX_ERROR : TestSuite
     {
         public override void RunSuite()
         {
-            UT_STOP_ON_FAIL(true);
+            Common.Reset();
 
-            // Set up runtime lua environment.
-            var testDir = MiscUtils.GetSourcePath();
-            var luaPath = $"{testDir}\\?.lua;{testDir}\\..\\LBOT\\?.lua;;";
-            var scriptFn = Path.Join(testDir, "lua", "script_happy.lua");
-            var testFn = "_test.lua";
-
-            // General syntax error during load.
+            try
             {
-                try
-                {
-                    using Interop interop = new();
-                    File.WriteAllText(testFn,
-                        @"local api = require(""luainterop"")
-                    this is a bad statement
-                    end");
+                // Load test code.
+                string  s = @"
+                    local li = require('luainterop')
+                    I'm a syntax error
+                    function setup(arg) return 111 end
+                    function do_command(cmd, arg) return 'aaa' end";
+                Common.Interop.RunChunk(s, Common.LuaPath);
 
-                    interop.RunScript(testFn, luaPath);
-                    UT_FAIL("did not throw");
-                }
-                catch (Exception e)
-                {
-                    UT_STRING_CONTAINS(e.Message, "syntax error near 'is'");
-                }
+                UT_FAIL("Should throw");
+            }
+            catch (LuaException e)
+            {
+                UT_STRING_CONTAINS(e.Message, "I'm a syntax error");
+            }
+            catch (Exception e)
+            {
+                UT_FAIL(e.GetType().Name);
+            }
+            UT_NULL(Common.LogArgs);
+            UT_NULL(Common.NotifArgs);
+        }
+    }
+
+    /// <summary>host => script lua func</summary>
+    public class INTEROP_MISSING_REQ_FUNC : TestSuite
+    {
+        public override void RunSuite()
+        {
+            Common.Reset();
+
+            try
+            {
+                // Load test code.
+                string s = @"
+                    local li = require('luainterop')
+                    -- missing function setup(arg) return 111 end
+                    function do_command(cmd, arg) return 'aaa' end";
+                Common.Interop.RunChunk(s, Common.LuaPath);
+
+                // Execute script functions.
+                var resi = Common.Interop.Setup(1234);
+
+                UT_FAIL("Should throw");
+            }
+            catch (LuaException e)
+            {
+                UT_STRING_CONTAINS(e.Message, "syntax error TODO1");
+            }
+            catch (Exception e)
+            {
+                UT_FAIL(e.GetType().Name);
+            }
+            UT_NULL(Common.LogArgs);
+            UT_NULL(Common.NotifArgs);
+        }
+    }
+
+    /// <summary>host => script lua func</summary>
+    public class INTEROP_EXPLICIT_ERROR : TestSuite
+    {
+        public override void RunSuite()
+        {
+            Common.Reset();
+
+            try
+            {
+                // Load test code.
+                string s = @"
+                    local li = require('luainterop')
+                    function setup(arg) error('setup() raises error()') end";
+                Common.Interop.RunChunk(s, Common.LuaPath);
+
+                // Execute script functions.
+                var resi = Common.Interop.Setup(1234);
+
+                UT_FAIL("Should throw");
+            }
+            catch (LuaException e)
+            {
+                UT_STRING_CONTAINS(e.Message, "syntax error TODO1");
+            }
+            catch (Exception e)
+            {
+                UT_FAIL(e.GetType().Name);
             }
 
-            // Bad L2C function
-            {
-                try
-                {
-                    using Interop interop = new();
-                    File.WriteAllText(testFn,
-                        @"local api = require(""luainterop"")
-                        api.no_good(95)");
+            UT_NULL(Common.LogArgs);
+            UT_NULL(Common.NotifArgs);
+        }
+    }
 
-                    interop.RunScript(testFn, luaPath);
-                    UT_FAIL("did not throw");
-                }
-                catch (Exception e)
-                {
-                    UT_STRING_CONTAINS(e.Message, "attempt to call a nil value (field 'no_good')");
-                }
+    /// <summary>host => script lua func</summary>
+    public class INTEROP_SCRIPT_ERROR : TestSuite
+    {
+        public override void RunSuite()
+        {
+            Common.Reset();
+
+            try
+            {
+                // Load test code. Has tail calls.
+                string s = @"
+                    local li = require('luainterop')
+                    local function boomer2(tt) return 'boom'..nil end
+                    local function boomer1(tt) v = boomer2(tt) return #v end
+                    function setup(arg) boomer1('shakalaka') end";
+                Common.Interop.RunChunk(s, Common.LuaPath);
+
+                // Execute script functions.
+                var resi = Common.Interop.Setup(1234);
+
+                UT_FAIL("Should throw");
+            }
+            catch (LuaException e)
+            {
+                UT_STRING_CONTAINS(e.Message, "syntax error TODO1");
+            }
+            catch (Exception e)
+            {
+                UT_FAIL(e.GetType().Name);
             }
 
-            // General explicit error.
-            {
-                try
-                {
-                    using Interop interop = new();
-                    File.WriteAllText(testFn,
-                        @"local api = require(""luainterop"")
-                        error(""setup() raises error()"")");
+            UT_NULL(Common.LogArgs);
+            UT_NULL(Common.NotifArgs);
+        }
+    }
 
-                    interop.RunScript(testFn, luaPath);
-                    UT_FAIL("did not throw");
-                }
-                catch (Exception e)
-                {
-                    UT_STRING_CONTAINS(e.Message, " setup() raises error()");
-                }
+    /// <summary>host => script lua func</summary>
+    public class INTEROP_SCRIPT_ERROR_TAIL_CALLS : TestSuite
+    {
+        public override void RunSuite()
+        {
+            Common.Reset();
+
+            try
+            {
+                // Load test code. Has tail calls.
+                string s = @"
+                    local li = require('luainterop')
+                    local function boomer2(tt) return 'boom'..nil end
+                    local function boomer1(tt) return boomer2(tt) end
+                    function setup(arg) boomer1('shakalaka') end";
+                Common.Interop.RunChunk(s, Common.LuaPath);
+
+                // Execute script functions.
+                var resi = Common.Interop.Setup(1234);
+
+                UT_FAIL("Should throw");
+            }
+            catch (LuaException e)
+            {
+                UT_STRING_CONTAINS(e.Message, "syntax error TODO1");
+            }
+            catch (Exception e)
+            {
+                UT_FAIL(e.GetType().Name);
             }
 
-            // Runtime error.
-            {
-                try
-                {
-                    using Interop interop = new();
-                    File.WriteAllText(testFn,
-                        @"local api = require(""luainterop"")
-                        local bad = 123 + ng");
+            UT_NULL(Common.LogArgs);
+            UT_NULL(Common.NotifArgs);
+        }
+    }
 
-                    interop.RunScript(testFn, luaPath);
-                    UT_FAIL("did not throw");
-                }
-                catch (Exception e)
-                {
-                    UT_STRING_CONTAINS(e.Message, "attempt to perform arithmetic on a nil value (global 'ng')");
-                }
+    /// <summary>script => host callback func</summary>
+    public class INTEROP_INVALID_FUNC : TestSuite
+    {
+        public override void RunSuite()
+        {
+            Common.Reset();
+
+            try
+            {
+                // Load test code.
+                string s = @"
+                    local li  = require('luainterop')
+                    li.invalid_func(444)";
+                Common.Interop.RunChunk(s, Common.LuaPath);
+
+                UT_FAIL("Should throw");
+            }
+            catch (LuaException e)
+            {
+                UT_STRING_CONTAINS(e.Message, "syntax error TODO1");
+            }
+            catch (Exception e)
+            {
+                UT_FAIL(e.GetType().Name);
+            }
+
+            UT_NULL(Common.LogArgs);
+            UT_NULL(Common.NotifArgs);
+        }
+    }
+
+
+    /// <summary>script => host callback func</summary>
+    public class INTEROP_ARG_TYPE_WRONG : TestSuite
+    {
+        public override void RunSuite()
+        {
+            Common.Reset();
+
+            try
+            {
+                // Load test code.
+                string s = @"
+                    local li  = require('luainterop')
+                    nret = li.notif('bad arg', true, 123.45)";
+                Common.Interop.RunChunk(s, Common.LuaPath);
+
+                UT_FAIL("Should throw");
+            }
+            catch (LuaException e)
+            {
+                UT_STRING_CONTAINS(e.Message, "syntax error TODO1");
+            }
+            catch (Exception e)
+            {
+                UT_FAIL(e.GetType().Name);
+            }
+
+            UT_NULL(Common.LogArgs);
+            UT_NULL(Common.NotifArgs);
+        }
+    }
+
+    /// <summary>host => script lua func</summary>
+    public class DEBUGGER : TestSuite
+    {
+        public override void RunSuite()
+        {
+            Common.Reset();
+
+            try
+            {
+                // Load test code.
+                string s = @"
+                    local li = require('luainterop')
+                    local dbg = require('debugex')
+                    dbg.init() -- local cli
+                    local function not_boomer(tt) dbg() end
+                    function setup(arg) not_boomer('shakalaka') end";
+                Common.Interop.RunChunk(s, Common.LuaPath);
+
+                // Execute script functions.
+                var resi = Common.Interop.Setup(1234);
+                UT_EQUAL(resi, 2345);
+
+            }
+            catch (LuaException e)
+            {
+                UT_FAIL("Should not throw");
+            }
+            catch (Exception e)
+            {
+                UT_FAIL(e.GetType().Name);
             }
         }
     }
