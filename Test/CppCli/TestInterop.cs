@@ -15,8 +15,8 @@ namespace Test
     public class Common
     {
         // Where are we?
-        static public string SrcDir { get; set; } // = MiscUtils.GetSourcePath().Replace("\\", "/");
-        static public string LuaPath { get; set; } // = $"{srcDir}/LBOT/?.lua;{srcDir}/lua/?.lua;;";
+        static public string SrcDir { get; set; }
+        static public string LuaPath { get; set; }
         static public Interop Interop { get; set; } = new();
 
         // Hook script callbacks. Capture payload.
@@ -100,7 +100,7 @@ namespace Test
                 // Load test code.
                 string  s = @"
                     local li = require('luainterop')
-                    I'm a syntax error
+                    syntax error
                     function setup(arg) return 111 end
                     function do_command(cmd, arg) return 'aaa' end";
                 Common.Interop.RunChunk(s, Common.LuaPath);
@@ -109,7 +109,9 @@ namespace Test
             }
             catch (LuaException e)
             {
-                UT_STRING_CONTAINS(e.Message, "I'm a syntax error");
+                UT_EQUAL(e.Status, LuaStatus.ERRSYNTAX);
+                UT_STRING_CONTAINS(e.Info, "Load chunk failed.");
+                UT_STRING_CONTAINS(e.Context, ":3: syntax error near 'error'");
             }
             catch (Exception e)
             {
@@ -143,7 +145,9 @@ namespace Test
             }
             catch (LuaException e)
             {
-                UT_STRING_CONTAINS(e.Message, "syntax error TODO1");
+                UT_EQUAL(e.Status, LuaStatus.ERRINTEROP);
+                UT_STRING_CONTAINS(e.Info, "Setup() Script does not implement required function setup()");
+                UT_STRING_CONTAINS(e.Context, "Context ????????");
             }
             catch (Exception e)
             {
@@ -176,7 +180,9 @@ namespace Test
             }
             catch (LuaException e)
             {
-                UT_STRING_CONTAINS(e.Message, "syntax error TODO1");
+                UT_EQUAL(e.Status, LuaStatus.ERRINTEROP);
+                UT_STRING_CONTAINS(e.Info, "Info ????????");
+                UT_STRING_CONTAINS(e.Context, ":3: setup() raises error()");
             }
             catch (Exception e)
             {
@@ -212,7 +218,9 @@ namespace Test
             }
             catch (LuaException e)
             {
-                UT_STRING_CONTAINS(e.Message, "syntax error TODO1");
+                UT_EQUAL(e.Status, LuaStatus.ERRINTEROP);
+                UT_STRING_CONTAINS(e.Info, "Info ????????");
+                UT_STRING_CONTAINS(e.Context, ":3: attempt to concatenate a nil value");
             }
             catch (Exception e)
             {
@@ -248,7 +256,9 @@ namespace Test
             }
             catch (LuaException e)
             {
-                UT_STRING_CONTAINS(e.Message, "syntax error TODO1");
+                UT_EQUAL(e.Status, LuaStatus.ERRINTEROP);
+                UT_STRING_CONTAINS(e.Info, "Info ????????");
+                UT_STRING_CONTAINS(e.Context, ":3: attempt to concatenate a nil value");
             }
             catch (Exception e)
             {
@@ -279,7 +289,9 @@ namespace Test
             }
             catch (LuaException e)
             {
-                UT_STRING_CONTAINS(e.Message, "syntax error TODO1");
+                UT_EQUAL(e.Status, LuaStatus.ERRRUN);
+                UT_STRING_CONTAINS(e.Info, "Info ????????");
+                UT_STRING_CONTAINS(e.Context, ":3: attempt to call a nil value (field 'invalid_func'");
             }
             catch (Exception e)
             {
@@ -311,7 +323,9 @@ namespace Test
             }
             catch (LuaException e)
             {
-                UT_STRING_CONTAINS(e.Message, "syntax error TODO1");
+                UT_EQUAL(e.Status, LuaStatus.ERRRUN);
+                UT_STRING_CONTAINS(e.Info, "Execute chunk failed");
+                UT_STRING_CONTAINS(e.Context, ":3: Invalid arg type for arg_I");
             }
             catch (Exception e)
             {
@@ -348,7 +362,9 @@ namespace Test
             }
             catch (LuaException e)
             {
-                UT_FAIL("Should not throw");
+                UT_EQUAL(e.Status, LuaStatus.ERRINTEROP);
+                UT_STRING_CONTAINS(e.Info, "Info ????????");
+                UT_STRING_CONTAINS(e.Context, "Context ????????");
             }
             catch (Exception e)
             {

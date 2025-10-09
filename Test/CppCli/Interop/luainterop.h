@@ -61,5 +61,5 @@ int luainteropcb_Notification(lua_State* l, int arg_I, const char* arg_S, bool a
 /// Load Lua C lib.
 void luainterop_Load(lua_State* l);
 
-/// Operation result: lua traceback OR error info string OR NULL if OK. 
+/// Operation result: lua traceback OR error info string OR NULL if OK. TODO1X No!! add a separate _context field.
 const char* luainterop_Error();
