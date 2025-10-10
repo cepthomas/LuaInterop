@@ -1,4 +1,4 @@
-///// Warning - this file is created by gen_interop.lua - do not edit. /////
+///// Warning - this file is created by do_gen.lua - do not edit. /////
 
 #pragma once
 #include "cliex.h"

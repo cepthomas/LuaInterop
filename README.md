@@ -26,7 +26,7 @@ will have minimal changes after settling down.
 
 # Code Generation
 
-C# and/or C code is generated using `gen_interop.lua`, `interop_<flavor>.lua`, and a custom `interop_spec.lua`
+C# and/or C code is generated using `do_gen.lua`, `interop_<flavor>.lua`, and a custom `interop_spec.lua`
 file that describes the bidirectional api you need for your application.
 
 `interop_spec.lua` is a plain Lua data file. It has three sections:
@@ -95,7 +95,7 @@ M.host_funcs =
 
 This is turned into the flavors of interop code using a command like:
 ```
-lua gen_interop.lua -csh input_dir\interop_spec.lua output_dir
+lua do_gen.lua -csh input_dir\interop_spec.lua output_dir
 ```
 
 Currently the supported api data types are limited to boolean, integer, number, string.
@@ -107,11 +107,11 @@ Comprehensive examples are provided in the `C`, `CppCli`, and `Csh` folders.
 
 Each flavor has these files:
 - interop_spec.lua - defines your api
-- gen_interop.cmd - code generation script
+- do_gen.cmd - code generation script
 - script_xxx.lua - test/example scripts
 
 The files that do the work:
-- gen_interop.lua - the driver
+- do_gen.lua - the driver
 - interop_c.lua - C flavor
 - interop_cppcli.lua - C++/CLI flavor
 - interop_csh.lua - C# flavor

@@ -8,7 +8,7 @@ cd ..\..\..\
 set LDIR=%cd%\LBOT
 set LUA_PATH=%LDIR%\?.lua;%ODIR%\?.lua;?.lua;
 cd Generator
-lua gen_interop.lua -c %ODIR%\interop_spec.lua %ODIR%
+lua do_gen.lua -c %ODIR%\interop_spec.lua %ODIR%
 :: Cpp flavor also requires the C generaated code.
-lua gen_interop.lua -cppcli %ODIR%\interop_spec.lua %ODIR%
+lua do_gen.lua -cppcli %ODIR%\interop_spec.lua %ODIR%
 cd %ODIR%

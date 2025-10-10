@@ -9,7 +9,7 @@ local arg = {...}
 
 ------------------------------------------------
 local function usage()
-    print("Usage: gen_interop.lua (-d) [-ch|-cs] [ns] [sf] [op]")
+    print("Usage: do_gen.lua (-d) [-ch|-cs] [ns] [sf] [op]")
     print("  -c - generate C/H files")
     print("  -cppcli - generate C++/CLI files")
     print("  -csh - generate C# file")

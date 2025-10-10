@@ -1,5 +1,5 @@
 ///// Generated cpp and h files that bind Cpp/CLI to C interop code.   /////
-///// Warning - this file is created by gen_interop.lua - do not edit. /////
+///// Warning - this file is created by do_gen.lua - do not edit. /////
 
 #include <windows.h>
 #include "luainterop.h"
@@ -16,7 +16,7 @@ int Interop::Setup(int opt)
 {
     SCOPE();
     int ret = luainterop_Setup(_l, opt);
-    EvalInterop(luainterop_Info(), luainterop_Context());
+    if (luainterop_Info() != NULL) { throw(gcnew LuaException(gcnew String(luainterop_Info()), luainterop_Context() == NULL ? "" : gcnew String(luainterop_Context()))); }
     return ret; 
 }
 
@@ -25,7 +25,7 @@ String^ Interop::DoCommand(String^ cmd, bool arg_B, int arg_I, double arg_N, Str
 {
     SCOPE();
     String^ ret = gcnew String(luainterop_DoCommand(_l, ToCString(cmd), arg_B, arg_I, arg_N, ToCString(arg_S)));
-    EvalInterop(luainterop_Info(), luainterop_Context());
+    if (luainterop_Info() != NULL) { throw(gcnew LuaException(gcnew String(luainterop_Info()), luainterop_Context() == NULL ? "" : gcnew String(luainterop_Context()))); }
     return ret; 
 }
 

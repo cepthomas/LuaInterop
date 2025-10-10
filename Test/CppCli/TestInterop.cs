@@ -6,9 +6,9 @@ using System.IO;
 using System.Threading;
 using System.Diagnostics;
 using System.Drawing;
+using System.Runtime.CompilerServices;
 using Ephemera.NBagOfTricks;
 using Ephemera.NBagOfTricks.PNUT;
-using System.Runtime.CompilerServices;
 
 
 namespace Test
@@ -49,15 +49,15 @@ namespace Test
             Interop.Dispose();
         }
 
-        public static void Dump(LuaException e, [CallerMemberName] string memberName = "", [CallerLineNumber] int lineNumber = -1)
+        public static void Dump(LuaException e, [CallerLineNumber] int lineNumber = -1)
         {
-            List<string> ls = [];
-            ls.Add("---------- LuaException ----------");
-            ls.Add($"name:[{memberName}({lineNumber})]");
-            ls.Add($"status:[{e.Status}]");
-            ls.Add($"info:[{e.Info}]");
-            ls.Add($"context:[{e.Context}]");
-            Console.WriteLine(string.Join(Environment.NewLine, ls));
+            // List<string> ls = [];
+            // ls.Add("---------- LuaException ----------");
+            // ls.Add($"name:[{new StackTrace().GetFrame(1).GetMethod().ReflectedType.Name}({lineNumber})]");
+            // ls.Add($"info:[{e.Info}]");
+            // ls.Add($"context:[{e.Context}]");
+            // ls.Add($"");
+            // Console.WriteLine(string.Join(Environment.NewLine, ls));
         }
     }
 
@@ -124,7 +124,6 @@ namespace Test
             catch (LuaException e)
             {
                 Common.Dump(e);
-                UT_EQUAL(e.Status, LuaStatus.ERRSYNTAX);
                 UT_STRING_CONTAINS(e.Info, "Load chunk failed.");
                 UT_STRING_CONTAINS(e.Context, ":3: syntax error near 'error'");
             }
@@ -162,7 +161,6 @@ namespace Test
             catch (LuaException e)
             {
                 Common.Dump(e);
-                UT_EQUAL(e.Status, LuaStatus.ERRINTEROP);
                 UT_STRING_CONTAINS(e.Info, "Script does not implement required function setup()");
                 UT_EQUAL(e.Context, "");
             }
@@ -199,7 +197,6 @@ namespace Test
             catch (LuaException e)
             {
                 Common.Dump(e);
-                UT_EQUAL(e.Status, LuaStatus.ERRINTEROP);
                 UT_STRING_CONTAINS(e.Info, "Script function setup() error");
                 UT_STRING_CONTAINS(e.Context, ":3: boom!!!");
             }
@@ -239,7 +236,6 @@ namespace Test
             catch (LuaException e)
             {
                 Common.Dump(e);
-                UT_EQUAL(e.Status, LuaStatus.ERRINTEROP);
                 UT_STRING_CONTAINS(e.Info, "Script function setup() error");
                 UT_STRING_CONTAINS(e.Context, ":3: attempt to concatenate a nil value");
             }
@@ -279,7 +275,6 @@ namespace Test
             catch (LuaException e)
             {
                 Common.Dump(e);
-                UT_EQUAL(e.Status, LuaStatus.ERRINTEROP);
                 UT_STRING_CONTAINS(e.Info, "Script function setup() error");
                 UT_STRING_CONTAINS(e.Context, ":3: attempt to concatenate a nil value");
             }
@@ -314,7 +309,6 @@ namespace Test
             catch (LuaException e)
             {
                 Common.Dump(e);
-                UT_EQUAL(e.Status, LuaStatus.ERRRUN);
                 UT_STRING_CONTAINS(e.Info, "Execute chunk failed.");
                 UT_STRING_CONTAINS(e.Context, ":3: attempt to call a nil value (field 'invalid_func'");
             }
@@ -349,7 +343,6 @@ namespace Test
             catch (LuaException e)
             {
                 Common.Dump(e);
-                UT_EQUAL(e.Status, LuaStatus.ERRRUN);
                 UT_STRING_CONTAINS(e.Info, "Execute chunk failed");
                 UT_STRING_CONTAINS(e.Context, ":3: Invalid arg type for arg_I");
             }
@@ -390,9 +383,6 @@ namespace Test
             catch (LuaException e)
             {
                 Common.Dump(e);
-                UT_EQUAL(e.Status, LuaStatus.ERRINTEROP);
-                //UT_STRING_CONTAINS(e.Info, "Info ????????");
-                //UT_STRING_CONTAINS(e.Context, "Context ????????");
             }
             catch (Exception e)
             {

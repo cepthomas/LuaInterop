@@ -20,7 +20,7 @@ local tmpl_interop_c =
 >local os = require("os")
 >local snow = os.date('%Y-%m-%d %H:%M:%S')
 ///// Generated C and h files that bind interop C to lua C code.       /////
-///// Warning - this file is created by gen_interop.lua - do not edit. /////
+///// Warning - this file is created by do_gen.lua - do not edit. /////
 
 #include "$(config.lua_lib_name).h"
 >if config.add_refs then
@@ -182,7 +182,7 @@ local tmpl_interop_h =
 >local sx = require("stringex")
 >local os = require("os")
 >local snow = os.date('%Y-%m-%d %H:%M:%S')
-///// Warning - this file is created by gen_interop.lua - do not edit. /////
+///// Warning - this file is created by do_gen.lua - do not edit. /////
 
 #include <stdbool.h>
 
