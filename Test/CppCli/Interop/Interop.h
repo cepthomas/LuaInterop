@@ -67,13 +67,7 @@ public:
     /// <param name="arg_N">number/double argument</param>
     /// <param name="arg_S">string argument</param>
     /// <returns>Script return</returns>
-    double DoCommand(String^ cmd, bool arg_B, int arg_I, double arg_N, String^ arg_S);
-
-    /// <summary>DoCommand</summary>
-    /// <param name="cmd">Specific command</param>
-    /// <param name="arg">int argument</param>
-    /// <returns>Script return</returns>
-    String^ DoCommand(String^ cmd, int arg);
+    String^ DoCommand(String^ cmd, bool arg_B, int arg_I, double arg_N, String^ arg_S);
 
 //============= interop C => Cpp/CLI callback functions =============//
 public:

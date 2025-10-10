@@ -1,4 +1,5 @@
 -- Generate C# specific interop code. Requires KeraLuaEx to compile.
+-- Uses .NET style markup.
 
 -- local ut = require('lbot_utils')
 local tmpl = require('template')

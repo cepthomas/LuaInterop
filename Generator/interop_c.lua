@@ -1,4 +1,5 @@
 -- Generate C specific interop code.
+-- Uses doxygen style markup.
 
 -- local ut = require('lbot_utils')
 local tmpl = require('template')
@@ -33,7 +34,9 @@ local tmpl_interop_c =
 #pragma warning( disable : 6001 4244 4703 4090 )
 #endif
 
-static const char* _error;
+static const char* _info;
+static const char* _context;
+
 
 //============= interop C => Lua functions =============//
 
@@ -52,7 +55,8 @@ $(c_ret_type) $(config.lua_lib_name)_$(func.host_func_name)(lua_State* l, $(sarg
 $(c_ret_type) $(config.lua_lib_name)_$(func.host_func_name)(lua_State* l)
 >end -- #sargs
 {
-    _error = NULL;
+    _info = NULL;
+    _context = NULL;
     int stat = LUA_OK;
     int num_args = 0;
     int num_ret = 1;
@@ -62,7 +66,7 @@ $(c_ret_type) $(config.lua_lib_name)_$(func.host_func_name)(lua_State* l)
     int ltype = lua_getglobal(l, "$(func.lua_func_name)");
     if (ltype != LUA_TFUNCTION)
     {
-        _error = "Script does not implement required function $(func.lua_func_name)()";
+        _info = "Script does not implement required function $(func.lua_func_name)()";
         return ret;
     }
 
@@ -79,12 +83,13 @@ $(c_ret_type) $(config.lua_lib_name)_$(func.host_func_name)(lua_State* l)
     {
         // Get the results from the stack.
         if (lua_is$(lua_ret_type)(l, -1)) { ret = lua_to$(lua_ret_type)(l, -1); }
-        else { _error = "Script function $(func.lua_func_name)() returned wrong type - should be $(lua_ret_type)"; }
+        else { _info = "Script function $(func.lua_func_name)() returned wrong type - should be $(lua_ret_type)"; }
     }
     else
     {
+        _info = "Script function $(func.lua_func_name)() error";
         // Get the traceback from the stack.
-         _error = lua_tostring(l, -1);
+         _context = lua_tostring(l, -1);
     }
     lua_pop(l, num_ret); // Clean up results.
     return ret;
@@ -155,9 +160,14 @@ void $(config.lua_lib_name)_Load(lua_State* l)
     luaL_requiref(l, "$(config.lua_lib_name)", $(config.lua_lib_name)_Open, true);
 }
 
-const char* $(config.lua_lib_name)_Error()
+const char* $(config.lua_lib_name)_Info()
 {
-    return _error;
+    return _info;
+}
+
+const char* $(config.lua_lib_name)_Context()
+{
+    return _context;
 }
 ]]
 
@@ -236,8 +246,11 @@ $(c_types(func.ret.type)) $(config.lua_lib_name)cb_$(func.host_func_name)(lua_St
 /// Load Lua C lib.
 void $(config.lua_lib_name)_Load(lua_State* l);
 
-/// Operation result: lua traceback OR error info string OR NULL if OK. 
-const char* $(config.lua_lib_name)_Error();
+/// Operation result: Error info string or NULL if OK. 
+const char* $(config.lua_lib_name)_Info();
+
+/// Operation result: lua traceback or NULL if OK. 
+const char* $(config.lua_lib_name)_Context();
 ]]
 
 

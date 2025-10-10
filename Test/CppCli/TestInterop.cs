@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Drawing;
 using Ephemera.NBagOfTricks;
 using Ephemera.NBagOfTricks.PNUT;
+using System.Runtime.CompilerServices;
 
 
 namespace Test
@@ -28,8 +29,8 @@ namespace Test
             SrcDir = MiscUtils.GetSourcePath().Replace("\\", "/");
             LuaPath = $"{SrcDir}/LBOT/?.lua;{SrcDir}/lua/?.lua;;";
 
-            Interop.Log += (object? sender, LogArgs args) => { LogArgs = args; };
-            Interop.Notification += (object? sender, NotificationArgs args) => { NotifArgs = args; NotifArgs.ret = 987; };
+            Interop.Log += (sender, args) => { LogArgs = args; };
+            Interop.Notification += (sender, args) => { NotifArgs = args; NotifArgs.ret = 987; };
         }
 
         static public void Reset()
@@ -47,6 +48,17 @@ namespace Test
 
             Interop.Dispose();
         }
+
+        public static void Dump(LuaException e, [CallerMemberName] string memberName = "", [CallerLineNumber] int lineNumber = -1)
+        {
+            List<string> ls = [];
+            ls.Add("---------- LuaException ----------");
+            ls.Add($"name:[{memberName}({lineNumber})]");
+            ls.Add($"status:[{e.Status}]");
+            ls.Add($"info:[{e.Info}]");
+            ls.Add($"context:[{e.Context}]");
+            Console.WriteLine(string.Join(Environment.NewLine, ls));
+        }
     }
 
     /// <summary>All success operations.</summary>
@@ -55,6 +67,7 @@ namespace Test
         public override void RunSuite()
         {
             Common.Reset();
+            UT_STOP_ON_FAIL(true);
 
             try
             {
@@ -72,7 +85,7 @@ namespace Test
                 var resi = Common.Interop.Setup(1234);
                 UT_EQUAL(resi, 2345);
             }
-            catch (LuaException e)
+            catch (LuaException)
             {
                 UT_FAIL("Should not throw");
             }
@@ -83,8 +96,8 @@ namespace Test
 
             UT_NOT_NULL(Common.LogArgs);
             UT_NOT_NULL(Common.NotifArgs);
-            UT_EQUAL(Common.LogArgs.msg, "nret:987");
-            UT_EQUAL(Common.NotifArgs.arg_N, 123.45);
+            UT_EQUAL(Common.LogArgs!.msg, "nret:987");
+            UT_EQUAL(Common.NotifArgs!.arg_N, 123.45);
         }
     }
 
@@ -94,6 +107,7 @@ namespace Test
         public override void RunSuite()
         {
             Common.Reset();
+            UT_STOP_ON_FAIL(true);
 
             try
             {
@@ -109,6 +123,7 @@ namespace Test
             }
             catch (LuaException e)
             {
+                Common.Dump(e);
                 UT_EQUAL(e.Status, LuaStatus.ERRSYNTAX);
                 UT_STRING_CONTAINS(e.Info, "Load chunk failed.");
                 UT_STRING_CONTAINS(e.Context, ":3: syntax error near 'error'");
@@ -128,6 +143,7 @@ namespace Test
         public override void RunSuite()
         {
             Common.Reset();
+            UT_STOP_ON_FAIL(true);
 
             try
             {
@@ -145,9 +161,10 @@ namespace Test
             }
             catch (LuaException e)
             {
+                Common.Dump(e);
                 UT_EQUAL(e.Status, LuaStatus.ERRINTEROP);
-                UT_STRING_CONTAINS(e.Info, "Setup() Script does not implement required function setup()");
-                UT_STRING_CONTAINS(e.Context, "Context ????????");
+                UT_STRING_CONTAINS(e.Info, "Script does not implement required function setup()");
+                UT_EQUAL(e.Context, "");
             }
             catch (Exception e)
             {
@@ -164,13 +181,14 @@ namespace Test
         public override void RunSuite()
         {
             Common.Reset();
+            UT_STOP_ON_FAIL(true);
 
             try
             {
                 // Load test code.
                 string s = @"
                     local li = require('luainterop')
-                    function setup(arg) error('setup() raises error()') end";
+                    function setup(arg) error('boom!!!') end";
                 Common.Interop.RunChunk(s, Common.LuaPath);
 
                 // Execute script functions.
@@ -180,9 +198,10 @@ namespace Test
             }
             catch (LuaException e)
             {
+                Common.Dump(e);
                 UT_EQUAL(e.Status, LuaStatus.ERRINTEROP);
-                UT_STRING_CONTAINS(e.Info, "Info ????????");
-                UT_STRING_CONTAINS(e.Context, ":3: setup() raises error()");
+                UT_STRING_CONTAINS(e.Info, "Script function setup() error");
+                UT_STRING_CONTAINS(e.Context, ":3: boom!!!");
             }
             catch (Exception e)
             {
@@ -200,6 +219,7 @@ namespace Test
         public override void RunSuite()
         {
             Common.Reset();
+            UT_STOP_ON_FAIL(true);
 
             try
             {
@@ -218,8 +238,9 @@ namespace Test
             }
             catch (LuaException e)
             {
+                Common.Dump(e);
                 UT_EQUAL(e.Status, LuaStatus.ERRINTEROP);
-                UT_STRING_CONTAINS(e.Info, "Info ????????");
+                UT_STRING_CONTAINS(e.Info, "Script function setup() error");
                 UT_STRING_CONTAINS(e.Context, ":3: attempt to concatenate a nil value");
             }
             catch (Exception e)
@@ -238,6 +259,7 @@ namespace Test
         public override void RunSuite()
         {
             Common.Reset();
+            UT_STOP_ON_FAIL(true);
 
             try
             {
@@ -256,8 +278,9 @@ namespace Test
             }
             catch (LuaException e)
             {
+                Common.Dump(e);
                 UT_EQUAL(e.Status, LuaStatus.ERRINTEROP);
-                UT_STRING_CONTAINS(e.Info, "Info ????????");
+                UT_STRING_CONTAINS(e.Info, "Script function setup() error");
                 UT_STRING_CONTAINS(e.Context, ":3: attempt to concatenate a nil value");
             }
             catch (Exception e)
@@ -276,6 +299,7 @@ namespace Test
         public override void RunSuite()
         {
             Common.Reset();
+            UT_STOP_ON_FAIL(true);
 
             try
             {
@@ -289,8 +313,9 @@ namespace Test
             }
             catch (LuaException e)
             {
+                Common.Dump(e);
                 UT_EQUAL(e.Status, LuaStatus.ERRRUN);
-                UT_STRING_CONTAINS(e.Info, "Info ????????");
+                UT_STRING_CONTAINS(e.Info, "Execute chunk failed.");
                 UT_STRING_CONTAINS(e.Context, ":3: attempt to call a nil value (field 'invalid_func'");
             }
             catch (Exception e)
@@ -303,13 +328,13 @@ namespace Test
         }
     }
 
-
     /// <summary>script => host callback func</summary>
     public class INTEROP_ARG_TYPE_WRONG : TestSuite
     {
         public override void RunSuite()
         {
             Common.Reset();
+            UT_STOP_ON_FAIL(true);
 
             try
             {
@@ -323,6 +348,7 @@ namespace Test
             }
             catch (LuaException e)
             {
+                Common.Dump(e);
                 UT_EQUAL(e.Status, LuaStatus.ERRRUN);
                 UT_STRING_CONTAINS(e.Info, "Execute chunk failed");
                 UT_STRING_CONTAINS(e.Context, ":3: Invalid arg type for arg_I");
@@ -343,6 +369,7 @@ namespace Test
         public override void RunSuite()
         {
             Common.Reset();
+            UT_STOP_ON_FAIL(true);
 
             try
             {
@@ -362,9 +389,10 @@ namespace Test
             }
             catch (LuaException e)
             {
+                Common.Dump(e);
                 UT_EQUAL(e.Status, LuaStatus.ERRINTEROP);
-                UT_STRING_CONTAINS(e.Info, "Info ????????");
-                UT_STRING_CONTAINS(e.Context, "Context ????????");
+                //UT_STRING_CONTAINS(e.Info, "Info ????????");
+                //UT_STRING_CONTAINS(e.Context, "Context ????????");
             }
             catch (Exception e)
             {

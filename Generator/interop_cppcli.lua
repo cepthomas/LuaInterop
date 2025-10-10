@@ -1,4 +1,5 @@
 -- Generate .NET C++/CLI interop code.
+-- Uses .NET style markup.
 
 -- local ut = require('lbot_utils')
 local tmpl = require('template')
@@ -63,7 +64,7 @@ $(cpp_types(func.ret.type)) $(config.class_name)::$(func.host_func_name)()
 >    else
     $(cpp_types(func.ret.type)) ret = $(config.lua_lib_name)_$(func.host_func_name)(_l$(sarg_impl));
 >    end
-    EvalInterop(luainterop_Error(), "$(func.host_func_name)()");
+    EvalInterop(luainterop_Info(), luainterop_Context());
     return ret; 
 }
 

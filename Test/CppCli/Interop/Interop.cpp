@@ -16,25 +16,16 @@ int Interop::Setup(int opt)
 {
     SCOPE();
     int ret = luainterop_Setup(_l, opt);
-    EvalInterop(luainterop_Error(), "Setup()");
+    EvalInterop(luainterop_Info(), luainterop_Context());
     return ret; 
 }
 
 //--------------------------------------------------------//
-double Interop::DoCommand(String^ cmd, bool arg_B, int arg_I, double arg_N, String^ arg_S)
+String^ Interop::DoCommand(String^ cmd, bool arg_B, int arg_I, double arg_N, String^ arg_S)
 {
     SCOPE();
-    double ret = luainterop_DoCommand(_l, ToCString(cmd), arg_B, arg_I, arg_N, ToCString(arg_S));
-    EvalInterop(luainterop_Error(), "DoCommand()");
-    return ret; 
-}
-
-//--------------------------------------------------------//
-String^ Interop::DoCommand(String^ cmd, int arg)
-{
-    SCOPE();
-    String^ ret = gcnew String(luainterop_DoCommand(_l, ToCString(cmd), arg));
-    EvalInterop(luainterop_Error(), "DoCommand()");
+    String^ ret = gcnew String(luainterop_DoCommand(_l, ToCString(cmd), arg_B, arg_I, arg_N, ToCString(arg_S)));
+    EvalInterop(luainterop_Info(), luainterop_Context());
     return ret; 
 }
 

@@ -8,14 +8,17 @@
 #pragma warning( disable : 6001 4244 4703 4090 )
 #endif
 
-static const char* _error;
+static const char* _info;
+static const char* _context;
+
 
 //============= interop C => Lua functions =============//
 
 //--------------------------------------------------------//
 int luainterop_Setup(lua_State* l, int opt)
 {
-    _error = NULL;
+    _info = NULL;
+    _context = NULL;
     int stat = LUA_OK;
     int num_args = 0;
     int num_ret = 1;
@@ -25,7 +28,7 @@ int luainterop_Setup(lua_State* l, int opt)
     int ltype = lua_getglobal(l, "setup");
     if (ltype != LUA_TFUNCTION)
     {
-        _error = "Script does not implement required function setup()";
+        _info = "Script does not implement required function setup()";
         return ret;
     }
 
@@ -39,31 +42,33 @@ int luainterop_Setup(lua_State* l, int opt)
     {
         // Get the results from the stack.
         if (lua_isinteger(l, -1)) { ret = lua_tointeger(l, -1); }
-        else { _error = "Script function setup() returned wrong type - should be integer"; }
+        else { _info = "Script function setup() returned wrong type - should be integer"; }
     }
     else
     {
+        _info = "Script function setup() error";
         // Get the traceback from the stack.
-         _error = lua_tostring(l, -1);
+         _context = lua_tostring(l, -1);
     }
     lua_pop(l, num_ret); // Clean up results.
     return ret;
 }
 
 //--------------------------------------------------------//
-double luainterop_DoCommand(lua_State* l, const char* cmd, bool arg_B, int arg_I, double arg_N, const char* arg_S)
+const char* luainterop_DoCommand(lua_State* l, const char* cmd, bool arg_B, int arg_I, double arg_N, const char* arg_S)
 {
-    _error = NULL;
+    _info = NULL;
+    _context = NULL;
     int stat = LUA_OK;
     int num_args = 0;
     int num_ret = 1;
-    double ret = 0;
+    const char* ret = 0;
 
     // Get function.
-    int ltype = lua_getglobal(l, "do_types");
+    int ltype = lua_getglobal(l, "do_command");
     if (ltype != LUA_TFUNCTION)
     {
-        _error = "Script does not implement required function do_types()";
+        _info = "Script does not implement required function do_command()";
         return ret;
     }
 
@@ -84,53 +89,14 @@ double luainterop_DoCommand(lua_State* l, const char* cmd, bool arg_B, int arg_I
     if (stat == LUA_OK)
     {
         // Get the results from the stack.
-        if (lua_isnumber(l, -1)) { ret = lua_tonumber(l, -1); }
-        else { _error = "Script function do_types() returned wrong type - should be number"; }
-    }
-    else
-    {
-        // Get the traceback from the stack.
-         _error = lua_tostring(l, -1);
-    }
-    lua_pop(l, num_ret); // Clean up results.
-    return ret;
-}
-
-//--------------------------------------------------------//
-const char* luainterop_DoCommand(lua_State* l, const char* cmd, int arg)
-{
-    _error = NULL;
-    int stat = LUA_OK;
-    int num_args = 0;
-    int num_ret = 1;
-    const char* ret = 0;
-
-    // Get function.
-    int ltype = lua_getglobal(l, "do_command");
-    if (ltype != LUA_TFUNCTION)
-    {
-        _error = "Script does not implement required function do_command()";
-        return ret;
-    }
-
-    // Push arguments. No error checking required.
-    lua_pushstring(l, cmd);
-    num_args++;
-    lua_pushinteger(l, arg);
-    num_args++;
-
-    // Do the protected call.
-    stat = luaex_docall(l, num_args, num_ret);
-    if (stat == LUA_OK)
-    {
-        // Get the results from the stack.
         if (lua_isstring(l, -1)) { ret = lua_tostring(l, -1); }
-        else { _error = "Script function do_command() returned wrong type - should be string"; }
+        else { _info = "Script function do_command() returned wrong type - should be string"; }
     }
     else
     {
+        _info = "Script function do_command() error";
         // Get the traceback from the stack.
-         _error = lua_tostring(l, -1);
+         _context = lua_tostring(l, -1);
     }
     lua_pop(l, num_ret); // Clean up results.
     return ret;
@@ -210,7 +176,12 @@ void luainterop_Load(lua_State* l)
     luaL_requiref(l, "luainterop", luainterop_Open, true);
 }
 
-const char* luainterop_Error()
+const char* luainterop_Info()
 {
-    return _error;
+    return _info;
+}
+
+const char* luainterop_Context()
+{
+    return _context;
 }

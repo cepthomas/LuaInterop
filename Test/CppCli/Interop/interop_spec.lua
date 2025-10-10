@@ -23,9 +23,9 @@ M.script_funcs =
     },
 
     {
-        lua_func_name = "do_types",
+        lua_func_name = "do_command",
         host_func_name = "DoCommand",
-        description = "Test arg types",
+        description = "Arbitrary lua function with all arg types",
         args =
         {
             { name = "cmd",   type = "S", description = "Specific command" },
@@ -34,19 +34,7 @@ M.script_funcs =
             { name = "arg_N", type = "N", description = "number/double argument" },
             { name = "arg_S", type = "S", description = "string argument" },
         },
-        ret = { type = "N", description = "Function response" }
-    },
-
-    {
-        lua_func_name = "do_command",
-        host_func_name = "DoCommand",
-        description = "Arbitrary lua function",
-        args =
-        {
-            { name = "cmd", type = "S", description = "Specific command" },
-            { name = "arg", type = "I", description = "int argument" },
-        },
-        ret = { type = "S", description = "Some response" }
+        ret = { type = "S", description = "Function response" }
     },
 }
 

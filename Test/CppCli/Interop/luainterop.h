@@ -18,25 +18,18 @@ extern "C" {
 // Initialize stuff
 // @param[in] l Internal lua state.
 // @param[in] opt Option
-// @return int Some integer
+// @return int Return integer
 int luainterop_Setup(lua_State* l, int opt);
 
-// Test arg types
+// Arbitrary lua function with all arg types
 // @param[in] l Internal lua state.
 // @param[in] cmd Specific command
 // @param[in] arg_B bool argument
 // @param[in] arg_I int argument
 // @param[in] arg_N number/double argument
 // @param[in] arg_S string argument
-// @return double Function response
-double luainterop_DoCommand(lua_State* l, const char* cmd, bool arg_B, int arg_I, double arg_N, const char* arg_S);
-
-// Arbitrary lua function
-// @param[in] l Internal lua state.
-// @param[in] cmd Specific command
-// @param[in] arg int argument
-// @return const char* Some response
-const char* luainterop_DoCommand(lua_State* l, const char* cmd, int arg);
+// @return const char* Function response
+const char* luainterop_DoCommand(lua_State* l, const char* cmd, bool arg_B, int arg_I, double arg_N, const char* arg_S);
 
 
 //============= Lua => interop C callback functions =============//
@@ -61,5 +54,8 @@ int luainteropcb_Notification(lua_State* l, int arg_I, const char* arg_S, bool a
 /// Load Lua C lib.
 void luainterop_Load(lua_State* l);
 
-/// Operation result: lua traceback OR error info string OR NULL if OK. TODO1X No!! add a separate _context field.
-const char* luainterop_Error();
+/// Operation result: Error info string or NULL if OK. 
+const char* luainterop_Info();
+
+/// Operation result: lua traceback or NULL if OK. 
+const char* luainterop_Context();
