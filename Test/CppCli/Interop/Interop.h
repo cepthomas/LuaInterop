@@ -87,6 +87,7 @@ public:
 
     /// <summary>Initialize and execute a chunk of lua code.</summary>
     /// <param name="code">The lua code to load.</param>
+    /// <param name="name">Lua chunk name</param>
     /// <param name="luaPath">LUA_PATH components</param>
-    void RunChunk(String^ code, String^ luaPath);
+    void RunChunk(String^ code, String^ name, String^ luaPath);
 };

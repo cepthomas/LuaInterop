@@ -99,6 +99,7 @@ int $(config.lua_lib_name)cb_$(func.host_func_name)(lua_State* l, $(sarg_spec))
 //--------------------------------------------------------//
 void $(config.class_name)::RunScript(String^ scriptFn, String^ luaPath)
 {
+    SCOPE();
     InitLua(luaPath);
     // Load C host funcs into lua space.
     $(config.lua_lib_name)_Load(_l);
@@ -108,14 +109,15 @@ void $(config.class_name)::RunScript(String^ scriptFn, String^ luaPath)
 }
 
 //--------------------------------------------------------//
-void $(config.class_name)::RunChunk(String^ code, String^ luaPath)
+void $(config.class_name)::RunChunk(String^ code, String^ name, String^ luaPath)
 {
+    SCOPE();
     InitLua(luaPath);
     // Load C host funcs into lua space.
     $(config.lua_lib_name)_Load(_l);
     // Clean up stack.
     lua_pop(_l, 1);
-    OpenChunk(code);
+    OpenChunk(code, name);
 }
 ]]
 
@@ -204,8 +206,9 @@ public:
 
     /// <summary>Initialize and execute a chunk of lua code.</summary>
     /// <param name="code">The lua code to load.</param>
+    /// <param name="name">Lua chunk name</param>
     /// <param name="luaPath">LUA_PATH components</param>
-    void RunChunk(String^ code, String^ luaPath);
+    void RunChunk(String^ code, String^ name, String^ luaPath);
 };
 ]]
 

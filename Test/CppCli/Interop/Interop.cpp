@@ -60,6 +60,7 @@ int luainteropcb_Notification(lua_State* l, int arg_I, const char* arg_S, bool a
 //--------------------------------------------------------//
 void Interop::RunScript(String^ scriptFn, String^ luaPath)
 {
+    SCOPE();
     InitLua(luaPath);
     // Load C host funcs into lua space.
     luainterop_Load(_l);
@@ -69,12 +70,13 @@ void Interop::RunScript(String^ scriptFn, String^ luaPath)
 }
 
 //--------------------------------------------------------//
-void Interop::RunChunk(String^ code, String^ luaPath)
+void Interop::RunChunk(String^ code, String^ name, String^ luaPath)
 {
+    SCOPE();
     InitLua(luaPath);
     // Load C host funcs into lua space.
     luainterop_Load(_l);
     // Clean up stack.
     lua_pop(_l, 1);
-    OpenChunk(code);
+    OpenChunk(code, name);
 }
