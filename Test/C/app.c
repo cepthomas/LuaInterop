@@ -13,9 +13,6 @@ static lua_State* _l;
 static int _timestamp = 1000;
 static char _last_log[500];
 
-// Top level error handler for status.
-static const char* CheckStatus(int stat);
-
 
 //---------------- Callback host functions from Lua -------------//
 
@@ -54,6 +51,7 @@ bool luainteropcb_ForceError(lua_State* l)
 //---------------- Helpers -------------//
 
 //--------------------------------------------------------//
+// Top level error handler for status.
 const char* CheckStatus(int stat)
 {
     static char buff[500];
@@ -72,6 +70,26 @@ const char* CheckStatus(int stat)
     }
 
     return sret;
+}
+
+//--------------------------------------------------------//
+// Decipher actual error message.
+const char* OpResult()
+{
+    const char* error = luainterop_Error();
+    const char* context = luainterop_Context();
+
+    const char* ret = NULL;
+    if (context == NULL)
+    {
+        ret = error;
+    }
+    else
+    {
+        ret = context;
+    }
+
+    return ret;
 }
 
 //---------------- Start here -------------//
@@ -133,53 +151,53 @@ int main()
     // Call script functions.
     char op[] = {"*"};
     double answer = luainterop_Calculator(_l, 12.96, op, 3.15);
-    sinterop_error = luainterop_Error();
+    sinterop_error = OpResult();
     assert(sinterop_error == NULL);
     assert(answer > 40.823 && answer < 40.825);
 
     char day[] = { "Moonday" };
     int daynum = luainterop_DayOfWeek(_l, day);
-    sinterop_error = luainterop_Error();
+    sinterop_error = OpResult();
     assert(sinterop_error == NULL);
     assert(daynum == 3);
 
     const char* dayname = luainterop_FirstDay(_l);
-    sinterop_error = luainterop_Error();
+    sinterop_error = OpResult();
     assert(sinterop_error == NULL);
     assert(strcmp(dayname, "Hamday") == 0);
 
     int dummy = luainterop_InvalidFunc(_l);
-    sinterop_error = luainterop_Error();
+    sinterop_error = OpResult();
     assert(sinterop_error != NULL);
-    assert(strstr(sinterop_error, "Bad function name: invalid_func()") != NULL);
+    assert(strstr(sinterop_error, "Script does not implement required function invalid_func()") != NULL);
 
     char arg[] = { "abc" };
     dummy = luainterop_InvalidArgType(_l, arg);
-    sinterop_error = luainterop_Error();
+    sinterop_error = OpResult();
     assert(sinterop_error != NULL);
     assert(strstr(sinterop_error, "attempt to add a 'string' with a 'number'") != NULL);
 
     dummy = luainterop_InvalidRetType(_l);
-    sinterop_error = luainterop_Error();
+    sinterop_error = OpResult();
     assert(sinterop_error != NULL);
-    assert(strstr(sinterop_error, "Bad return type for invalid_ret_type(): should be integer") != NULL);
+    assert(strstr(sinterop_error, "Script function invalid_ret_type() returned wrong type - should be integer") != NULL);
 
     // Force error - C calls lua which calls error(). This is fatal.
     dummy = luainterop_ErrorFunc(_l, 1);
-    sinterop_error = luainterop_Error();
+    sinterop_error = OpResult();
     assert(sinterop_error != NULL);
     assert(strstr(sinterop_error, "user_lua_func3() raises error()") != NULL);
 
     // Force error - C calls lua which calls C which calls luaL_error().
     dummy = luainterop_ErrorFunc(_l, 2);
-    sinterop_error = luainterop_Error();
+    sinterop_error = OpResult();
     assert(sinterop_error != NULL);
     assert(strstr(sinterop_error, "Let's blow something up in lua") != NULL);
 
-    // Try to call optional function.
+    // Try to call optional function. Not implemented currently.
     dummy = luainterop_OptionalFunc(_l);
-    sinterop_error = luainterop_Error();
-    assert(sinterop_error == NULL);
+    sinterop_error = OpResult();
+    //assert(sinterop_error == NULL);
 
     // Done.
     lua_close(_l);

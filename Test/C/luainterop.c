@@ -1,4 +1,5 @@
-///// Warning - this file is created by gen_interop.lua - do not edit. /////
+///// Generated C and h files that bind interop C to lua C code.       /////
+///// Warning - this file is created by do_gen.lua - do not edit. /////
 
 #include "luainterop.h"
 
@@ -8,13 +9,16 @@
 #endif
 
 static const char* _error;
+static const char* _context;
 
-//============= C => Lua functions .c =============//
+
+//============= interop C => Lua functions =============//
 
 //--------------------------------------------------------//
 double luainterop_Calculator(lua_State* l, double op_one, const char* oper, double op_two)
 {
     _error = NULL;
+    _context = NULL;
     int stat = LUA_OK;
     int num_args = 0;
     int num_ret = 1;
@@ -24,7 +28,7 @@ double luainterop_Calculator(lua_State* l, double op_one, const char* oper, doub
     int ltype = lua_getglobal(l, "calculator");
     if (ltype != LUA_TFUNCTION)
     {
-        _error = "Invalid function name calculator()";
+        _error = "Script does not implement required function calculator()";
         return ret;
     }
 
@@ -42,9 +46,14 @@ double luainterop_Calculator(lua_State* l, double op_one, const char* oper, doub
     {
         // Get the results from the stack.
         if (lua_isnumber(l, -1)) { ret = lua_tonumber(l, -1); }
-        else { _error = "Invalid return type for calculator() should be number"; }
+        else { _error = "Script function calculator() returned wrong type - should be number"; }
     }
-    else { _error = lua_tostring(l, -1); }
+    else
+    {
+        _error = "Script function calculator() error";
+        // Get the traceback from the stack.
+         _context = lua_tostring(l, -1);
+    }
     lua_pop(l, num_ret); // Clean up results.
     return ret;
 }
@@ -53,6 +62,7 @@ double luainterop_Calculator(lua_State* l, double op_one, const char* oper, doub
 int luainterop_DayOfWeek(lua_State* l, const char* day)
 {
     _error = NULL;
+    _context = NULL;
     int stat = LUA_OK;
     int num_args = 0;
     int num_ret = 1;
@@ -62,7 +72,7 @@ int luainterop_DayOfWeek(lua_State* l, const char* day)
     int ltype = lua_getglobal(l, "day_of_week");
     if (ltype != LUA_TFUNCTION)
     {
-        _error = "Invalid function name day_of_week()";
+        _error = "Script does not implement required function day_of_week()";
         return ret;
     }
 
@@ -76,9 +86,14 @@ int luainterop_DayOfWeek(lua_State* l, const char* day)
     {
         // Get the results from the stack.
         if (lua_isinteger(l, -1)) { ret = lua_tointeger(l, -1); }
-        else { _error = "Invalid return type for day_of_week() should be integer"; }
+        else { _error = "Script function day_of_week() returned wrong type - should be integer"; }
     }
-    else { _error = lua_tostring(l, -1); }
+    else
+    {
+        _error = "Script function day_of_week() error";
+        // Get the traceback from the stack.
+         _context = lua_tostring(l, -1);
+    }
     lua_pop(l, num_ret); // Clean up results.
     return ret;
 }
@@ -87,6 +102,7 @@ int luainterop_DayOfWeek(lua_State* l, const char* day)
 const char* luainterop_FirstDay(lua_State* l)
 {
     _error = NULL;
+    _context = NULL;
     int stat = LUA_OK;
     int num_args = 0;
     int num_ret = 1;
@@ -96,7 +112,7 @@ const char* luainterop_FirstDay(lua_State* l)
     int ltype = lua_getglobal(l, "first_day");
     if (ltype != LUA_TFUNCTION)
     {
-        _error = "Invalid function name first_day()";
+        _error = "Script does not implement required function first_day()";
         return ret;
     }
 
@@ -108,9 +124,14 @@ const char* luainterop_FirstDay(lua_State* l)
     {
         // Get the results from the stack.
         if (lua_isstring(l, -1)) { ret = lua_tostring(l, -1); }
-        else { _error = "Invalid return type for first_day() should be string"; }
+        else { _error = "Script function first_day() returned wrong type - should be string"; }
     }
-    else { _error = lua_tostring(l, -1); }
+    else
+    {
+        _error = "Script function first_day() error";
+        // Get the traceback from the stack.
+         _context = lua_tostring(l, -1);
+    }
     lua_pop(l, num_ret); // Clean up results.
     return ret;
 }
@@ -119,6 +140,7 @@ const char* luainterop_FirstDay(lua_State* l)
 bool luainterop_InvalidFunc(lua_State* l)
 {
     _error = NULL;
+    _context = NULL;
     int stat = LUA_OK;
     int num_args = 0;
     int num_ret = 1;
@@ -128,7 +150,7 @@ bool luainterop_InvalidFunc(lua_State* l)
     int ltype = lua_getglobal(l, "invalid_func");
     if (ltype != LUA_TFUNCTION)
     {
-        _error = "Invalid function name invalid_func()";
+        _error = "Script does not implement required function invalid_func()";
         return ret;
     }
 
@@ -140,9 +162,14 @@ bool luainterop_InvalidFunc(lua_State* l)
     {
         // Get the results from the stack.
         if (lua_isboolean(l, -1)) { ret = lua_toboolean(l, -1); }
-        else { _error = "Invalid return type for invalid_func() should be boolean"; }
+        else { _error = "Script function invalid_func() returned wrong type - should be boolean"; }
     }
-    else { _error = lua_tostring(l, -1); }
+    else
+    {
+        _error = "Script function invalid_func() error";
+        // Get the traceback from the stack.
+         _context = lua_tostring(l, -1);
+    }
     lua_pop(l, num_ret); // Clean up results.
     return ret;
 }
@@ -151,6 +178,7 @@ bool luainterop_InvalidFunc(lua_State* l)
 bool luainterop_InvalidArgType(lua_State* l, const char* arg1)
 {
     _error = NULL;
+    _context = NULL;
     int stat = LUA_OK;
     int num_args = 0;
     int num_ret = 1;
@@ -160,7 +188,7 @@ bool luainterop_InvalidArgType(lua_State* l, const char* arg1)
     int ltype = lua_getglobal(l, "invalid_arg_type");
     if (ltype != LUA_TFUNCTION)
     {
-        _error = "Invalid function name invalid_arg_type()";
+        _error = "Script does not implement required function invalid_arg_type()";
         return ret;
     }
 
@@ -174,9 +202,14 @@ bool luainterop_InvalidArgType(lua_State* l, const char* arg1)
     {
         // Get the results from the stack.
         if (lua_isboolean(l, -1)) { ret = lua_toboolean(l, -1); }
-        else { _error = "Invalid return type for invalid_arg_type() should be boolean"; }
+        else { _error = "Script function invalid_arg_type() returned wrong type - should be boolean"; }
     }
-    else { _error = lua_tostring(l, -1); }
+    else
+    {
+        _error = "Script function invalid_arg_type() error";
+        // Get the traceback from the stack.
+         _context = lua_tostring(l, -1);
+    }
     lua_pop(l, num_ret); // Clean up results.
     return ret;
 }
@@ -185,6 +218,7 @@ bool luainterop_InvalidArgType(lua_State* l, const char* arg1)
 int luainterop_InvalidRetType(lua_State* l)
 {
     _error = NULL;
+    _context = NULL;
     int stat = LUA_OK;
     int num_args = 0;
     int num_ret = 1;
@@ -194,7 +228,7 @@ int luainterop_InvalidRetType(lua_State* l)
     int ltype = lua_getglobal(l, "invalid_ret_type");
     if (ltype != LUA_TFUNCTION)
     {
-        _error = "Invalid function name invalid_ret_type()";
+        _error = "Script does not implement required function invalid_ret_type()";
         return ret;
     }
 
@@ -206,9 +240,14 @@ int luainterop_InvalidRetType(lua_State* l)
     {
         // Get the results from the stack.
         if (lua_isinteger(l, -1)) { ret = lua_tointeger(l, -1); }
-        else { _error = "Invalid return type for invalid_ret_type() should be integer"; }
+        else { _error = "Script function invalid_ret_type() returned wrong type - should be integer"; }
     }
-    else { _error = lua_tostring(l, -1); }
+    else
+    {
+        _error = "Script function invalid_ret_type() error";
+        // Get the traceback from the stack.
+         _context = lua_tostring(l, -1);
+    }
     lua_pop(l, num_ret); // Clean up results.
     return ret;
 }
@@ -217,6 +256,7 @@ int luainterop_InvalidRetType(lua_State* l)
 bool luainterop_ErrorFunc(lua_State* l, int flavor)
 {
     _error = NULL;
+    _context = NULL;
     int stat = LUA_OK;
     int num_args = 0;
     int num_ret = 1;
@@ -226,7 +266,7 @@ bool luainterop_ErrorFunc(lua_State* l, int flavor)
     int ltype = lua_getglobal(l, "error_func");
     if (ltype != LUA_TFUNCTION)
     {
-        _error = "Invalid function name error_func()";
+        _error = "Script does not implement required function error_func()";
         return ret;
     }
 
@@ -240,9 +280,14 @@ bool luainterop_ErrorFunc(lua_State* l, int flavor)
     {
         // Get the results from the stack.
         if (lua_isboolean(l, -1)) { ret = lua_toboolean(l, -1); }
-        else { _error = "Invalid return type for error_func() should be boolean"; }
+        else { _error = "Script function error_func() returned wrong type - should be boolean"; }
     }
-    else { _error = lua_tostring(l, -1); }
+    else
+    {
+        _error = "Script function error_func() error";
+        // Get the traceback from the stack.
+         _context = lua_tostring(l, -1);
+    }
     lua_pop(l, num_ret); // Clean up results.
     return ret;
 }
@@ -251,6 +296,7 @@ bool luainterop_ErrorFunc(lua_State* l, int flavor)
 int luainterop_OptionalFunc(lua_State* l)
 {
     _error = NULL;
+    _context = NULL;
     int stat = LUA_OK;
     int num_args = 0;
     int num_ret = 1;
@@ -260,7 +306,7 @@ int luainterop_OptionalFunc(lua_State* l)
     int ltype = lua_getglobal(l, "optional_func");
     if (ltype != LUA_TFUNCTION)
     {
-        _error = "Invalid function name optional_func()";
+        _error = "Script does not implement required function optional_func()";
         return ret;
     }
 
@@ -272,15 +318,20 @@ int luainterop_OptionalFunc(lua_State* l)
     {
         // Get the results from the stack.
         if (lua_isinteger(l, -1)) { ret = lua_tointeger(l, -1); }
-        else { _error = "Invalid return type for optional_func() should be integer"; }
+        else { _error = "Script function optional_func() returned wrong type - should be integer"; }
     }
-    else { _error = lua_tostring(l, -1); }
+    else
+    {
+        _error = "Script function optional_func() error";
+        // Get the traceback from the stack.
+         _context = lua_tostring(l, -1);
+    }
     lua_pop(l, num_ret); // Clean up results.
     return ret;
 }
 
 
-//============= Lua => C callback functions .c =============//
+//============= Lua => interop C callback functions =============//
 
 //--------------------------------------------------------//
 // Record something for me.
@@ -355,7 +406,7 @@ static int luainterop_ForceError(lua_State* l)
 }
 
 
-//============= Infrastructure .c =============//
+//============= Infrastructure =============//
 
 static const luaL_Reg function_map[] =
 {
@@ -380,4 +431,9 @@ void luainterop_Load(lua_State* l)
 const char* luainterop_Error()
 {
     return _error;
+}
+
+const char* luainterop_Context()
+{
+    return _context;
 }

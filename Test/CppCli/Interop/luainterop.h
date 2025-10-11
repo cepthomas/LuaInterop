@@ -55,7 +55,7 @@ int luainteropcb_Notification(lua_State* l, int arg_I, const char* arg_S, bool a
 void luainterop_Load(lua_State* l);
 
 /// Operation result: Error info string or NULL if OK. 
-const char* luainterop_Info();
+const char* luainterop_Error();
 
 /// Operation result: lua traceback or NULL if OK. 
 const char* luainterop_Context();

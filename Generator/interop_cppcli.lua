@@ -19,7 +19,6 @@ local tmpl_interop_cpp =
 >local sx = require("stringex")
 >local os = require("os")
 >local snow = os.date('%Y-%m-%d %H:%M:%S')
-///// Generated cpp and h files that bind Cpp/CLI to C interop code.   /////
 ///// Warning - this file is created by do_gen.lua - do not edit. /////
 
 #include <windows.h>
@@ -64,7 +63,7 @@ $(cpp_types(func.ret.type)) $(config.class_name)::$(func.host_func_name)()
 >    else
     $(cpp_types(func.ret.type)) ret = $(config.lua_lib_name)_$(func.host_func_name)(_l$(sarg_impl));
 >    end
-    if (luainterop_Info() != NULL) { throw(gcnew LuaException(gcnew String(luainterop_Info()), luainterop_Context() == NULL ? "" : gcnew String(luainterop_Context()))); }
+    if (luainterop_Error() != NULL) { throw(gcnew LuaException(gcnew String(luainterop_Error()), luainterop_Context() == NULL ? "" : gcnew String(luainterop_Context()))); }
     return ret; 
 }
 

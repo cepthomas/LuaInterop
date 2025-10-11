@@ -1,5 +1,5 @@
 #pragma once
-///// Warning - this file is created by gen_interop.lua - do not edit. /////
+///// Warning - this file is created by do_gen.lua - do not edit. /////
 
 #include <stdbool.h>
 
@@ -13,7 +13,7 @@ extern "C" {
 #include "luaex.h"
 #endif
 
-//============= C => Lua functions .h =============//
+//============= interop C => Lua functions =============//
 
 // Simple calculations.
 // @param[in] l Internal lua state.
@@ -62,7 +62,7 @@ bool luainterop_ErrorFunc(lua_State* l, int flavor);
 int luainterop_OptionalFunc(lua_State* l);
 
 
-//============= Lua => C callback functions .h =============//
+//============= Lua => interop C callback functions =============//
 
 // Record something for me.
 // @param[in] l Internal lua state.
@@ -87,10 +87,13 @@ int luainteropcb_GetTimestamp(lua_State* l);
 // @return Dummy return value.
 bool luainteropcb_ForceError(lua_State* l);
 
-//============= Infrastructure .h =============//
+//============= Infrastructure =============//
 
 /// Load Lua C lib.
 void luainterop_Load(lua_State* l);
 
-/// Return operation error or NULL if ok.
+/// Operation result: Error info string or NULL if OK. 
 const char* luainterop_Error();
+
+/// Operation result: lua traceback or NULL if OK. 
+const char* luainterop_Context();
