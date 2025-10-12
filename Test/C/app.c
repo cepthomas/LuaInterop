@@ -17,14 +17,14 @@ static char _last_log[500];
 //---------------- Callback host functions from Lua -------------//
 
 //--------------------------------------------------------//
-int luainteropcb_GetTimestamp(lua_State* l)
+int luainterop_cb_GetTimestamp(lua_State* l)
 {
     _timestamp += 100;
     return _timestamp;
 }
 
 //--------------------------------------------------------//
-bool luainteropcb_Log(lua_State* l, int level, const char* msg)
+bool luainterop_cb_Log(lua_State* l, int level, const char* msg)
 {
     snprintf(_last_log, sizeof(_last_log) - 1, "Log LVL%d %s", level, msg);
     printf(_last_log);
@@ -33,7 +33,7 @@ bool luainteropcb_Log(lua_State* l, int level, const char* msg)
 }
 
 //--------------------------------------------------------//
-const char* luainteropcb_GetEnvironment(lua_State* l, double temp)
+const char* luainterop_cb_GetEnvironment(lua_State* l, double temp)
 {
     static char buff[50];
     snprintf(buff, sizeof(buff) - 1, "Temperature is %.1f degrees", temp);
@@ -41,7 +41,7 @@ const char* luainteropcb_GetEnvironment(lua_State* l, double temp)
 }
 
 //--------------------------------------------------------//
-bool luainteropcb_ForceError(lua_State* l)
+bool luainterop_cb_ForceError(lua_State* l)
 {
     luaL_error(_l, "Let's blow something up in lua");
     return true;

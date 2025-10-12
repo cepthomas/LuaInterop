@@ -8,7 +8,6 @@ local tmpl = require('template')
 local args = {...}
 local spec = args[1]
 
--- TODO: function required = "true",
 
 --------------------------------------------------------------------------------
 ---------------------------- Gen C file ----------------------------------------
@@ -35,6 +34,7 @@ local tmpl_interop_c =
 
 static const char* _error;
 static const char* _context;
+static int _lstat;
 
 
 //============= interop C => Lua functions =============//
@@ -56,7 +56,7 @@ $(c_ret_type) $(config.lua_lib_name)_$(func.host_func_name)(lua_State* l)
 {
     _error = NULL;
     _context = NULL;
-    int stat = LUA_OK;
+    _lstat = LUA_OK;
     int num_args = 0;
     int num_ret = 1;
     $(c_ret_type) ret = 0;
@@ -77,8 +77,8 @@ $(c_ret_type) $(config.lua_lib_name)_$(func.host_func_name)(lua_State* l)
 >end -- func.args
 
     // Do the protected call.
-    stat = luaex_docall(l, num_args, num_ret);
-    if (stat == LUA_OK)
+    _lstat = luaex_docall(l, num_args, num_ret);
+    if (_lstat == LUA_OK)
     {
         // Get the results from the stack.
         if (lua_is$(lua_ret_type)(l, -1)) { ret = lua_to$(lua_ret_type)(l, -1); }
@@ -128,9 +128,9 @@ static int $(config.lua_lib_name)_$(func.host_func_name)(lua_State* l)
 >end -- func.args
 >sargs = sx.strjoin(", ", arg_specs)
 >if #sargs > 0 then
-    $(c_ret_type) ret = $(config.lua_lib_name)cb_$(func.host_func_name)(l, $(sargs));
+    $(c_ret_type) ret = $(config.lua_lib_name)_cb_$(func.host_func_name)(l, $(sargs));
 >else
-    $(c_ret_type) ret = $(config.lua_lib_name)cb_$(func.host_func_name)(l);
+    $(c_ret_type) ret = $(config.lua_lib_name)_cb_$(func.host_func_name)(l);
 >end -- #sargs
     lua_push$(lua_ret_type)(l, ret);
     return 1;
@@ -159,15 +159,8 @@ void $(config.lua_lib_name)_Load(lua_State* l)
     luaL_requiref(l, "$(config.lua_lib_name)", $(config.lua_lib_name)_Open, true);
 }
 
-const char* $(config.lua_lib_name)_Error()
-{
-    return _error;
-}
-
-const char* $(config.lua_lib_name)_Context()
-{
-    return _context;
-}
+const char* $(config.lua_lib_name)_Error() { return _error; }
+const char* $(config.lua_lib_name)_Context() { return _context; }
 ]]
 
 
@@ -234,9 +227,9 @@ $(c_ret_type) $(config.lua_lib_name)_$(func.host_func_name)(lua_State* l);
 >end -- func.args
 >sargs = sx.strjoin(", ", arg_specs)
 >if #sargs > 0 then
-$(c_types(func.ret.type)) $(config.lua_lib_name)cb_$(func.host_func_name)(lua_State* l, $(sargs));
+$(c_types(func.ret.type)) $(config.lua_lib_name)_cb_$(func.host_func_name)(lua_State* l, $(sargs));
 >else
-$(c_types(func.ret.type)) $(config.lua_lib_name)cb_$(func.host_func_name)(lua_State* l);
+$(c_types(func.ret.type)) $(config.lua_lib_name)_cb_$(func.host_func_name)(lua_State* l);
 >end -- #sargs
 >end -- host_funcs
 

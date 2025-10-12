@@ -34,7 +34,7 @@ String^ Interop::DoCommand(String^ cmd, bool arg_B, int arg_I, double arg_N, Str
 
 //--------------------------------------------------------//
 
-int luainteropcb_Log(lua_State* l, const char* msg)
+int luainterop_cb_Log(lua_State* l, const char* msg)
 {
     SCOPE();
     LogArgs^ args = gcnew LogArgs(msg);
@@ -45,7 +45,7 @@ int luainteropcb_Log(lua_State* l, const char* msg)
 
 //--------------------------------------------------------//
 
-int luainteropcb_Notification(lua_State* l, int arg_I, const char* arg_S, bool arg_B, double arg_N)
+int luainterop_cb_Notification(lua_State* l, int arg_I, const char* arg_S, bool arg_B, double arg_N)
 {
     SCOPE();
     NotificationArgs^ args = gcnew NotificationArgs(arg_I, arg_S, arg_B, arg_N);

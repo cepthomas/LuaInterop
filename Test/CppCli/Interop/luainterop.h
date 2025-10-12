@@ -38,7 +38,7 @@ const char* luainterop_DoCommand(lua_State* l, const char* cmd, bool arg_B, int 
 // @param[in] l Internal lua state.
 // @param[in] msg Log message
 // @return Unused
-int luainteropcb_Log(lua_State* l, const char* msg);
+int luainterop_cb_Log(lua_State* l, const char* msg);
 
 // Script wants to say something.
 // @param[in] l Internal lua state.
@@ -47,7 +47,7 @@ int luainteropcb_Log(lua_State* l, const char* msg);
 // @param[in] arg_B boooooool
 // @param[in] arg_N numero/doublo
 // @return Back at you
-int luainteropcb_Notification(lua_State* l, int arg_I, const char* arg_S, bool arg_B, double arg_N);
+int luainterop_cb_Notification(lua_State* l, int arg_I, const char* arg_S, bool arg_B, double arg_N);
 
 //============= Infrastructure =============//
 

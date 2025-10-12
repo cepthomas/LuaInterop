@@ -118,7 +118,7 @@ static int luainterop_Log(lua_State* l)
     else { luaL_error(l, "Invalid arg type for msg"); }
 
     // Do the work. One result.
-    int ret = luainteropcb_Log(l, msg);
+    int ret = luainterop_cb_Log(l, msg);
     lua_pushinteger(l, ret);
     return 1;
 }
@@ -149,7 +149,7 @@ static int luainterop_Notification(lua_State* l)
     else { luaL_error(l, "Invalid arg type for arg_N"); }
 
     // Do the work. One result.
-    int ret = luainteropcb_Notification(l, arg_I, arg_S, arg_B, arg_N);
+    int ret = luainterop_cb_Notification(l, arg_I, arg_S, arg_B, arg_N);
     lua_pushinteger(l, ret);
     return 1;
 }

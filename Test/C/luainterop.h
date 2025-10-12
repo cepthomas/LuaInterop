@@ -69,23 +69,23 @@ int luainterop_OptionalFunc(lua_State* l);
 // @param[in] level Log level.
 // @param[in] msg What to log.
 // @return Dummy return value.
-bool luainteropcb_Log(lua_State* l, int level, const char* msg);
+bool luainterop_cb_Log(lua_State* l, int level, const char* msg);
 
 // How hot are you?
 // @param[in] l Internal lua state.
 // @param[in] temp Temperature.
 // @return String environment.
-const char* luainteropcb_GetEnvironment(lua_State* l, double temp);
+const char* luainterop_cb_GetEnvironment(lua_State* l, double temp);
 
 // Milliseconds.
 // @param[in] l Internal lua state.
 // @return The time.
-int luainteropcb_GetTimestamp(lua_State* l);
+int luainterop_cb_GetTimestamp(lua_State* l);
 
 // Raise an error from lua code.
 // @param[in] l Internal lua state.
 // @return Dummy return value.
-bool luainteropcb_ForceError(lua_State* l);
+bool luainterop_cb_ForceError(lua_State* l);
 
 //============= Infrastructure =============//
 

@@ -351,7 +351,7 @@ static int luainterop_Log(lua_State* l)
     else { luaL_error(l, "Invalid arg type for msg"); }
 
     // Do the work. One result.
-    bool ret = luainteropcb_Log(l, level, msg);
+    bool ret = luainterop_cb_Log(l, level, msg);
     lua_pushboolean(l, ret);
     return 1;
 }
@@ -370,7 +370,7 @@ static int luainterop_GetEnvironment(lua_State* l)
     else { luaL_error(l, "Invalid arg type for temp"); }
 
     // Do the work. One result.
-    const char* ret = luainteropcb_GetEnvironment(l, temp);
+    const char* ret = luainterop_cb_GetEnvironment(l, temp);
     lua_pushstring(l, ret);
     return 1;
 }
@@ -385,7 +385,7 @@ static int luainterop_GetTimestamp(lua_State* l)
     // Get arguments
 
     // Do the work. One result.
-    int ret = luainteropcb_GetTimestamp(l);
+    int ret = luainterop_cb_GetTimestamp(l);
     lua_pushinteger(l, ret);
     return 1;
 }
@@ -400,7 +400,7 @@ static int luainterop_ForceError(lua_State* l)
     // Get arguments
 
     // Do the work. One result.
-    bool ret = luainteropcb_ForceError(l);
+    bool ret = luainterop_cb_ForceError(l);
     lua_pushboolean(l, ret);
     return 1;
 }

@@ -8,7 +8,6 @@ local tmpl = require('template')
 local args = {...}
 local spec = args[1]
 
--- TODO: function required = "true",
 
 --------------------------------------------------------------------------------
 ---------------------------- Gen C++ file --------------------------------------
@@ -83,7 +82,7 @@ $(cpp_types(func.ret.type)) $(config.class_name)::$(func.host_func_name)()
 
 //--------------------------------------------------------//
 
-int $(config.lua_lib_name)cb_$(func.host_func_name)(lua_State* l, $(sarg_spec))
+int $(config.lua_lib_name)_cb_$(func.host_func_name)(lua_State* l, $(sarg_spec))
 {
     SCOPE();
     $(func.host_func_name)Args^ args = gcnew $(func.host_func_name)Args($(sarg_impl));
