@@ -27,7 +27,7 @@ int luainterop_Setup(lua_State* l, int opt)
     int ltype = lua_getglobal(l, "setup");
     if (ltype != LUA_TFUNCTION)
     {
-        _error = "Script does not implement required function setup()";
+        _error = "Script does not implement function setup()";
         return ret;
     }
 
@@ -67,7 +67,7 @@ const char* luainterop_DoCommand(lua_State* l, const char* cmd, bool arg_B, int 
     int ltype = lua_getglobal(l, "do_command");
     if (ltype != LUA_TFUNCTION)
     {
-        _error = "Script does not implement required function do_command()";
+        _error = "Script does not implement function do_command()";
         return ret;
     }
 

@@ -169,7 +169,7 @@ int main()
     int dummy = luainterop_InvalidFunc(_l);
     sinterop_error = OpResult();
     assert(sinterop_error != NULL);
-    assert(strstr(sinterop_error, "Script does not implement required function invalid_func()") != NULL);
+    assert(strstr(sinterop_error, "Script does not implement function invalid_func()") != NULL);
 
     char arg[] = { "abc" };
     dummy = luainterop_InvalidArgType(_l, arg);

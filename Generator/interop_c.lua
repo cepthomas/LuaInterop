@@ -65,7 +65,7 @@ $(c_ret_type) $(config.lua_lib_name)_$(func.host_func_name)(lua_State* l)
     int ltype = lua_getglobal(l, "$(func.lua_func_name)");
     if (ltype != LUA_TFUNCTION)
     {
-        _error = "Script does not implement required function $(func.lua_func_name)()";
+        _error = "Script does not implement function $(func.lua_func_name)()";
         return ret;
     }
 

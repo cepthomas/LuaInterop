@@ -1,3 +1,4 @@
+//#define _DUMP
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,8 @@ using Ephemera.NBagOfTricks;
 using Ephemera.NBagOfTricks.PNUT;
 
 // TODO LBOT\csrc\cliex.h/cpp probably should live somewhere in this project.
+
+
 
 namespace Test
 {
@@ -56,7 +59,7 @@ namespace Test
             #if _DUMP
             List<string> ls = [];
             ls.Add($"LuaException => {new StackTrace().GetFrame(1)!.GetMethod()!.ReflectedType!.Name}({lineNumber})");
-            ls.Add($"info:[{e.Info}]");
+            ls.Add($"error:[{e.Error}]");
             ls.Add($"context:[{e.Context}]");
             ls.Add($"message:[{e.Message}]");
             ls.Add($"");
@@ -134,8 +137,8 @@ namespace Test
             catch (LuaException e)
             {
                 Common.Dump(e);
-                UT_EQUAL(e.Message, "Script does not implement required function setup()");
-                // UT_STRING_CONTAINS(e.Info, "Script does not implement required function setup()");
+                UT_EQUAL(e.Message, "Script does not implement function setup()");
+                // UT_STRING_CONTAINS(e.Info, "Script does not implement function setup()");
                 // UT_EQUAL(e.Context, "");
             }
             catch (Exception e)

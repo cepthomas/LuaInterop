@@ -28,7 +28,7 @@ double luainterop_Calculator(lua_State* l, double op_one, const char* oper, doub
     int ltype = lua_getglobal(l, "calculator");
     if (ltype != LUA_TFUNCTION)
     {
-        _error = "Script does not implement required function calculator()";
+        _error = "Script does not implement function calculator()";
         return ret;
     }
 
@@ -72,7 +72,7 @@ int luainterop_DayOfWeek(lua_State* l, const char* day)
     int ltype = lua_getglobal(l, "day_of_week");
     if (ltype != LUA_TFUNCTION)
     {
-        _error = "Script does not implement required function day_of_week()";
+        _error = "Script does not implement function day_of_week()";
         return ret;
     }
 
@@ -112,7 +112,7 @@ const char* luainterop_FirstDay(lua_State* l)
     int ltype = lua_getglobal(l, "first_day");
     if (ltype != LUA_TFUNCTION)
     {
-        _error = "Script does not implement required function first_day()";
+        _error = "Script does not implement function first_day()";
         return ret;
     }
 
@@ -150,7 +150,7 @@ bool luainterop_InvalidFunc(lua_State* l)
     int ltype = lua_getglobal(l, "invalid_func");
     if (ltype != LUA_TFUNCTION)
     {
-        _error = "Script does not implement required function invalid_func()";
+        _error = "Script does not implement function invalid_func()";
         return ret;
     }
 
@@ -188,7 +188,7 @@ bool luainterop_InvalidArgType(lua_State* l, const char* arg1)
     int ltype = lua_getglobal(l, "invalid_arg_type");
     if (ltype != LUA_TFUNCTION)
     {
-        _error = "Script does not implement required function invalid_arg_type()";
+        _error = "Script does not implement function invalid_arg_type()";
         return ret;
     }
 
@@ -228,7 +228,7 @@ int luainterop_InvalidRetType(lua_State* l)
     int ltype = lua_getglobal(l, "invalid_ret_type");
     if (ltype != LUA_TFUNCTION)
     {
-        _error = "Script does not implement required function invalid_ret_type()";
+        _error = "Script does not implement function invalid_ret_type()";
         return ret;
     }
 
@@ -266,7 +266,7 @@ bool luainterop_ErrorFunc(lua_State* l, int flavor)
     int ltype = lua_getglobal(l, "error_func");
     if (ltype != LUA_TFUNCTION)
     {
-        _error = "Script does not implement required function error_func()";
+        _error = "Script does not implement function error_func()";
         return ret;
     }
 
@@ -306,7 +306,7 @@ int luainterop_OptionalFunc(lua_State* l)
     int ltype = lua_getglobal(l, "optional_func");
     if (ltype != LUA_TFUNCTION)
     {
-        _error = "Script does not implement required function optional_func()";
+        _error = "Script does not implement function optional_func()";
         return ret;
     }
 
