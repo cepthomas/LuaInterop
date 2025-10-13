@@ -11,9 +11,6 @@ using System.Runtime.CompilerServices;
 using Ephemera.NBagOfTricks;
 using Ephemera.NBagOfTricks.PNUT;
 
-// TODO1 LBOT\csrc\cliex.h/cpp probably should live somewhere in this project. Or where?
-
-
 
 namespace Test
 {
