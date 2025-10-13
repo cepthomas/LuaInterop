@@ -49,7 +49,7 @@ M.host_funcs =
         {
             { name = "msg",   type = "S", description = "Log message" },
         },
-        ret = { type = "I", description = "Unused" }
+        ret = { type = "I", description = "Nada" }
     },
 
     {
@@ -63,7 +63,7 @@ M.host_funcs =
             { name = "arg_B", type = "B", description = "boooooool" },
             { name = "arg_N", type = "N", description = "numero/doublo" },
         },
-        ret = { type = "I", description = "Back at you" }
+        ret = { type = "I", description = "life the universe and everything" }
     },
 }
 

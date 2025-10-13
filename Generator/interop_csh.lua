@@ -80,7 +80,7 @@ namespace $(config.namespace)
 >end -- script_funcs
         #endregion
 
-        #region ============= KeraLuaEx => C# callback functions =============s
+        #region ============= KeraLuaEx => C# functions =============s
         
 >for _, func in ipairs(host_funcs) do
 >local klex_ret_type = klex_types(func.ret.type)

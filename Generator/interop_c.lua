@@ -37,7 +37,7 @@ static const char* _context;
 static int _lstat;
 
 
-//============= interop C => Lua functions =============//
+//============= App => C/Lua functions =============//
 
 >for _, func in ipairs(script_funcs) do
 >local lua_ret_type = lua_types(func.ret.type)
@@ -86,7 +86,7 @@ $(c_ret_type) $(config.lua_lib_name)_$(func.host_func_name)(lua_State* l)
     }
     else
     {
-        _error = "Script function $(func.lua_func_name)() error";
+        _error = (_lstat == LUA_ERRMEM || _lstat == LUA_ERRMEM) ? "FATAL" : "Script function $(func.lua_func_name)() error";
         // Get the traceback from the stack.
          _context = lua_tostring(l, -1);
     }
@@ -96,7 +96,7 @@ $(c_ret_type) $(config.lua_lib_name)_$(func.host_func_name)(lua_State* l)
 
 >end -- script_funcs
 
-//============= Lua => interop C callback functions =============//
+//============= C/Lua => App functions =============//
 
 >for _, func in ipairs(host_funcs) do
 >local lua_ret_type = lua_types(func.ret.type)
@@ -188,7 +188,7 @@ extern "C" {
 #include "luaex.h"
 #endif
 
-//============= interop C => Lua functions =============//
+//============= App => C/Lua functions =============//
 
 >for _, func in ipairs(script_funcs) do
 >local lua_ret_type = lua_types(func.ret.type)
@@ -212,7 +212,8 @@ $(c_ret_type) $(config.lua_lib_name)_$(func.host_func_name)(lua_State* l);
 
 >end -- script_funcs
 
-//============= Lua => interop C callback functions =============//
+//============= C/Lua => App functions =============//
+
 >for _, func in ipairs(host_funcs) do
 
 // $(func.description or "")

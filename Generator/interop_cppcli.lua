@@ -33,7 +33,7 @@ using namespace System;
 using namespace System::Collections::Generic;
 
 
-//============= Cpp/CLI => interop C functions =============//
+//============= Cpp/CLI => C/Lua functions =============//
 
 >for _, func in ipairs(script_funcs) do
 >  local arg_spec = {}
@@ -68,7 +68,7 @@ $(cpp_types(func.ret.type)) $(config.class_name)::$(func.host_func_name)()
 
 >end -- script_funcs
 
-//============= interop C => Cpp/CLI callback functions =============//
+//============= C/Lua => Cpp/CLI functions =============//
 
 >for _, func in ipairs(host_funcs) do
 >  local arg_spec = {}
@@ -137,7 +137,7 @@ local tmpl_interop_h =
 using namespace System;
 using namespace System::Collections::Generic;
 
-//============= interop C => Cpp/CLI callback payload =============//
+//============= C/Lua => Cpp/CLI payloads =============//
 
 >for _, func in ipairs(host_funcs) do
 //--------------------------------------------------------//
@@ -172,7 +172,7 @@ public:
 public ref class $(config.class_name) : CliEx
 {
 
-//============= Cpp/CLI => interop C functions =============//
+//============= Cpp/CLI => C/Lua functions =============//
 public:
 
 >for _, func in ipairs(script_funcs) do
@@ -187,7 +187,7 @@ public:
     $(cpp_types(func.ret.type)) $(func.host_func_name)($(sarg_spec));
 
 >end -- script_funcs
-//============= interop C => Cpp/CLI callback functions =============//
+//============= C/Lua => Cpp/CLI functions =============//
 public:
 >for _, func in ipairs(host_funcs) do
     static event EventHandler<$(func.host_func_name)Args^>^ $(func.host_func_name);
