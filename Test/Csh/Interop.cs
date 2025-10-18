@@ -1,4 +1,4 @@
-///// Warning - this file is created by gen_interop.lua - do not edit. /////
+///// Warning - this file is created by do_gen.lua - do not edit. /////
 
 using System;
 using System.IO;
@@ -123,7 +123,7 @@ namespace Csh
 
         #endregion
 
-        #region ============= KeraLuaEx => C# callback functions =============s
+        #region ============= KeraLuaEx => C# functions =============s
         
         /// <summary>Host export function: Script wants to log something.
         /// Lua arg: "level" Log level

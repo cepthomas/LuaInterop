@@ -1,4 +1,3 @@
-//#define _DUMP
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -53,15 +52,13 @@ namespace Test
 
         public static void Dump(LuaException e, [CallerLineNumber] int lineNumber = -1)
         {
-            #if _DUMP
-            List<string> ls = [];
-            ls.Add($"LuaException => {new StackTrace().GetFrame(1)!.GetMethod()!.ReflectedType!.Name}({lineNumber})");
-            ls.Add($"error:[{e.Error}]");
-            ls.Add($"context:[{e.Context}]");
-            ls.Add($"message:[{e.Message}]");
-            ls.Add($"");
-            Console.WriteLine(string.Join(Environment.NewLine, ls));
-            #endif
+            //List<string> ls = [];
+            //ls.Add($"LuaException => {new StackTrace().GetFrame(1)!.GetMethod()!.ReflectedType!.Name}({lineNumber})");
+            //ls.Add($"error:[{e.Error}]");
+            //ls.Add($"context:[{e.Context}]");
+            //ls.Add($"message:[{e.Message}]");
+            //ls.Add($"");
+            //Console.WriteLine(string.Join(Environment.NewLine, ls));
         }
     }
     #endregion
@@ -135,8 +132,6 @@ namespace Test
             {
                 Common.Dump(e);
                 UT_EQUAL(e.Message, "Script does not implement function setup()");
-                // UT_STRING_CONTAINS(e.Info, "Script does not implement function setup()");
-                // UT_EQUAL(e.Context, "");
             }
             catch (Exception e)
             {
@@ -172,8 +167,6 @@ namespace Test
             {
                 Common.Dump(e);
                 UT_EQUAL(e.Message, "[string \"INTEROP_EXPLICIT_ERROR\"]:3: boom!!!");
-                // UT_STRING_CONTAINS(e.Info, "Script function setup() error");
-                // UT_STRING_CONTAINS(e.Context, ":3: boom!!!");
             }
             catch (Exception e)
             {
@@ -212,8 +205,6 @@ namespace Test
             {
                 Common.Dump(e);
                 UT_EQUAL(e.Message, "[string \"INTEROP_SCRIPT_ERROR\"]:3: attempt to concatenate a nil value");
-                // UT_STRING_CONTAINS(e.Info, "Script function setup() error");
-                // UT_STRING_CONTAINS(e.Context, ":3: attempt to concatenate a nil value");
             }
             catch (Exception e)
             {
@@ -252,8 +243,6 @@ namespace Test
             {
                 Common.Dump(e);
                 UT_EQUAL(e.Message, "[string \"INTEROP_SCRIPT_ERROR_TAIL_CALLS\"]:3: attempt to concatenate a nil value");
-                // UT_STRING_CONTAINS(e.Info, "Script function setup() error");
-                // UT_STRING_CONTAINS(e.Context, ":3: attempt to concatenate a nil value");
             }
             catch (Exception e)
             {
@@ -291,8 +280,6 @@ namespace Test
             {
                 Common.Dump(e);
                 UT_EQUAL(e.Message, "[string \"INTEROP_SYNTAX_ERROR\"]:3: syntax error near 'error'");
-                // UT_STRING_CONTAINS(e.Info, "Load chunk failed.");
-                // UT_STRING_CONTAINS(e.Context, ":3: syntax error near 'error'");
             }
             catch (Exception e)
             {
@@ -325,8 +312,6 @@ namespace Test
             {
                 Common.Dump(e);
                 UT_EQUAL(e.Message, "[string \"INTEROP_INVALID_FUNC\"]:3: attempt to call a nil value (field 'invalid_func')");
-                // UT_STRING_CONTAINS(e.Info, "Execute chunk failed.");
-                // UT_STRING_CONTAINS(e.Context, ":3: attempt to call a nil value (field 'invalid_func'");
             }
             catch (Exception e)
             {
@@ -360,8 +345,6 @@ namespace Test
             {
                 Common.Dump(e);
                 UT_EQUAL(e.Message, "[string \"INTEROP_ARG_TYPE_WRONG\"]:3: Invalid arg type for arg_I");
-                // UT_STRING_CONTAINS(e.Info, "Execute chunk failed");
-                // UT_STRING_CONTAINS(e.Context, ":3: Invalid arg type for arg_I");
             }
             catch (Exception e)
             {
@@ -399,8 +382,6 @@ namespace Test
             {
                 Common.Dump(e);
                 UT_EQUAL(e.Message, "C:/Dev/Libs/LuaInterop/Test/CppCli/test2.lua:14: attempt to add a 'string' with a 'nil'");
-                // UT_STRING_CONTAINS(e.Info, "Script function setup() error");
-                // UT_STRING_CONTAINS(e.Context, "attempt to add a 'string' with a 'nil'");
             }
             catch (Exception e)
             {

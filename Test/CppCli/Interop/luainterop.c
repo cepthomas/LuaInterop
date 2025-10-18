@@ -9,16 +9,17 @@
 
 static const char* _error;
 static const char* _context;
+static int _lstat;
 
 
-//============= interop C => Lua functions =============//
+//============= App => C/Lua functions =============//
 
 //--------------------------------------------------------//
 int luainterop_Setup(lua_State* l, int opt)
 {
     _error = NULL;
     _context = NULL;
-    int stat = LUA_OK;
+    _lstat = LUA_OK;
     int num_args = 0;
     int num_ret = 1;
     int ret = 0;
@@ -36,8 +37,8 @@ int luainterop_Setup(lua_State* l, int opt)
     num_args++;
 
     // Do the protected call.
-    stat = luaex_docall(l, num_args, num_ret);
-    if (stat == LUA_OK)
+    _lstat = luaex_docall(l, num_args, num_ret);
+    if (_lstat == LUA_OK)
     {
         // Get the results from the stack.
         if (lua_isinteger(l, -1)) { ret = lua_tointeger(l, -1); }
@@ -45,7 +46,7 @@ int luainterop_Setup(lua_State* l, int opt)
     }
     else
     {
-        _error = "Script function setup() error";
+        _error = (_lstat == LUA_ERRMEM || _lstat == LUA_ERRMEM) ? "FATAL" : "Script function setup() error";
         // Get the traceback from the stack.
          _context = lua_tostring(l, -1);
     }
@@ -58,7 +59,7 @@ const char* luainterop_DoCommand(lua_State* l, const char* cmd, bool arg_B, int 
 {
     _error = NULL;
     _context = NULL;
-    int stat = LUA_OK;
+    _lstat = LUA_OK;
     int num_args = 0;
     int num_ret = 1;
     const char* ret = 0;
@@ -84,8 +85,8 @@ const char* luainterop_DoCommand(lua_State* l, const char* cmd, bool arg_B, int 
     num_args++;
 
     // Do the protected call.
-    stat = luaex_docall(l, num_args, num_ret);
-    if (stat == LUA_OK)
+    _lstat = luaex_docall(l, num_args, num_ret);
+    if (_lstat == LUA_OK)
     {
         // Get the results from the stack.
         if (lua_isstring(l, -1)) { ret = lua_tostring(l, -1); }
@@ -93,7 +94,7 @@ const char* luainterop_DoCommand(lua_State* l, const char* cmd, bool arg_B, int 
     }
     else
     {
-        _error = "Script function do_command() error";
+        _error = (_lstat == LUA_ERRMEM || _lstat == LUA_ERRMEM) ? "FATAL" : "Script function do_command() error";
         // Get the traceback from the stack.
          _context = lua_tostring(l, -1);
     }
@@ -102,14 +103,14 @@ const char* luainterop_DoCommand(lua_State* l, const char* cmd, bool arg_B, int 
 }
 
 
-//============= Lua => interop C callback functions =============//
+//============= C/Lua => App functions =============//
 
 //--------------------------------------------------------//
 // Script wants to log something.
 // @param[in] l Internal lua state.
 // @return Number of lua return values.
 // Lua arg: msg Log message
-// Lua return: int Unused
+// Lua return: int Nada
 static int luainterop_Log(lua_State* l)
 {
     // Get arguments
@@ -131,7 +132,7 @@ static int luainterop_Log(lua_State* l)
 // Lua arg: arg_S Some text
 // Lua arg: arg_B boooooool
 // Lua arg: arg_N numero/doublo
-// Lua return: int Back at you
+// Lua return: int life the universe and everything
 static int luainterop_Notification(lua_State* l)
 {
     // Get arguments
@@ -175,12 +176,5 @@ void luainterop_Load(lua_State* l)
     luaL_requiref(l, "luainterop", luainterop_Open, true);
 }
 
-const char* luainterop_Error()
-{
-    return _error;
-}
-
-const char* luainterop_Context()
-{
-    return _context;
-}
+const char* luainterop_Error() { return _error; }
+const char* luainterop_Context() { return _context; }

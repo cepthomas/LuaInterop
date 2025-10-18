@@ -6,7 +6,7 @@
 using namespace System;
 using namespace System::Collections::Generic;
 
-//============= interop C => Cpp/CLI callback payload =============//
+//============= C/Lua => Cpp/CLI payloads =============//
 
 //--------------------------------------------------------//
 public ref class LogArgs : public EventArgs
@@ -14,7 +14,7 @@ public ref class LogArgs : public EventArgs
 public:
     /// <summary>Log message</summary>
     property String^ msg;
-    /// <summary>Unused</summary>
+    /// <summary>Nada</summary>
     property int ret;
     /// <summary>Constructor.</summary>
     LogArgs(const char* msg)
@@ -35,7 +35,7 @@ public:
     property bool arg_B;
     /// <summary>numero/doublo</summary>
     property double arg_N;
-    /// <summary>Back at you</summary>
+    /// <summary>life the universe and everything</summary>
     property int ret;
     /// <summary>Constructor.</summary>
     NotificationArgs(int arg_I, const char* arg_S, bool arg_B, double arg_N)
@@ -52,7 +52,7 @@ public:
 public ref class Interop : CliEx
 {
 
-//============= Cpp/CLI => interop C functions =============//
+//============= Cpp/CLI => C/Lua functions =============//
 public:
 
     /// <summary>Setup</summary>
@@ -69,7 +69,7 @@ public:
     /// <returns>Script return</returns>
     String^ DoCommand(String^ cmd, bool arg_B, int arg_I, double arg_N, String^ arg_S);
 
-//============= interop C => Cpp/CLI callback functions =============//
+//============= C/Lua => Cpp/CLI functions =============//
 public:
     static event EventHandler<LogArgs^>^ Log;
     static void Notify(LogArgs^ args) { Log(nullptr, args); }

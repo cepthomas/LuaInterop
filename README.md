@@ -13,7 +13,7 @@ Building this solution requires a folder named `LBOT` at the top level containin
   - copy of pertinent parts
   - symlink: `mklink /d <current_folder>\LBOT <lbot_source_folder>\LuaBagOfTricks`
 
-It's mostly a Windows project but parts would probably work elsewhere.
+It's mostly a Windows VS project but parts would probably work elsewhere.
 
 The intended way to use this is to copy one of the flavors directly, modify the spec file, run the code generator,
 modify the host file(s), build the application in VS.

@@ -13,7 +13,7 @@ extern "C" {
 #include "luaex.h"
 #endif
 
-//============= interop C => Lua functions =============//
+//============= App => C/Lua functions =============//
 
 // Initialize stuff
 // @param[in] l Internal lua state.
@@ -32,12 +32,13 @@ int luainterop_Setup(lua_State* l, int opt);
 const char* luainterop_DoCommand(lua_State* l, const char* cmd, bool arg_B, int arg_I, double arg_N, const char* arg_S);
 
 
-//============= Lua => interop C callback functions =============//
+//============= C/Lua => App functions =============//
+
 
 // Script wants to log something.
 // @param[in] l Internal lua state.
 // @param[in] msg Log message
-// @return Unused
+// @return Nada
 int luainterop_cb_Log(lua_State* l, const char* msg);
 
 // Script wants to say something.
@@ -46,7 +47,7 @@ int luainterop_cb_Log(lua_State* l, const char* msg);
 // @param[in] arg_S Some text
 // @param[in] arg_B boooooool
 // @param[in] arg_N numero/doublo
-// @return Back at you
+// @return life the universe and everything
 int luainterop_cb_Notification(lua_State* l, int arg_I, const char* arg_S, bool arg_B, double arg_N);
 
 //============= Infrastructure =============//

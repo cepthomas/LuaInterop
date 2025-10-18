@@ -13,7 +13,7 @@ extern "C" {
 #include "luaex.h"
 #endif
 
-//============= interop C => Lua functions =============//
+//============= App => C/Lua functions =============//
 
 // Simple calculations.
 // @param[in] l Internal lua state.
@@ -62,7 +62,8 @@ bool luainterop_ErrorFunc(lua_State* l, int flavor);
 int luainterop_OptionalFunc(lua_State* l);
 
 
-//============= Lua => interop C callback functions =============//
+//============= C/Lua => App functions =============//
+
 
 // Record something for me.
 // @param[in] l Internal lua state.

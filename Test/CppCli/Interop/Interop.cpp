@@ -8,7 +8,7 @@ using namespace System;
 using namespace System::Collections::Generic;
 
 
-//============= Cpp/CLI => interop C functions =============//
+//============= Cpp/CLI => C/Lua functions =============//
 
 //--------------------------------------------------------//
 int Interop::Setup(int opt)
@@ -29,7 +29,7 @@ String^ Interop::DoCommand(String^ cmd, bool arg_B, int arg_I, double arg_N, Str
 }
 
 
-//============= interop C => Cpp/CLI callback functions =============//
+//============= C/Lua => Cpp/CLI functions =============//
 
 
 //--------------------------------------------------------//

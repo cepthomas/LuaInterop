@@ -16,17 +16,17 @@ msbuild KeraLuaEx.sln /p:Configuration=Debug /t:Restore -v:n
 msbuild KeraLuaEx.sln /p:Configuration=Debug /t:Build -v:n
 popd
 
-pushd C
+pushd Test/C
 msbuild C.sln /p:Configuration=Debug /t:Restore -v:n
 msbuild C.sln /p:Configuration=Debug /t:Build -v:n
 popd
 
-pushd Csh
+pushd Test/Csh
 msbuild Csh.sln /p:Configuration=Debug /t:Restore -v:n
 msbuild Csh.sln /p:Configuration=Debug /t:Build -v:n
 popd
 
-pushd CppCli
+pushd Test/CppCli
 msbuild CppCli.sln /p:Configuration=Debug /t:Restore -v:n
 msbuild CppCli.sln /p:Configuration=Debug /t:Build -v:n
 popd

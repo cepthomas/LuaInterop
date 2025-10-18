@@ -1,4 +1,3 @@
-///// Generated C and h files that bind interop C to lua C code.       /////
 ///// Warning - this file is created by do_gen.lua - do not edit. /////
 
 #include "luainterop.h"
@@ -10,16 +9,17 @@
 
 static const char* _error;
 static const char* _context;
+static int _lstat;
 
 
-//============= interop C => Lua functions =============//
+//============= App => C/Lua functions =============//
 
 //--------------------------------------------------------//
 double luainterop_Calculator(lua_State* l, double op_one, const char* oper, double op_two)
 {
     _error = NULL;
     _context = NULL;
-    int stat = LUA_OK;
+    _lstat = LUA_OK;
     int num_args = 0;
     int num_ret = 1;
     double ret = 0;
@@ -41,8 +41,8 @@ double luainterop_Calculator(lua_State* l, double op_one, const char* oper, doub
     num_args++;
 
     // Do the protected call.
-    stat = luaex_docall(l, num_args, num_ret);
-    if (stat == LUA_OK)
+    _lstat = luaex_docall(l, num_args, num_ret);
+    if (_lstat == LUA_OK)
     {
         // Get the results from the stack.
         if (lua_isnumber(l, -1)) { ret = lua_tonumber(l, -1); }
@@ -50,7 +50,7 @@ double luainterop_Calculator(lua_State* l, double op_one, const char* oper, doub
     }
     else
     {
-        _error = "Script function calculator() error";
+        _error = (_lstat == LUA_ERRMEM || _lstat == LUA_ERRMEM) ? "FATAL" : "Script function calculator() error";
         // Get the traceback from the stack.
          _context = lua_tostring(l, -1);
     }
@@ -63,7 +63,7 @@ int luainterop_DayOfWeek(lua_State* l, const char* day)
 {
     _error = NULL;
     _context = NULL;
-    int stat = LUA_OK;
+    _lstat = LUA_OK;
     int num_args = 0;
     int num_ret = 1;
     int ret = 0;
@@ -81,8 +81,8 @@ int luainterop_DayOfWeek(lua_State* l, const char* day)
     num_args++;
 
     // Do the protected call.
-    stat = luaex_docall(l, num_args, num_ret);
-    if (stat == LUA_OK)
+    _lstat = luaex_docall(l, num_args, num_ret);
+    if (_lstat == LUA_OK)
     {
         // Get the results from the stack.
         if (lua_isinteger(l, -1)) { ret = lua_tointeger(l, -1); }
@@ -90,7 +90,7 @@ int luainterop_DayOfWeek(lua_State* l, const char* day)
     }
     else
     {
-        _error = "Script function day_of_week() error";
+        _error = (_lstat == LUA_ERRMEM || _lstat == LUA_ERRMEM) ? "FATAL" : "Script function day_of_week() error";
         // Get the traceback from the stack.
          _context = lua_tostring(l, -1);
     }
@@ -103,7 +103,7 @@ const char* luainterop_FirstDay(lua_State* l)
 {
     _error = NULL;
     _context = NULL;
-    int stat = LUA_OK;
+    _lstat = LUA_OK;
     int num_args = 0;
     int num_ret = 1;
     const char* ret = 0;
@@ -119,8 +119,8 @@ const char* luainterop_FirstDay(lua_State* l)
     // Push arguments. No error checking required.
 
     // Do the protected call.
-    stat = luaex_docall(l, num_args, num_ret);
-    if (stat == LUA_OK)
+    _lstat = luaex_docall(l, num_args, num_ret);
+    if (_lstat == LUA_OK)
     {
         // Get the results from the stack.
         if (lua_isstring(l, -1)) { ret = lua_tostring(l, -1); }
@@ -128,7 +128,7 @@ const char* luainterop_FirstDay(lua_State* l)
     }
     else
     {
-        _error = "Script function first_day() error";
+        _error = (_lstat == LUA_ERRMEM || _lstat == LUA_ERRMEM) ? "FATAL" : "Script function first_day() error";
         // Get the traceback from the stack.
          _context = lua_tostring(l, -1);
     }
@@ -141,7 +141,7 @@ bool luainterop_InvalidFunc(lua_State* l)
 {
     _error = NULL;
     _context = NULL;
-    int stat = LUA_OK;
+    _lstat = LUA_OK;
     int num_args = 0;
     int num_ret = 1;
     bool ret = 0;
@@ -157,8 +157,8 @@ bool luainterop_InvalidFunc(lua_State* l)
     // Push arguments. No error checking required.
 
     // Do the protected call.
-    stat = luaex_docall(l, num_args, num_ret);
-    if (stat == LUA_OK)
+    _lstat = luaex_docall(l, num_args, num_ret);
+    if (_lstat == LUA_OK)
     {
         // Get the results from the stack.
         if (lua_isboolean(l, -1)) { ret = lua_toboolean(l, -1); }
@@ -166,7 +166,7 @@ bool luainterop_InvalidFunc(lua_State* l)
     }
     else
     {
-        _error = "Script function invalid_func() error";
+        _error = (_lstat == LUA_ERRMEM || _lstat == LUA_ERRMEM) ? "FATAL" : "Script function invalid_func() error";
         // Get the traceback from the stack.
          _context = lua_tostring(l, -1);
     }
@@ -179,7 +179,7 @@ bool luainterop_InvalidArgType(lua_State* l, const char* arg1)
 {
     _error = NULL;
     _context = NULL;
-    int stat = LUA_OK;
+    _lstat = LUA_OK;
     int num_args = 0;
     int num_ret = 1;
     bool ret = 0;
@@ -197,8 +197,8 @@ bool luainterop_InvalidArgType(lua_State* l, const char* arg1)
     num_args++;
 
     // Do the protected call.
-    stat = luaex_docall(l, num_args, num_ret);
-    if (stat == LUA_OK)
+    _lstat = luaex_docall(l, num_args, num_ret);
+    if (_lstat == LUA_OK)
     {
         // Get the results from the stack.
         if (lua_isboolean(l, -1)) { ret = lua_toboolean(l, -1); }
@@ -206,7 +206,7 @@ bool luainterop_InvalidArgType(lua_State* l, const char* arg1)
     }
     else
     {
-        _error = "Script function invalid_arg_type() error";
+        _error = (_lstat == LUA_ERRMEM || _lstat == LUA_ERRMEM) ? "FATAL" : "Script function invalid_arg_type() error";
         // Get the traceback from the stack.
          _context = lua_tostring(l, -1);
     }
@@ -219,7 +219,7 @@ int luainterop_InvalidRetType(lua_State* l)
 {
     _error = NULL;
     _context = NULL;
-    int stat = LUA_OK;
+    _lstat = LUA_OK;
     int num_args = 0;
     int num_ret = 1;
     int ret = 0;
@@ -235,8 +235,8 @@ int luainterop_InvalidRetType(lua_State* l)
     // Push arguments. No error checking required.
 
     // Do the protected call.
-    stat = luaex_docall(l, num_args, num_ret);
-    if (stat == LUA_OK)
+    _lstat = luaex_docall(l, num_args, num_ret);
+    if (_lstat == LUA_OK)
     {
         // Get the results from the stack.
         if (lua_isinteger(l, -1)) { ret = lua_tointeger(l, -1); }
@@ -244,7 +244,7 @@ int luainterop_InvalidRetType(lua_State* l)
     }
     else
     {
-        _error = "Script function invalid_ret_type() error";
+        _error = (_lstat == LUA_ERRMEM || _lstat == LUA_ERRMEM) ? "FATAL" : "Script function invalid_ret_type() error";
         // Get the traceback from the stack.
          _context = lua_tostring(l, -1);
     }
@@ -257,7 +257,7 @@ bool luainterop_ErrorFunc(lua_State* l, int flavor)
 {
     _error = NULL;
     _context = NULL;
-    int stat = LUA_OK;
+    _lstat = LUA_OK;
     int num_args = 0;
     int num_ret = 1;
     bool ret = 0;
@@ -275,8 +275,8 @@ bool luainterop_ErrorFunc(lua_State* l, int flavor)
     num_args++;
 
     // Do the protected call.
-    stat = luaex_docall(l, num_args, num_ret);
-    if (stat == LUA_OK)
+    _lstat = luaex_docall(l, num_args, num_ret);
+    if (_lstat == LUA_OK)
     {
         // Get the results from the stack.
         if (lua_isboolean(l, -1)) { ret = lua_toboolean(l, -1); }
@@ -284,7 +284,7 @@ bool luainterop_ErrorFunc(lua_State* l, int flavor)
     }
     else
     {
-        _error = "Script function error_func() error";
+        _error = (_lstat == LUA_ERRMEM || _lstat == LUA_ERRMEM) ? "FATAL" : "Script function error_func() error";
         // Get the traceback from the stack.
          _context = lua_tostring(l, -1);
     }
@@ -297,7 +297,7 @@ int luainterop_OptionalFunc(lua_State* l)
 {
     _error = NULL;
     _context = NULL;
-    int stat = LUA_OK;
+    _lstat = LUA_OK;
     int num_args = 0;
     int num_ret = 1;
     int ret = 0;
@@ -313,8 +313,8 @@ int luainterop_OptionalFunc(lua_State* l)
     // Push arguments. No error checking required.
 
     // Do the protected call.
-    stat = luaex_docall(l, num_args, num_ret);
-    if (stat == LUA_OK)
+    _lstat = luaex_docall(l, num_args, num_ret);
+    if (_lstat == LUA_OK)
     {
         // Get the results from the stack.
         if (lua_isinteger(l, -1)) { ret = lua_tointeger(l, -1); }
@@ -322,7 +322,7 @@ int luainterop_OptionalFunc(lua_State* l)
     }
     else
     {
-        _error = "Script function optional_func() error";
+        _error = (_lstat == LUA_ERRMEM || _lstat == LUA_ERRMEM) ? "FATAL" : "Script function optional_func() error";
         // Get the traceback from the stack.
          _context = lua_tostring(l, -1);
     }
@@ -331,7 +331,7 @@ int luainterop_OptionalFunc(lua_State* l)
 }
 
 
-//============= Lua => interop C callback functions =============//
+//============= C/Lua => App functions =============//
 
 //--------------------------------------------------------//
 // Record something for me.
@@ -428,12 +428,5 @@ void luainterop_Load(lua_State* l)
     luaL_requiref(l, "luainterop", luainterop_Open, true);
 }
 
-const char* luainterop_Error()
-{
-    return _error;
-}
-
-const char* luainterop_Context()
-{
-    return _context;
-}
+const char* luainterop_Error() { return _error; }
+const char* luainterop_Context() { return _context; }
