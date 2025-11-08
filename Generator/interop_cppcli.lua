@@ -56,13 +56,13 @@ $(cpp_types(func.ret.type)) $(config.class_name)::$(func.host_func_name)($(sarg_
 $(cpp_types(func.ret.type)) $(config.class_name)::$(func.host_func_name)()
 >  end -- #sarg_spec
 {
-    SCOPE();
 >    if func.ret.type == 'S' then
     $(cpp_types(func.ret.type)) ret = gcnew String($(config.lua_lib_name)_$(func.host_func_name)(_l$(sarg_impl)));
 >    else
     $(cpp_types(func.ret.type)) ret = $(config.lua_lib_name)_$(func.host_func_name)(_l$(sarg_impl));
 >    end
     if (luainterop_Error() != NULL) { throw(gcnew LuaException(gcnew String(luainterop_Error()), luainterop_Context() == NULL ? "" : gcnew String(luainterop_Context()))); }
+    Collect();
     return ret; 
 }
 
@@ -84,7 +84,6 @@ $(cpp_types(func.ret.type)) $(config.class_name)::$(func.host_func_name)()
 
 int $(config.lua_lib_name)_cb_$(func.host_func_name)(lua_State* l, $(sarg_spec))
 {
-    SCOPE();
     $(func.host_func_name)Args^ args = gcnew $(func.host_func_name)Args($(sarg_impl));
     $(config.class_name)::Notify(args);
     return args->ret;
@@ -97,7 +96,6 @@ int $(config.lua_lib_name)_cb_$(func.host_func_name)(lua_State* l, $(sarg_spec))
 //--------------------------------------------------------//
 void $(config.class_name)::RunScript(String^ scriptFn, String^ luaPath)
 {
-    SCOPE();
     InitLua(luaPath);
     // Load C host funcs into lua space.
     $(config.lua_lib_name)_Load(_l);
@@ -109,7 +107,6 @@ void $(config.class_name)::RunScript(String^ scriptFn, String^ luaPath)
 //--------------------------------------------------------//
 void $(config.class_name)::RunChunk(String^ code, String^ name, String^ luaPath)
 {
-    SCOPE();
     InitLua(luaPath);
     // Load C host funcs into lua space.
     $(config.lua_lib_name)_Load(_l);

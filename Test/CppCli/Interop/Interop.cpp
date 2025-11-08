@@ -13,18 +13,18 @@ using namespace System::Collections::Generic;
 //--------------------------------------------------------//
 int Interop::Setup(int opt)
 {
-    SCOPE();
     int ret = luainterop_Setup(_l, opt);
     if (luainterop_Error() != NULL) { throw(gcnew LuaException(gcnew String(luainterop_Error()), luainterop_Context() == NULL ? "" : gcnew String(luainterop_Context()))); }
+    Collect();
     return ret; 
 }
 
 //--------------------------------------------------------//
 String^ Interop::DoCommand(String^ cmd, bool arg_B, int arg_I, double arg_N, String^ arg_S)
 {
-    SCOPE();
     String^ ret = gcnew String(luainterop_DoCommand(_l, ToCString(cmd), arg_B, arg_I, arg_N, ToCString(arg_S)));
     if (luainterop_Error() != NULL) { throw(gcnew LuaException(gcnew String(luainterop_Error()), luainterop_Context() == NULL ? "" : gcnew String(luainterop_Context()))); }
+    Collect();
     return ret; 
 }
 
@@ -36,7 +36,6 @@ String^ Interop::DoCommand(String^ cmd, bool arg_B, int arg_I, double arg_N, Str
 
 int luainterop_cb_Log(lua_State* l, const char* msg)
 {
-    SCOPE();
     LogArgs^ args = gcnew LogArgs(msg);
     Interop::Notify(args);
     return args->ret;
@@ -47,7 +46,6 @@ int luainterop_cb_Log(lua_State* l, const char* msg)
 
 int luainterop_cb_Notification(lua_State* l, int arg_I, const char* arg_S, bool arg_B, double arg_N)
 {
-    SCOPE();
     NotificationArgs^ args = gcnew NotificationArgs(arg_I, arg_S, arg_B, arg_N);
     Interop::Notify(args);
     return args->ret;
@@ -59,7 +57,6 @@ int luainterop_cb_Notification(lua_State* l, int arg_I, const char* arg_S, bool 
 //--------------------------------------------------------//
 void Interop::RunScript(String^ scriptFn, String^ luaPath)
 {
-    SCOPE();
     InitLua(luaPath);
     // Load C host funcs into lua space.
     luainterop_Load(_l);
@@ -71,7 +68,6 @@ void Interop::RunScript(String^ scriptFn, String^ luaPath)
 //--------------------------------------------------------//
 void Interop::RunChunk(String^ code, String^ name, String^ luaPath)
 {
-    SCOPE();
     InitLua(luaPath);
     // Load C host funcs into lua space.
     luainterop_Load(_l);
