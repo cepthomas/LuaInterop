@@ -18,9 +18,8 @@
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <SatelliteResourceLanguages>none</SatelliteResourceLanguages>
     </PropertyGroup>
-
     <ItemGroup>
-        <ProjectReference Include="..\KeraLuaEx\KeraLuaEx.csproj" />
+      <ProjectReference Include="..\..\KeraLuaEx\KeraLuaEx.csproj" />
     </ItemGroup>
 
     <ItemGroup>

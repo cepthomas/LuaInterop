@@ -19,11 +19,6 @@ namespace Csh
     /// <summary>A typical application.</summary>
     public partial class App : IDisposable
     {
-        #region Fields
-        /// <summary>App logger.</summary>
-        readonly Logger _logger = LogManager.CreateLogger("App");
-        #endregion
-
         #region Lifecycle
         /// <summary>
         /// Constructor.
@@ -53,28 +48,28 @@ namespace Csh
                 TableEx t1 = new(lint);
 
                 var res1 = MyLuaFunc("abcdef", 74747, t1);
-                _logger.Info($"MyLuaFunc() returned {res1}");
+                Console.WriteLine($"MyLuaFunc() returned {res1}");
 
                 var res2 = MyLuaFunc2(true);
-                _logger.Info($"MyLuaFunc2() returned {res2}");
+                Console.WriteLine($"MyLuaFunc2() returned {res2}");
 
                 var res3 = NoArgsFunc();
-                _logger.Info($"NoArgsFunc() returned {res3}");
+                Console.WriteLine($"NoArgsFunc() returned {res3}");
 
                 var res4 = OptionalFunc();
-                _logger.Info($"OptionalFunc() returned {res4}");
+                Console.WriteLine($"OptionalFunc() returned {res4}");
             }
             catch (SyntaxException ex)
             {
-                _logger.Exception(ex);
+                Console.WriteLine(ex);
             }
             catch (LuaException ex)
             {
-                _logger.Exception(ex);
+                Console.WriteLine(ex);
             }
             catch (Exception ex)
             {
-                _logger.Exception(ex);
+                Console.WriteLine(ex);
             }
 
             LogManager.Stop();
@@ -101,11 +96,11 @@ namespace Csh
                 string s = $"SCRIPT LOGS {msg ?? "null"}";
                 switch ((LogLevel)level)
                 {
-                    case LogLevel.Trace: _logger.Trace(s); break;
-                    case LogLevel.Debug: _logger.Debug(s); break;
-                    case LogLevel.Info:  _logger.Info(s); break;
-                    case LogLevel.Warn:  _logger.Warn(s); break;
-                    case LogLevel.Error: _logger.Error(s); break;
+                    case LogLevel.Trace: Console.WriteLine(s); break;
+                    case LogLevel.Debug: Console.WriteLine(s); break;
+                    case LogLevel.Info:  Console.WriteLine(s); break;
+                    case LogLevel.Warn:  Console.WriteLine(s); break;
+                    case LogLevel.Error: Console.WriteLine(s); break;
                 }
             }
             return 0;
