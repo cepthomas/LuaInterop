@@ -45,9 +45,9 @@ namespace KeraLuaEx.Test
 
             Lua.LogMessage += (object? _, Lua.LogEventArgs a) => Console.WriteLine(a.Message);
         }
+        
         public void Dispose()
         {
-            //throw new NotImplementedException();
         }
         #endregion
 
