@@ -16,7 +16,7 @@ The core KeraLua code is cleaned up but structurally and functionally the same.
 
 ## Innards
 - Uses Lua 5.4.6 x64. Windows only right now.
-- .NET6/C# SDK project.
+- .NET8/C# SDK project.
 - Turned on nullable.
 - Integers fixed at 32 bit.
 
