@@ -316,7 +316,7 @@ namespace KeraLuaEx.Test
             Assert.AreEqual("gnirts a", tbl["sret"]);
             Assert.AreEqual(9876 / 2, tbl["iret"]);
 
-            _l.CheckStackSize(0);
+            _l!.CheckStackSize(0);
         }
 
         /// <summary>Test generated errors.</summary>
