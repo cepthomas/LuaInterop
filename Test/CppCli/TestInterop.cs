@@ -43,8 +43,8 @@ namespace Test
         static void Main()
         {   
             TestRunner runner = new(OutputFormat.Readable);
-            var cases = new[] { "INTEROP" }; // INTEROP_SCRIPT_FILE_ERROR
-            runner.RunSuites(cases);
+            var torun = new[] { "INTEROP" }; // INTEROP_SCRIPT_FILE_ERROR
+            runner.RunSuites(torun);
             File.WriteAllLines(Path.Combine(SrcDir, "_test_out.txt"), runner.Context.OutputLines);
 
             Interop.Dispose();
@@ -70,9 +70,9 @@ namespace Test
         public override void RunSuite()
         {
             Common.Reset();
-            UT_STOP_ON_FAIL(true);
+            StopOnFail(true);
 
-            try
+            ThrowsNot(() =>
             {
                 // Load test code.
                 string s = @"--line 1
@@ -86,21 +86,13 @@ namespace Test
 
                 // Execute script functions.
                 var resi = Common.Interop.Setup(1234);
-                UT_EQUAL(resi, 2345);
-            }
-            catch (LuaException)
-            {
-                UT_FAIL("Should not throw");
-            }
-            catch (Exception e)
-            {
-                UT_FAIL($"Unexpected exception {e.GetType().Name} {e}");
-            }
+                Assert(resi == 2345);
+            });
 
-            UT_NOT_NULL(Common.LogArgs);
-            UT_NOT_NULL(Common.NotifArgs);
-            UT_EQUAL(Common.LogArgs!.msg, "nret:987");
-            UT_EQUAL(Common.NotifArgs!.arg_N, 123.45);
+            Assert(Common.LogArgs is not null);
+            Assert(Common.NotifArgs is not null);
+            Assert(Common.LogArgs!.msg == "nret:987");
+            Assert(Common.NotifArgs!.arg_N == 123.45);
         }
     }
     #endregion
@@ -112,9 +104,9 @@ namespace Test
         public override void RunSuite()
         {
             Common.Reset();
-            UT_STOP_ON_FAIL(true);
+            StopOnFail(true);
 
-            try
+            var e = Throws(typeof(LuaException), () =>
             {
                 // Load test code.
                 string s = @"--line 1
@@ -125,20 +117,12 @@ namespace Test
 
                 // Execute script functions.
                 var resi = Common.Interop.Setup(1234);
+            });
 
-                UT_FAIL("Should throw");
-            }
-            catch (LuaException e)
-            {
-                Common.Dump(e);
-                UT_EQUAL(e.Message, "Script does not implement function setup()");
-            }
-            catch (Exception e)
-            {
-                UT_FAIL($"Unexpected exception {e.GetType().Name} {e}");
-            }
-            UT_NULL(Common.LogArgs);
-            UT_NULL(Common.NotifArgs);
+            Assert(e is not null);
+            Assert(e!.Message == "Script does not implement function setup()");
+            Assert(Common.LogArgs is null);
+            Assert(Common.NotifArgs is null);
         }
     }
 
@@ -148,9 +132,9 @@ namespace Test
         public override void RunSuite()
         {
             Common.Reset();
-            UT_STOP_ON_FAIL(true);
+            StopOnFail(true);
 
-            try
+            var e = Throws(typeof(LuaException), () =>
             {
                 // Load test code.
                 string s = @"--line 1
@@ -160,21 +144,12 @@ namespace Test
 
                 // Execute script functions.
                 var resi = Common.Interop.Setup(1234);
+            });
 
-                UT_FAIL("Should throw");
-            }
-            catch (LuaException e)
-            {
-                Common.Dump(e);
-                UT_EQUAL(e.Message, "[string \"INTEROP_EXPLICIT_ERROR\"]:3: boom!!!");
-            }
-            catch (Exception e)
-            {
-                UT_FAIL($"Unexpected exception {e.GetType().Name} {e}");
-            }
-
-            UT_NULL(Common.LogArgs);
-            UT_NULL(Common.NotifArgs);
+            Assert(e is not null);
+            Assert(e!.Message == "[string \"INTEROP_EXPLICIT_ERROR\"]:3: boom!!!");
+            Assert(Common.LogArgs is null);
+            Assert(Common.NotifArgs is null);
         }
     }
 
@@ -184,9 +159,9 @@ namespace Test
         public override void RunSuite()
         {
             Common.Reset();
-            UT_STOP_ON_FAIL(true);
+            StopOnFail(true);
 
-            try
+            var e = Throws(typeof(LuaException), () =>
             {
                 // Load test code.
                 string s = @"--line 1
@@ -198,21 +173,12 @@ namespace Test
 
                 // Execute script functions.
                 var resi = Common.Interop.Setup(1234);
+            });
 
-                UT_FAIL("Should throw");
-            }
-            catch (LuaException e)
-            {
-                Common.Dump(e);
-                UT_EQUAL(e.Message, "[string \"INTEROP_SCRIPT_ERROR\"]:3: attempt to concatenate a nil value");
-            }
-            catch (Exception e)
-            {
-                UT_FAIL($"Unexpected exception {e.GetType().Name} {e}");
-            }
-
-            UT_NULL(Common.LogArgs);
-            UT_NULL(Common.NotifArgs);
+            Assert(e is not null);
+            Assert(e!.Message == "[string \"INTEROP_SCRIPT_ERROR\"]:3: attempt to concatenate a nil value");
+            Assert(Common.LogArgs is null);
+            Assert(Common.NotifArgs is null);
         }
     }
 
@@ -222,9 +188,9 @@ namespace Test
         public override void RunSuite()
         {
             Common.Reset();
-            UT_STOP_ON_FAIL(true);
+            StopOnFail(true);
 
-            try
+            var e = Throws(typeof(LuaException), () =>
             {
                 // Load test code. Has tail calls.
                 string s = @"--line 1
@@ -236,21 +202,12 @@ namespace Test
 
                 // Execute script functions.
                 var resi = Common.Interop.Setup(1234);
+            });
 
-                UT_FAIL("Should throw");
-            }
-            catch (LuaException e)
-            {
-                Common.Dump(e);
-                UT_EQUAL(e.Message, "[string \"INTEROP_SCRIPT_ERROR_TAIL_CALLS\"]:3: attempt to concatenate a nil value");
-            }
-            catch (Exception e)
-            {
-                UT_FAIL($"Unexpected exception {e.GetType().Name} {e}");
-            }
-
-            UT_NULL(Common.LogArgs);
-            UT_NULL(Common.NotifArgs);
+            Assert(e is not null);
+            Assert(e!.Message == "[string \"INTEROP_SCRIPT_ERROR_TAIL_CALLS\"]:3: attempt to concatenate a nil value");
+            Assert(Common.LogArgs is null);
+            Assert(Common.NotifArgs is null);
         }
     }
     #endregion
@@ -262,9 +219,9 @@ namespace Test
         public override void RunSuite()
         {
             Common.Reset();
-            UT_STOP_ON_FAIL(true);
+            StopOnFail(true);
 
-            try
+            var e = Throws(typeof(LuaException), () =>
             {
                 // Load test code.
                 string s = @"--line 1
@@ -273,20 +230,12 @@ namespace Test
                     function setup(arg) return 111 end
                     function do_command(cmd, arg) return 'aaa' end";
                 Common.Interop.RunChunk(s, "INTEROP_SYNTAX_ERROR", Common.LuaPath);
+            });
 
-                UT_FAIL("Should throw");
-            }
-            catch (LuaException e)
-            {
-                Common.Dump(e);
-                UT_EQUAL(e.Message, "[string \"INTEROP_SYNTAX_ERROR\"]:3: syntax error near 'error'");
-            }
-            catch (Exception e)
-            {
-                UT_FAIL($"Unexpected exception {e.GetType().Name} {e}");
-            }
-            UT_NULL(Common.LogArgs);
-            UT_NULL(Common.NotifArgs);
+            Assert(e is not null);
+            Assert(e!.Message == "[string \"INTEROP_SYNTAX_ERROR\"]:3: syntax error near 'error'");
+            Assert(Common.LogArgs is null);
+            Assert(Common.NotifArgs is null);
         }
     }
 
@@ -296,30 +245,21 @@ namespace Test
         public override void RunSuite()
         {
             Common.Reset();
-            UT_STOP_ON_FAIL(true);
+            StopOnFail(true);
 
-            try
+            var e = Throws(typeof(LuaException), () =>
             {
                 // Load test code.
                 string s = @"--line 1
                     local li  = require('luainterop')
                     li.invalid_func(444)";
                 Common.Interop.RunChunk(s, "INTEROP_INVALID_FUNC", Common.LuaPath);
+            });
 
-                UT_FAIL("Should throw");
-            }
-            catch (LuaException e)
-            {
-                Common.Dump(e);
-                UT_EQUAL(e.Message, "[string \"INTEROP_INVALID_FUNC\"]:3: attempt to call a nil value (field 'invalid_func')");
-            }
-            catch (Exception e)
-            {
-                UT_FAIL($"Unexpected exception {e.GetType().Name} {e}");
-            }
-
-            UT_NULL(Common.LogArgs);
-            UT_NULL(Common.NotifArgs);
+            Assert(e is not null);
+            Assert(e!.Message == "[string \"INTEROP_INVALID_FUNC\"]:3: attempt to call a nil value (field 'invalid_func')");
+            Assert(Common.LogArgs is null);
+            Assert(Common.NotifArgs is null);
         }
     }
 
@@ -329,30 +269,21 @@ namespace Test
         public override void RunSuite()
         {
             Common.Reset();
-            UT_STOP_ON_FAIL(true);
+            StopOnFail(true);
 
-            try
+            var e = Throws(typeof(LuaException), () =>
             {
                 // Load test code.
                 string s = @"
                     local li  = require('luainterop')
                     nret = li.notif('bad arg', true, 123.45)";
                 Common.Interop.RunChunk(s, "INTEROP_ARG_TYPE_WRONG", Common.LuaPath);
+            });
 
-                UT_FAIL("Should throw");
-            }
-            catch (LuaException e)
-            {
-                Common.Dump(e);
-                UT_EQUAL(e.Message, "[string \"INTEROP_ARG_TYPE_WRONG\"]:3: Invalid arg type for arg_I");
-            }
-            catch (Exception e)
-            {
-                UT_FAIL($"Unexpected exception {e.GetType().Name} {e}");
-            }
-
-            UT_NULL(Common.LogArgs);
-            UT_NULL(Common.NotifArgs);
+            Assert(e is not null);
+            Assert(e!.Message == "[string \"INTEROP_ARG_TYPE_WRONG\"]:3: Invalid arg type for arg_I");
+            Assert(Common.LogArgs is null);
+            Assert(Common.NotifArgs is null);
         }
     }
     #endregion
@@ -364,9 +295,9 @@ namespace Test
         public override void RunSuite()
         {
             Common.Reset();
-            UT_STOP_ON_FAIL(true);
+            StopOnFail(true);
 
-            try
+            var e = Throws(typeof(LuaException), () =>
             {
                 // Load test code.
                 var fn = Path.Combine(Common.SrcDir, "test1.lua");
@@ -374,23 +305,15 @@ namespace Test
 
                 // Execute script functions.
                 var resi = Common.Interop.Setup(1234);
-                UT_EQUAL(resi, 2345);
+                Assert(resi == 2345);
+            });
 
-                UT_FAIL("Should throw");
-            }
-            catch (LuaException e)
-            {
-                Common.Dump(e);
-                UT_EQUAL(e.Message, "C:/Dev/Libs/LuaInterop/Test/CppCli/test2.lua:14: attempt to add a 'string' with a 'nil'");
-            }
-            catch (Exception e)
-            {
-                UT_FAIL($"Unexpected exception {e.GetType().Name} {e}");
-            }
-            UT_NOT_NULL(Common.LogArgs);
-            UT_NOT_NULL(Common.NotifArgs);
-            UT_EQUAL(Common.LogArgs!.msg, "Loading test1.lua");
-            UT_EQUAL(Common.NotifArgs!.arg_I, 111);
+            Assert(e is not null);
+            Assert(e!.Message == "C:/Dev/Libs/LuaInterop/Test/CppCli/test2.lua:14: attempt to add a 'string' with a 'nil'");
+            Assert(Common.LogArgs is not null);
+            Assert(Common.NotifArgs is not null);
+            Assert(Common.LogArgs!.msg == "Loading test1.lua");
+            Assert(Common.NotifArgs!.arg_I == 111);
         }
     }
     #endregion
@@ -402,9 +325,9 @@ namespace Test
         public override void RunSuite()
         {
             Common.Reset();
-            UT_STOP_ON_FAIL(true);
+            StopOnFail(true);
 
-            try
+            var e = Throws(typeof(LuaException), () =>
             {
                 // Load test code.
                 string s = @"
@@ -417,16 +340,8 @@ namespace Test
 
                 // Execute script functions.
                 var resi = Common.Interop.Setup(1234);
-                UT_EQUAL(resi, 2345);
-            }
-            catch (LuaException e)
-            {
-                Common.Dump(e);
-            }
-            catch (Exception e)
-            {
-                UT_FAIL($"Unexpected exception {e.GetType().Name} {e}");
-            }
+                Assert(resi == 2345);
+            });
         }
     }
     #endregion
