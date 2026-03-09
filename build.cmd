@@ -10,23 +10,17 @@ rem set "ODIR=%cd%"
 
 call "C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\Tools\VsDevCmd.bat"
 
-
-pushd KeraLuaEx
-msbuild KeraLuaEx.sln /p:Configuration=Debug /t:Restore -v:n
-msbuild KeraLuaEx.sln /p:Configuration=Debug /t:Build -v:n
-popd
-
-pushd Test/C
+pushd Test\C
 msbuild C.sln /p:Configuration=Debug /t:Restore -v:n
 msbuild C.sln /p:Configuration=Debug /t:Build -v:n
 popd
 
-pushd Test/Csh
+pushd Test\Csh
 msbuild Csh.sln /p:Configuration=Debug /t:Restore -v:n
 msbuild Csh.sln /p:Configuration=Debug /t:Build -v:n
 popd
 
-pushd Test/CppCli
+pushd Test\CppCli
 msbuild CppCli.sln /p:Configuration=Debug /t:Restore -v:n
 msbuild CppCli.sln /p:Configuration=Debug /t:Build -v:n
 popd
