@@ -9,7 +9,6 @@
 
         <Nullable>enable</Nullable>
         <ImplicitUsings>disable</ImplicitUsings>
-        <!-- <ApplicationIcon>cucaracha.ico</ApplicationIcon> -->
         <SatelliteResourceLanguages>none</SatelliteResourceLanguages>
         <NoWarn>1701;1702;CA1816;CA1822;IDE0130;IDE0060</NoWarn>
     </PropertyGroup>
