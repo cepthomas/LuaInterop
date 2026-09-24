@@ -10,6 +10,9 @@
         <ImplicitUsings>disable</ImplicitUsings>
         <SatelliteResourceLanguages>none</SatelliteResourceLanguages>
         <NoWarn>1701;1702;CA1816;CA1822;IDE0130;IDE0060</NoWarn>
+
+        <!--TODO This makes a weird warning go away - not fixable via configuration manager.-->
+        <ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>None</ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
     </PropertyGroup>
 
     <ItemGroup>

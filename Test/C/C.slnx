@@ -1,0 +1,11 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/Solution Items/">
+    <File Path="script_load_error.lua" />
+    <File Path="script_main.lua" />
+  </Folder>
+  <Project Path="C.vcxproj" />
+</Solution>
